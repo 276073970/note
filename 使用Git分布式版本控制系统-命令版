@@ -1,0 +1,665 @@
+注意事项（原创）
+1. Github库主（repository owner）在页面上修改某文件后可直接提交（commit）到当前分支上，或将该修改后的项目保存为新分支。
+2. 当master以外的其他branch，或其他contributor从库主fork走的项目库，可以向库主发起一个pull request。
+3. 库主从自己本地git库的push会直接merge进当前分支里，无论库主当前所在分支为master或是其他brach。
+4. 本地创建版本库后，若在github的版本库页面执行了某些修改，但是却没有pull到本地，此时远程repository和本地repository会产生冲突，即产生了版本冲突的问题。此时也将导致本地版本库向远程版本库pull内容时失败并报错。
+有如下几种解决方法：
+（1）使用强制push的方法：
+    $ git push -u origin master -f
+    这样会使远程修改丢失，一般是不可取的，尤其是多人协作开发的时候。
+（2）push前先将远程repository修改pull下来
+    $ git pull origin master
+    $ git push -u origin master
+（3）若不想merge远程和本地修改，可以先创建新的分支：
+    $ git branch [name]
+    然后push
+5. git默认不允许push空文件夹，所以只add一个空文件夹是push不上去的。只要该文件夹不空即可push到远端版本库。
+6. 因为提交操作只是将文件在暂存区中的快照版本提交到Git版本数据库，所以当你将文件添加到暂存区后，如果又对文件做了修改，请一定要再将文件添加到暂存区后提交到Git版本数据库：
+    第一次修改 -> git add -> 第二次修改 -> git add -> git commit
+7. 若某工作目录已执行过git的初始化（即该目录下生成了.git目录），则用Atom打开该工作目录后，会自动识别相应的版本库信息。
+Atom会用三种颜色来表示当前文件的更改情况：
+Orange: Modified
+Green: Added
+Red: Removed
+而且Atom会在窗口右下角显示当前Git的状态,比如当前的分支名,当前文件的状态等。
+
+####################################################################################################
+####################################################################################################
+21.2 使用Git服务程序
+
+Git的三种重要模式，分别是已提交、已修改和已暂存：
+    已提交(committed):表示数据文件已经顺利提交到Git数据库中。
+    已修改(modified):表示数据文件已经被修改，但未被保存到Git数据库中。
+    已暂存(staged):表示数据文件已经被修改，并会在下次提交时提交到Git数据库中。
+
+提交前的数据文件可能会被随意修改或丢失，但只要把文件快照顺利提交到Git数据库中，那就可以完全放心了，流程为：
+    1.在工作目录中修改数据文件。
+    2.将文件的快照放入暂存区域。
+    3.将暂存区域的文件快照提交到Git仓库中。
+
+执行yum命令来安装Git服务程序：
+[root@linuxprobe ~]# yum install -y git
+
+
+首次安装Git服务程序后需要设置下用户名称、邮件信息和编辑器，这些信息会随着文件每次都提交到Git数据库中，用于记录提交者的信息，
+而Git服务程序的配置文档通常会有三份，针对当前用户和指定仓库的配置文件优先级最高：
+配置文件 	作用
+/etc/gitconfig 	保存着系统中每个用户及仓库通用配置信息。
+~/.gitconfig
+~/.config/git/config 	针对于当前用户的配置信息。
+工作目录/.git/config 	针对于当前仓库数据的配置信息。
+
+
+配置个人的用户名称和电子邮件地址：
+[root@linuxprobe ~]# git config --global user.name "Liu Chuan"
+[root@linuxprobe ~]# git config --global user.email "root@linuxprobe.com"
+
+设置vim为默认的文本编辑器：
+[root@linuxprobe ~]# git config --global core.editor vim
+
+查看刚刚配置的Git工作环境信息：
+[root@linuxprobe ~]# git config --list
+
+21.2.1 提交数据
+
+我们可以简单的把工作目录理解成是一个被Git服务程序管理的目录，Git会时刻的追踪目录内文件的改动，另外在安装好了Git服务程序后，默认就会创建好了一个叫做master的分支，我们直接可以提交数据到主线了。
+
+创建本地的工作目录：
+[root@linuxprobe ~]# mkdir linuxprobe
+[root@linuxprobe ~]# cd linuxprobe/
+
+将该目录初始化转成Git的工作目录：
+[root@linuxprobe linuxprobe]# git init
+
+Git只能追踪类似于txt文件、网页、程序源码等文本文件的内容变化，而不能判断图片、视频、可执行命令等这些二进制文件的内容变化，所以先来尝试往里面写入一个新文件吧。
+[root@linuxprobe linuxprobe]# echo "Initialization Git repository" > readme.txt
+
+将该文件添加到暂存区：
+[root@linuxprobe linuxprobe]# git add readme.txt
+
+添加到暂存区后再次修改文件的内容：
+[root@linuxprobe linuxprobe]# echo "Something not important" >> readme.txt
+
+将暂存区的文件提交到Git版本仓库，命令格式为“git commit -m "提交说明”：
+[root@linuxprobe linuxprobe]# git commit -m "add the readme file"
+
+查看当前工作目录的状态（咦，为什么文件还是提示被修改了？）：
+[root@linuxprobe linuxprobe]# git status
+
+因为提交操作只是将文件在暂存区中的快照版本提交到Git版本数据库，所以当你将文件添加到暂存区后，如果又对文件做了修改，请一定要再将文件添加到暂存区后提交到Git版本数据库：
+    第一次修改 -> git add -> 第二次修改 -> git add -> git commit
+
+查看当前文件内容与Git版本数据库中的差别：
+[root@linuxprobe linuxprobe]# git diff readme.txt
+
+那么现在把文件提交到Git版本数据库吧：
+[root@linuxprobe linuxprobe]# git add readme.txt 
+[root@linuxprobe linuxprobe]# git commit -m "added a line of words"
+
+再来查看下当前Git版本仓库的状态：
+[root@linuxprobe linuxprobe]# git status
+
+有些时候工作目录内的文件会比较多，懒的把文件一个个提交到暂存区，可以先设置下要忽略上传的文件（写入到"工作目录/.gitignore"文件中），然后使用"git add ."命令来将当前工作目录内的所有文件都一起添加到暂存区域。
+
+//忽略所有以.a为后缀的文件。
+*.a
+//但是lib.a这个文件除外，依然会被提交。
+!lib.a
+//忽略build目录内的所有文件。
+build/
+//忽略build目录内以txt为后缀的文件。
+build/*.txt
+//指定忽略名字为git.c的文件。
+git.c
+
+先在工作目录中创建一个名字为git.c的文件：
+[root@linuxprobe linuxprobe]# touch git.c
+
+然后创建忽略文件列表：
+[root@linuxprobe linuxprobe]# vim .gitignore
+git.c
+
+添加将当前工作目录中的所有文件快照上传到暂存区：
+[root@linuxprobe linuxprobe]# git add .
+[root@linuxprobe linuxprobe]# git commit -m "add the .gitignore file"
+
+经过刚刚的实验，大家一定发现“添加到暂存区”真是个很麻烦的步骤，虽然使用暂存区的方式可以让提交文件更加的准确，但有时却略显繁琐，如果对要提交的文件完全有把握，我们完全可以追加-a参数，这样Git会将以前所有追踪过的文件添加到暂存区后自动的提交，从而跳过了上传暂存区的步骤，再来修改下文件：
+[root@linuxprobe linuxprobe]# echo "Modified again" >> readme.txt
+
+文件被直接提交到Git数据库：
+[root@linuxprobe linuxprobe]# git commit -a -m "Modified again"
+
+比如想把git.c也提交上去，便可以这样强制添加文件：
+[root@linuxprobe linuxprobe]# git add -f git.c
+
+然后重新提交一次（即修改上次的提交操作）：
+[root@linuxprobe linuxprobe]# git commit --amend
+//我们简单浏览下提交描述，然后输入:wq!保存并退出。
+
+21.2.2 移除数据
+
+有些时候会想把已经添加到暂存区的文件移除，但仍然希望文件在工作目录中不丢失，换句话说，就是把文件从追踪清单中删除。
+先添加一个新文件，并上传到暂存区：
+[root@linuxprobe linuxprobe]# touch database
+[root@linuxprobe linuxprobe]# git add database
+
+查看当前的Git状态：
+[root@linuxprobe linuxprobe]# git status
+
+将该文件从Git暂存区域的追踪列表中移除（并不会删除当前工作目录内的数据文件）：
+[root@linuxprobe linuxprobe]# git rm --cached database
+[root@linuxprobe linuxprobe]# ls
+
+此时文件已经是未追踪状态了：
+[root@linuxprobe linuxprobe]# git status
+
+而如果我们想将文件数据从Git暂存区和工作目录中一起删除，可以这样操作：
+再将database文件提交到Git暂存区：
+[root@linuxprobe linuxprobe]# git add .
+
+使用git rm命令可以直接删除暂存区内的追踪信息及工作目录内的数据文件：
+但如果在删除之前数据文件已经被放入到暂存区域的话，Git会担心你勿删未提交的文件而提示报错信息，此时可追加强制删除-f参数。
+[root@linuxprobe linuxprobe]# git rm -f database 
+[root@linuxprobe linuxprobe]# ls
+
+查看当前Git的状态：
+[root@linuxprobe linuxprobe]# git status
+
+21.2.3 移动数据
+
+Git不像其他版本控制系统那样跟踪文件的移动操作，如果要修改文件名称，则需要使用git mv命令：
+[root@linuxprobe linuxprobe]# git mv readme.txt introduction.txt
+
+发现下次提交时会有一个改名操作：
+[root@linuxprobe linuxprobe]# git status
+
+提交文件到Git版本仓库：
+[root@linuxprobe linuxprobe]# git commit -m "changed name"
+
+其实我们还可以这样来修改文件名，首先将工作目录下的数据文件改名：
+[root@linuxprobe linuxprobe]# mv introduction.txt readme.txt
+
+然后删除Git版本仓库内的文件快照：
+[root@linuxprobe linuxprobe]# git rm introduction.txt
+
+最后再将新的文件添加进入：
+[root@linuxprobe linuxprobe]# git add readme.txt 
+[root@linuxprobe linuxprobe]# git commit -m "changed the file name again"
+
+21.2.4 历史记录
+
+在完成上面的实验后，我们已经不知不觉有了很多次的提交操作了，可以用git log命令来查看提交历史记录：
+[root@linuxprobe linuxprobe]# git log
+
+我们还可以使用--stat参数来简要的显示数据增改行数，这样就能够看到提交中修改过的内容、对文件添加或移除的行数，并在最后列出所有增减行的概要信息（仅看最近两次的提交历史）：
+[root@linuxprobe linuxprobe]# git log --stat -2 
+
+还有一个超级常用的--pretty参数，它可以根据不同的格式为我们展示提交的历史信息，比如每行显示一条提交记录：
+[root@linuxprobe linuxprobe]# git log --pretty=oneline
+
+以更详细的模式输出最近两次的历史记录：
+[root@linuxprobe linuxprobe]# git log --pretty=fuller -2
+
+还可以使用format参数来指定具体的输出格式，这样非常便于后期编程的提取分析哦，常用的格式有：
+%s 	提交说明。
+%cd 	提交日期。
+%an 	作者的名字。
+%cn 	提交者的姓名。
+%ce 	提交者的电子邮件。
+%H 	提交对象的完整SHA-1哈希字串。
+%h 	提交对象的简短SHA-1哈希字串。
+%T 	树对象的完整SHA-1哈希字串。
+%t 	树对象的简短SHA-1哈希字串。
+%P 	父对象的完整SHA-1哈希字串。
+%p 	父对象的简短SHA-1哈希字串。
+%ad 	作者的修订时间。
+
+另外作者和提交者是不同的，作者才是对文件作出实际修改的人，而提交者只是最后将此文件提交到Git版本数据库的人。
+查看当前所有提交记录的简短SHA-1哈希字串与提交者的姓名：
+[root@linuxprobe linuxprobe]# git log --pretty=format:"%h %cn"d97dd0b Liu Chuan
+
+21.2.5 还原数据
+
+还原数据是每一个版本控制的基本功能，先来随意修改下文件吧：
+[root@linuxprobe linuxprobe]# echo "Git is a version control system" >> readme.txt
+
+然后将文件提交到Git版本数据库：
+[root@linuxprobe linuxprobe]# git add readme.txt
+[root@linuxprobe linuxprobe]# git commit -m "Introduction software"
+
+此时觉得写的不妥，想要还原某一次提交的文件快照：
+[root@linuxprobe linuxprobe]# git log --pretty=oneline
+
+Git服务程序中有一个叫做HEAD的版本指针，当用户申请还原数据时，其实就是将HEAD指针指向到某个特定的提交版本而已，但是因为Git是分布式版本控制系统，所以不可能像SVN那样使用1、2、3、4来定义每个历史的提交版本号，为了避免历史记录冲突，故使用了SHA-1计算出十六进制的哈希字串来区分每个提交版本，像刚刚最上面最新的提交版本号就是5cee15b32d78259985bac4e0cbb0cdad72ab68ad，另外默认的HEAD版本指针会指向到最近的一次提交版本记录哦，而上一个提交版本会叫HEAD^，上上一个版本则会叫做HEAD^^，当然一般会用HEAD~5来表示往上数第五个提交版本哦~。
+
+好啦，既然我们已经锁定了要还原的历史提交版本，就可以使用git reset命令来还原数据了：
+[root@linuxprobe linuxprobe]# git reset --hard HEAD^
+
+再来看下文件的内容吧（怎么样，内容果然已经还原了吧~）：
+[root@linuxprobe linuxprobe]# cat readme.txt
+
+刚刚的操作实际上就是改变了一下HEAD版本指针的位置，说白了就是你将HEAD指针放在那里，那么你的当前工作版本就会定位在那里，要想把内容再还原到最新提交的版本，先查看下提交版本号吧：
+[root@linuxprobe linuxprobe]# git log --pretty=oneline
+
+怎么搞得？竟然没有了Introduction software这个提交版本记录？？
+原因很简单，因为我们当前的工作版本是历史的一个提交点，这个历史提交点还没有发生过Introduction software更新记录，所以当然就看不到了，要是想“还原到未来”的历史更新点，可以用git reflog命令来查看所有的历史记录：
+[root@linuxprobe linuxprobe]# git reflog
+
+找到历史还原点的SHA-1值后，就可以还原文件了，另外SHA-1值没有必要写全，Git会自动去匹配：x
+[root@linuxprobe linuxprobe]# git reset --hard 5cee15b 
+[root@localhost linuxprobe]# cat readme.txt 
+
+如是只是想把某个文件内容还原，就不必这么麻烦，直接用git checkout命令就可以的，先随便写入一段话：
+[root@linuxprobe linuxprobe]# echo "Some mistakes words" >> readme.txt
+[root@linuxprobe linuxprobe]# cat readme.txt
+
+哎呀，我们突然发现不应该写一句话的，可以手工删除（当内容比较多的时候会很麻烦），还可以将文件内容从暂存区中恢复：
+[root@linuxprobe linuxprobe]# git checkout -- readme.txt
+[root@linuxprobe linuxprobe]# cat readme.txt 
+
+checkou规则是如果暂存区中有该文件，则直接从暂存区恢复，如果暂存区没有该文件，则将还原成最近一次文件提交时的快照。
+
+21.2.6 管理标签
+
+当版本仓库内的数据有个大的改善或者功能更新，我们经常会打一个类似于软件版本号的标签，这样通过标签就可以将版本库中的某个历史版本给记录下来，方便我们随时将特定历史时期的数据取出来用，另外打标签其实只是向某个历史版本做了一个指针，所以一般都是瞬间完成的，感觉很方便吧。
+
+在Git中打标签非常简单，给最近一次提交的记录打个标签：
+[root@linuxprobe linuxprobe]# git tag v1.0
+
+查看所有的已有标签：
+[root@linuxprobe linuxprobe]# git tag
+
+查看此标签的详细信息：
+[root@linuxprobe linuxprobe]# git show v1.0
+
+还可以创建带有说明的标签，用-a指定标签名，-m指定说明文字：
+[root@linuxprobe linuxprobe]# git tag v1.1 -m "version 1.1 released" d316fb
+
+我们为同一个提交版本设置了两次标签，来把之前的标签删除吧：
+[root@linuxprobe linuxprobe]# git tag -d v1.0
+[root@localhost linuxprobe]# git tag
+
+21.3 管理分支结构
+
+分支即是平行空间，假设你在为某个手机系统研发拍照功能，代码已经完成了80%，但如果将这不完整的代码直接提交到git仓库中，又有可能影响到其他人的工作，此时我们便可以在该软件的项目之上创建一个名叫“拍照功能”的分支，这种分支只会属于你自己，而其他人看不到，等代码编写完成后再与原来的项目主分支合并下即可，这样即能保证代码不丢失，又不影响其他人的工作。
+
+一般在实际的项目开发中，我们要尽量保证master分支是非常稳定的，仅用于发布新版本，平时不要随便直接修改里面的数据文件，而工作的时候则可以新建不同的工作分支，等到工作完成后在合并到master分支上面，所以团队的合作分支看起来会像上面图那样。
+
+另外如前面所讲，git会将每次的提交操作串成一个时间线，而在前面的实验中实际都是在对master分支进行操作，Git会在创建分支后默认创建一个叫做Photograph的指针，所以我们还需要再将HEAD指针切换到“Photograph”的位置才正式使用上了新分支哦，这么说起来可能比较抽象，赶紧学习下面的实验吧。
+
+21.3.1 创建分支
+
+首先创建分支：
+[root@linuxprobe linuxprobe]# git branch linuxprobe
+
+切换至分支：
+[root@linuxprobe linuxprobe]# git checkout linuxprobe
+
+查看当前分支的情况（会列出该仓库中所有的分支，当前的分支前有＊号）：
+[root@linuxprobe linuxprobe]# git branch
+
+我们对文件再追加一行字符串吧：
+[root@linuxprobe linuxprobe]# echo "Creating a new branch is quick." >> readme.txt
+
+将文件提交到git仓库：
+[root@linuxprobe linuxprobe]# git add readme.txt
+[root@linuxprobe linuxprobe]# git commit -m "new branch"
+
+为了让大家更好理解分支的作用，我们在提交文件后再切换回master分支：
+[root@linuxprobe linuxprobe]# git checkout master
+
+然后查看下文件内容，发现并没有新追加的字符串哦：
+[root@linuxprobe linuxprobe]# cat readme.txt
+
+21.3.2 合并分支
+
+现在，我们想把linuxprobe的工作成果合并到master分支上了，则可以使用"git merge"命令来将指定的的分支与当前分支合并：
+[root@linuxprobe linuxprobe]# git merge linuxprobe
+
+查看合并后的readme.txt文件：
+[root@linuxprobe linuxprobe]# cat readme.txt
+
+确认合并完成后，就可以放心地删除linuxprobe分支了：
+[root@linuxprobe linuxprobe]# git branch -d linuxprobe
+
+删除后，查看branch，就只剩下master分支了：
+[root@linuxprobe linuxprobe]# git branch
+
+21.3.3 内容冲突
+
+但是Git并不能每次都为我们自动的合并分支，当遇到了内容冲突比较复杂的情况，则必须手工将差异内容处理掉，比如这样的情况：
+    创建分支并切换到该分支命令：git checkout -b 分支名称
+
+创建一个新分支并切换到该分支命令：
+[root@linuxprobe linuxprobe]# git checkout -b linuxprobe
+
+修改readme.txt文件内容：
+[root@linuxprobe linuxprobe]# vim readme.txt
+
+在linuxprobe分支上提交：
+[root@linuxprobe linuxprobe]# git add readme.txt
+[root@linuxprobe linuxprobe]# git commit -m "Creating a new branch is quick & simple. " 
+
+切换到master分支：
+[root@linuxprobe linuxprobe]# git checkout master
+
+在在master分支上修改readme.txt文件同一行的内容：
+[root@linuxprobe linuxprobe]# vim readme.txt
+
+提交至Git版本仓库：
+[root@linuxprobe linuxprobe]# git add readme.txt
+[root@linuxprobe linuxprobe]# git commit -m "Creating a new branch is quick AND simple. "
+
+那么此时，我们在master与linuxprobe分支上都分别对中readme.txt文件进行了修改并提交了，那这种情况下Git就没法再为我们自动的快速合并了，它只能告诉我们readme.txt文件的内容有冲突，需要手工处理冲突的内容后才能继续合并：
+[root@linuxprobe linuxprobe]# git merge linuxprobe
+
+冲突的内容为：
+[root@localhost linuxprobe]# vim readme.txt
+Initialization Git repository
+Something not important
+Modified again
+Git is a version control system
+Creating a new branch is quick.
+<<<<<<< HEAD
+Creating a new branch is quick AND simple.
+=======
+Creating a new branch is quick & simple.
+>>>>>>> linuxprobe
+
+Git用< <<<<<<，=======，>>>>>>>分割开了各个分支冲突的内容，我们需要手工的删除这些符号，并将内容修改为：
+    Initialization Git repository
+    Something not important
+    Modified again
+    Git is a version control system
+    Creating a new branch is quick.
+    Creating a new branch is quick and simple.
+
+解决冲突内容后则可顺利的提交：
+[root@linuxprobe linuxprobe]# git add readme.txt 
+[root@linuxprobe linuxprobe]# git commit -m "conflict fixed" 
+
+查看Git历史提交记录(可以看到分支的变化)：
+[root@linuxprobe linuxprobe]# git log --graph --pretty=oneline --abbrev-commit
+* 90c607a conflict fixed
+|\ 
+| * 882a128 Creating a new branch is quick & simple.
+* | c21741c Creating a new branch is quick AND simple.
+|/ 
+* 2457d98 new branch
+* a41441f Introduction software
+* d97dd0b changed the file name again
+* c2674b7 changed name
+* c6f4adf Modified again
+* c2cce40 add the .gitignore file
+* f7814dc added a line of words
+* 0b7e029 add the readme file
+
+最后，放心的删除linuxprobe分支吧：
+[root@linuxprobe linuxprobe]# git branch -d linuxprobe
+[root@linuxprobe linuxprobe]# git branch
+
+21.4 部署Git服务器
+
+Git是分布式的版本控制系统，我们只要有了一个原始Git版本仓库，就可以让其他主机克隆走这个原始版本仓库，从而使得一个Git版本仓库可以被同时分布到不同的主机之上，并且每台主机的版本库都是一样的，没有主次之分，极大的保证了数据安全性，并使得用户能够自主选择向那个Git服务器推送文件了，其实部署一个git服务器是非常简单的事情，我们需要用到两台主机，分别是：
+主机名称 	操作系统 	IP地址
+Git服务器 	红帽RHEL7操作系统 	192.168.10.10
+Git客户端 	红帽RHEL7操作系统 	192.168.10.20
+
+
+首先我们分别在Git服务器和客户机中安装Git服务程序(刚刚实验安装过就不用安装了)：
+[root@linuxprobe ~]# yum install git 
+
+然后创建Git版本仓库，一般规范的方式要以.git为后缀：
+[root@linuxprobe ~]# mkdir linuxprobe.git
+
+修改Git版本仓库的所有者与所有组：
+[root@linuxprobe ~]# chown -Rf git:git linuxprobe.git/
+
+初始化Git版本仓库：
+[root@linuxprobe ~]# cd linuxprobe.git/
+[root@linuxprobe linuxprobe.git]# git --bare init
+
+其实此时你的Git服务器就已经部署好了，但用户还不能向你推送数据，也不能克隆你的Git版本仓库，因为我们要在服务器上开放至少一种支持Git的协议，比如HTTP/HTTPS/SSH等，现在用的最多的就是HTTPS和SSH，我们切换至Git客户机来生成SSH密钥：
+[root@linuxprobe ~]# ssh-keygen 
+Generating public/private rsa key pair.
+Enter file in which to save the key (/root/.ssh/id_rsa): 
+Created directory '/root/.ssh'.
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /root/.ssh/id_rsa.
+Your public key has been saved in /root/.ssh/id_rsa.pub.
+The key fingerprint is:
+65:4a:53:0d:4f:ee:49:4f:94:24:82:16:7a:dd:1f:28 root@linuxprobe.com
+The key's randomart image is:
++--[ RSA 2048]----+
+|        .o+oo.o. |
+|       .oo *.+.  |
+|      ..+ E * o  |
+|       o = + = . |
+|        S   o o  |
+|                 |
+|                 |
+|                 |
+|                 |
++-----------------+
+
+将客户机的公钥传递给Git服务器：
+[root@linuxprobe ~]# ssh-copy-id 192.168.10.10
+
+此时就已经可以从Git服务器中克隆版本仓库了（此时目录内没有文件是正常的）：
+[root@linuxprobe ~]# git clone root@192.168.10.10:/root/linuxprobe.git
+[root@linuxprobe ~]# cd linuxprobe
+[root@linuxprobe linuxprobe]# 
+
+初始化下Git工作环境：
+[root@linuxprobe ~]# git config --global user.name "Liu Chuan"
+[root@linuxprobe ~]# git config --global user.email "root@linuxprobe.com"
+[root@linuxprobe ~]# git config --global core.editor vim
+
+向Git版本仓库中提交一个新文件：
+[root@linuxprobe linuxprobe]# echo "I successfully cloned the Git repository" > readme.txt
+[root@linuxprobe linuxprobe]# git add readme.txt 
+[root@linuxprobe linuxprobe]# git status
+[root@linuxprobe linuxprobe]# git commit -m "Clone the Git repository"
+[root@linuxprobe linuxprobe]# git status
+
+但是这次的操作还是只将文件提交到了本地的Git版本仓库，并没有推送到远程Git服务器，所以我们来定义下远程的Git服务器吧：
+[root@linuxprobe linuxprobe]# git remote add server root@192.168.10.10:/root/linuxprobe.git
+
+将文件提交到远程Git服务器吧：
+[root@linuxprobe linuxprobe]# git push -u server master
+
+为了验证真的是推送到了远程的Git服务，你可以换个目录再克隆一份版本仓库（虽然在工作中毫无意义）：
+[root@linuxprobe linuxprobe]# cd ../Desktop
+[root@linuxprobe Desktop]# git clone root@192.168.10.10:/root/linuxprobe.git
+[root@linuxprobe Desktop]# cd linuxprobe/
+[root@linuxprobe linuxprobe]# cat readme.txt 
+
+21.5 Github托管服务
+
+其实自己部署一台Git服务器或许很有意思，但想到你要保证这台主机能够7*24小时稳定运行，还要保证各种权限及版本库的安全就觉得很累吧，
+
+Github顾名思义是一个Git版本库的托管服务，是目前全球最大的软件仓库，拥有上百万的开发者用户，也是软件开发和寻找资源的最佳途径，Github不仅可以托管各种Git版本仓库，还拥有了更美观的Web界面，您的代码文件可以被任何人克隆，使得开发者为开源项贡献代码变得更加容易，当然也可以付费购买私有库，这样高性价比的私有库真的是帮助到了很多团队和企业。
+
+大多数用户都是为了寻找资源而爱上Github的，首先进入网站，点击注册(Sign up)：
+填写注册信息：
+选择仓库类型：
+好棒，我们的GitHub帐号注册完成了：
+
+我们在向Github推送文件时，可以选择SSH协议模式，在本机生成密钥文件（上面实验已经做过，就不需要再生成了）：
+[root@linuxprobe ~]# ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/root/.ssh/id_rsa): 
+Created directory '/root/.ssh'.
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /root/.ssh/id_rsa.
+Your public key has been saved in /root/.ssh/id_rsa.pub.
+The key fingerprint is:
+88:91:4c:db:85:b6:b4:69:ba:44:4d:b1:89:da:48:78 root@linuxprobe.com
+The key's randomart image is:
++--[ RSA 2048]----+
+|    . .o.        |
+| . o ==+         |
+|. E *=++         |
+| o +.o*.         |
+|  o.oo. S        |
+|    o            |
+|   . .           |
+|    .            |
+|                 |
++-----------------+
+[root@linuxprobe ~]# ssh-add
+
+点击进入Github的帐户配置页面：
+点击添加SSH公钥：
+将本机中的ssh公钥(.ssh/id_rsa.pub)复制到页面中，填写ssh公钥信息：
+查看ssh公钥信息：
+好的，现在我们的准备工作已经妥当，让我们在Github上创建自己第一个Git版本仓库吧，点击创建一个新的版本仓库：
+填写版本仓库的信息：
+创建成功后会自动跳转到该仓库的页面：
+复制版本仓库的克隆地址：
+
+尝试把版本仓库克隆到本地(这个版本库我会一直保留，大家可以动手克隆下试试。)：
+[root@linuxprobe ~]# git clone  https://github.com/K130/linuxprobe.git
+[root@linuxprobe ~]# cat linuxprobe/
+[root@linuxprobe ~]# cat linuxprobe/README.md 
+
+将该Github版本仓库添加到本机的远程列表中：
+[root@linuxprobe linuxprobe]# git remote add linuxprobe git@github.com:K130/linuxprobe.git
+[root@linuxprobe linuxprobe]# git remote
+
+编写一个新文件：
+[root@linuxprobe ~]# cd linuxprobe/
+[root@linuxprobe linuxprobe]# echo "Based on the RHEL&Centos system" > features
+
+将该文件提交到本地的Git版本仓库：
+[root@linuxprobe linuxprobe]# git add features 
+[root@linuxprobe linuxprobe]# git commit -m "add features"
+
+然后将本地的Git仓库同步到远程Git服务器上(第一次请加上参数-u，代表关联本地与远程)：
+[root@linuxprobe linuxprobe]# git push -u linuxprobe master
+
+刷新一下Web页面，果然看到版本仓库已经同步了：
+
+本章节的复习作业(答案就在问题的下一行哦，用鼠标选中即可看到的~)
+1:分布式版本控制系统对比传统版本控制系统有那些优势？
+答案：去中心化设计让数据更加安全，管理文件数据更加的有效率。
+2:将Git工作目录中的文件提交到暂存区的命令是？
+答案：git add 
+3:将Git暂存区的文件上传到版本仓库的命令是？
+答案：git commit
+4:Git是一种非常智能的程序，它能够为我们自动解决任何分支的内容冲突情况？
+答案：错误，很多时候内容冲突后需要由人来解决合并冲突。
+5：为什么我们要将ssh公钥上传到Github资料中？
+答案：为了让Github能够验证用户身份，从而才能顺利的管理文件数据。
+
+####################################################################################################
+####################################################################################################
+查看当前你的路径
+    pwd  
+
+假如之后你切换到e盘下的test目录
+    cd /e/test   
+
+你可以查看当前目录下都有些什么
+    ls  
+
+这时你要是里面有很多东西，你想要提交
+    git add  文件名   
+
+如果出现  fatal: Not a git repository (or any of the parent directories): .git
+这是因为你这个目录还没有初始化称为git的一个工作空间，
+所以你要做的是：
+    git init  
+OK，问题解决
+
+然后你想commit 到主分支
+    git commit -m "描述"  
+
+出现 ：untracked files: **********************这是你该目录下的各种文件
+这又是怎么啦：
+这是因为你这个工作目录下有很多文件没有提交到master上
+所以你不用着急，先add你需要上传的，不需要理睬
+
+下面就是我们要把本地仓库的东西提交到远程仓库
+
+首先你要知道你自己仓库的地址
+登陆github官网，你可以创建一个新的仓库，接下来你要做的就是复制那个地址
+
+然后你将本地仓库个远程仓库连接起来
+    git remote add origin git@github.com:yourname/仓库名.git  
+这里需要注意的是你可能复制到的地址是
+https://github.com/iamguwen/myself
+完全没有关系，因为git支持多种协议，默认的是使用ssh,但是也有使用HTTPS等其他协议的
+但是HTTPS速度比较慢，而且最大的麻烦是每次都需要输入口令，所以我们这里使用的是原生的ssh支持的
+
+下来我们进行第一次提交
+    git push -u origin master  
+注意这个origin不一定是是这个单词，你喜欢就好，包括当面那个git remote add origin git@github.com:yourname/仓库名.git中的origin，
+相当于你给这个地址起了一个短点的好记的名字
+这个命令 是将主分支master提交到远程仓库
+当然这个带有-u这个参数是指，将master分支的所有内容都提交
+第一次关联之后后边你再提交就可以不用这个参数了
+
+之后你的每一次修改，你就可以只将你修改push就好了
+Git push origin master
+
+OK，初学者例子完成了。
+
+####################################################################################################
+####################################################################################################
+1. 去官网(https://github.com/)注册一个帐号
+2. 在本地安装Git
+    sudo apt-get install git  
+    sudo apt-get install git-doc git-svn git-email git-gui git-gitk  
+3. git 配置
+    git config --global user.name "yourname"  
+    git config --global user.email myaddress@gmail.com  
+4. 创建一个本地仓库
+假如你的家目录下有一个文件夹专门用来存放代码的 cd ~/code
+那么你只要在code目录下运行
+    git init  
+    git add .  
+    git commit -m "first commit"  
+git init初始化一个本地仓库，上面那个"."表示将当前目录下的所有文件和文件夹头添加到本地的仓库，执行第3句话的时候才真的提交到本地仓库。
+5. 要将数据备份到github需要认证，这一步很重要，但却是一劳永逸的事情。对于新手来说，什么公钥私钥，要怎么进行身份认证，简直就是云里雾里，但偏偏关于这一步的资料最少。我们以ssh为例，请参考官网方法：
+	https://help.github.com/articles/generating-ssh-keys
+6. 上面那步执行完以后，就可以备份数据到github了，在备份之前我们还需要在github上新建一个仓库(Reso)
+	https://help.github.com/articles/creating-a-new-repository
+7.仓库创建完以后就出现如下的提示：
+
+Quick setup — if you’ve done this kind of thing before
+or HTTPS/SSH git@github.com:276073970/test.git
+We recommend every repository include a README, LICENSE, and .gitignore.
+
+…or create a new repository on the command line
+echo "# test2" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin git@github.com:276073970/test2.git
+git push -u origin master
+
+…or push an existing repository from the command line
+git remote add origin git@github.com:276073970/test2.git
+git push -u origin master
+
+…or import code from another repository
+You can initialize this repository with code from a Subversion, Mercurial, or TFS project.
+
+因为之前我们已经在本地新建了一个仓库，所以执行“Push an existing repository from the command line”下面的两句话就好了。
+这样就把数据备份到github了。
+
+可能的错误$ git remote add origin git@github.com:defnngj/hello-world.git
+错误提示：fatal: remote origin already exists.
+解决办法：$ git remote rm origin
+然后在执行：$ git remote add origin git@github.com:defnngj/hello-world.git 
+就不会报错误了
+
+有了上面的工作，我们希望clone一个仓库到本地就很容易了，我们选择一个有名的库来试试。
+1. 在搜索框里输入 facebook folly，选择第一个库，然后点击右上角的fork按钮，这样就把facebook的开源的c++库 folly复制了一份到你自己的仓库。
+2. 进入你的folly仓库，找到下面这句话
+    SSH：git@github.com:lalor/folly.git
+3. 只要在你的本地目录下执行下面这句话就大功告成了。
+    git clone git@github.com:lalor/folly.git  

@@ -1,0 +1,865 @@
+软件项目开发
+三层结构为：
+1.表示层(USL - User Show Layer)：主要表示WEB方式，也可以表示成WINFORM方式。如果逻辑层相当强大和完善，无论表现层如何定义和更改，逻辑层都能完善地提供服务。
+2.业务逻辑层(BLL - Business Logic Layer)：主要是针对具体的问题的操作，也可以理解成对数据层的操作，对数据业务逻辑处理。如果说数据层是积木，那逻辑层就是对这些积木的搭建。
+3.数据访问层(DAL - Data Access Layer)：主要是对原始数据(数据库或者文本文件等存放数据的形式)的操作层，而不是指原始数据，也就是说，是对数据的操作，而不是数据库，具体为业务逻辑层或表示层提供数据服务。
+
+******************************
+*****   Windows环境下：  *****
+******************************
+
+====================================================================================================
+=配置环境变量=======================================================================================
+====================================================================================================
+1. 配置Java环境变量
+
+变量名：JAVA_HOME	//新建系统变量（配置JDK安装路径）
+变量值：C:\Program Files\Java\jdk1.8.0_92		// 要根据自己的实际路径配置
+
+变量名：CLASSPATH	//新建系统变量（配置类库文件的位置）
+变量值：.;%JAVA_HOME%\lib;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;	// 记得前面有个"."，点号代表当前路径
+
+变量名：Path	//编辑系统变量（配置JDK命令文件的位置）
+变量值：%JAVA_HOME%\bin;%JAVA_HOME%\jre\bin;		// 追加时用";"与前面内容分隔开
+
+JAVA_HOME
+C:\Program Files\Java\jdk1.8.0_92
+JRE_HOME
+C:\Program Files\Java\jdk1.8.0_92
+CATALINA_HOME
+C:\apache-tomcat-8.5.14
+CATALINA_BASE
+C:\apache-tomcat-8.5.14
+Path
+%Path%;%JAVA_HOME%\bin
+CLASSPATH
+.;%CLASSPATH%;%JAVA_HOME%\lib
+====================================================================================================
+1，JDK：版本为jdk-7-windows-i586.exe
+  下载地址http://www.oracle.com/technetwork/java/javase/downloads/index.html
+2，tomcat：版本为apache-tomcat-7.0.33-windows-x86.zip
+  下载地址http://tomcat.apache.org/
+3，windows2003,32bit
+
+一、安装JDK和Tomcat
+1，安装JDK：直接运行jdk-7-windows-i586.exe可执行程序，默认安装即可。
+备注：路径可以其他盘符，不建议路径包含中文名及特殊符号。
+2、安装Tomcat：直接解压缩下载文件“apache-tomcat-7.0.33-windows-x86.zip”到C盘下。安装路径建议修改为：c:\tomcat。
+备注：如下载的是可执行文件，双击运行，默认安装即可。
+
+二、配置JDK环境变量（在步骤查看如何配置环境变量）
+1，新建变量名：JAVA_HOME，变量值：C:\Program Files\Java\jdk1.7.0
+2，打开PATH，添加变量值：%JAVA_HOME%\bin;%JAVA_HOME%\jre\bin
+3，新建变量名：CLASSPATH，变量值：.;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar
+
+备注：
+1，.表示当前路径，%JAVA_HOME%就是引用前面指定的JAVA_HOME；
+2，JAVA_HOME指明JDK安装路径，此路径下包括lib，bin，jre等文件夹，tomcat，eclipse等的运行都需要依靠此变量。
+3，PATH使得系统可以在任何路径下识别java命令。
+4，CLASSPATH为java加载类(class or lib)路径，只有类在classpath中，java命令才能识别。
+
+三、测试JDK
+在CMD命令下输入javac，java，javadoc命令：出现图示界面，表示安装成功。
+java -version
+
+四、配置Tomcat环境变量
+1，新建变量名：CATALINA_BASE，变量值：C:\tomcat
+2，新建变量名：CATALINA_HOME，变量值：C:\tomcat
+3，打开PATH，添加变量值：%CATALINA_HOME%\lib;%CATALINA_HOME%\bin
+
+五、启动Tomcat服务
+方法两种：
+1，方法一：在CMD命令下输入命令：startup，出现如下对话框，表明服务启动成功。
+2，方法二：右键点击桌面上的“我的电脑”->“管理”->“服务和应用程序”->“服务”，找到“Apache     Tomcat”服务，右键点击该服务，选择“属性”，将“启动类型”由“手动”改成“自动”。
+
+六、测试Tomcat
+打开浏览器，在地址栏中输入http://localhost:8080回车，如果看到Tomcat自带的一个JSP页面，说明你的JDK和Tomcat已搭建成功。
+
+注意事项
+1，JAVA_HOME中的路径不能用分号结尾，如C:\Program     Files\Java\jdk1.7.0。
+2，CATALINA_BASE，CATALINA_HOME，TOMCAT_HOME中的路径不能以“\”结尾。
+3，JAVA_HOME的路径一定不要写成了JRE的路径。
+4，在环境变量中修改添加变量时，一定要注意分号、空格，是否有多余的字母。作者就是因为path路径中多了一个字母，怎么都配置不成功。如果配置不成功，一定要反复检查。
+以上错误，非常容易出现错误：CATALINA_HOME或是JAVA_HOME没有配置好。如错误提示“The CATALINA_HOME environment variable is not defined correctly”
+====================================================================================================
+Windows：
+例如tomcat安装在 E:\tomcat
+
+需要在环境变量配置：
+CATALINA_HOME=E:\tomcat
+CATALINA_BASE= E:\tomcat
+
+Linux：
+例如tomcat安装在：/usr/local/tomcat8.5
+
+[root@ora-rac2 ~]# vi /etc/profile	//进入配置文件，添加下列环境变量，编辑完Esc -> :wq 保存退出
+export JAVA_HOME=/cdr/jdk1.7.0_51
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASSPATH=.:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar:$CLASSPATH	//前三行是java环境配置
+export CATALINA_HOME= /usr/local/tomcat8.5
+export CATALINA_BASE= /usr/local/tomcat8.5	//后面这两行是tomcat环境配置保存后，退出
+[root@ora-rac2 ~]# source /etc/profile	//牢记，这部一定要执行！！！！！
+关闭当前连接的会话，即可生效。
+
+tomcat如果嵌入到开发环境如eclipse直接在开发环境中直接运行即可，无需配置环境；
+
+
+########################################################################################################################################################################################################
+********************************************************************************************************************************************************************************************************
+########################################################################################################################################################################################################
+****************************
+*****   Linux环境下：  *****
+****************************
+====================================================================================================
+更新并升级CentOS
+# yum -y update && yum -y upgrade
+
+Gnome快捷键
+
+ctrl + alt + shift + r  //录制视频
+ctrl + alt + shift + r  //第二次按下时停止录制
+print //截取全屏（保存至/home/Picture/）
+shift + print //截取自定义区域
+alt + print //截取当前窗口
+alt + space //activate the window menu
+alt + f2  //show the rum command prompt
+alt + f4  //close window
+super //
+super + l //lock screen
+super + m //show the message tray
+super + a //show all application
+super + space //切换输入法（之后也可通过shift键切换）
+super + tab //切换应用程序（也可alt + tab）
+super + shift + tab //反向切换应用程序（也可alt + shift + tab）
+super + up/down  //当前窗口最大/小化
+super + left/right  //当前窗口左/右填充
+super + pageup/pagedown //切换工作区
+super + home/end  //切换到首部/末尾工作区
+super + shift + pageup/pagedown //移动当前窗口到其他工作区
+super + shift + home/end  //移动当前窗口到首部/末尾工作区
+ctrl + alt + up/down  //切换工作区
+ctrl + alt + del  //log out
+ctrl + a  //全选
+ctrl + x  //剪切
+ctrl + c  //复制
+ctrl + v  //粘贴
+ctrl + z  //撤销
+
+==========同一应用内使用==========
+tab //在应用中切换（shift + tab反向切换）
+Alt + Tab （或Super + Tab）  //在不同应用间切换
+Alt + `\~ （或Super + `\~）  //在同一应用的不同窗口间切换
+shift + ctrl + t  //添加标签页
+shift + ctrl + w  //关闭标签
+ctrl + pageup/pagedown //前后切换标签（上下左右顺序）
+ctrl + PageDown
+ctrl + tab  //循环切换标签页
+alt + n //切换到第n标签页
+ctrl + shift + pageup //前移当前标签页
+ctrl + shift + pagedown //后移当前标签页
+alt + f2 => 输入gnome-terminal  //打开虚拟终端
+shift + ctrl + n  //新建窗口
+shift + ctrl + q  //关闭虚拟终端（或者输入exit）
+shift + ctrl + t  //添加标签页
+ctrl + PageUp //切换标签上下左右，和第n个标签
+ctrl + PageDown
+shift + ctrl + PageUp
+shift + ctrl + PageDown
+alt + n
+shift + ctrl + w  //关闭标签
+shift + ctrl + +  //放大
+ctrl + -  //缩小
+f11 //全屏
+
+====================================================================================================
+使用静态 IP 地址配置网络（ip addr show或ifconfig）
+vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+（1）BOOTPROTO=dhcp  改为  BOOTPROTO=static
+（2）IPADDR=192.168.1.150
+     NETMASK=255.255.255.0
+     GATEWAY=192.168.1.1
+     DNS1=8.8.8.8
+     DNS2=8.8.4.4
+（3）ONBOOT=no  改为  ONBOOT=yes
+
+====================================================================================================
+安装 Apache HTTP 服务器
+# yum install httpd	//安装
+# firewall-cmd --add-service=http	//允许 http 服务通过防火墙(永久)
+# firewall-cmd --permanent --add-port=80/tcp	//允许 3221 号端口通过防火墙(永久)
+# firewall-cmd --reload		//重新加载防火墙
+# systemctl restart httpd.service	//重启 Apache HTTP 服务器，然后新的端口号才能生效
+# systemctl start httpd.service
+# systemctl enable httpd.service	//添加 Apache 服务到系统层使其随系统自动启动
+
+更改 Apache HTTP 服务器的默认端口号(80)为其它端口，需要编辑配置文件 /etc/httpd/conf/httpd.conf 并查找以下面开始的行：
+    LISTEN 80
+把端口号 80 改为其它任何端口(例如 3221)，保存并退出。
+# vim /etc/httpd/conf/httpd.conf  //打开httpd服务程序的主配置文件
+
+118 #
+119 DocumentRoot "/home/wwwroot"  //找到大约在119行附近的DocumentRoot参数以及大约在123行附近的，修改后记得保存
+120
+121 #
+====================================================================================================
+安装 MariaDB 数据库
+# yum install mariadb mariadb-server	//安装
+# systemctl start mariadb.service	//启动 MariaDB 并配置它开机时自动启动
+# systemctl enable mariadb.service
+# firewall-cmd --add-service=mysql	//允许 mysql(mariadb) 服务通过防火墙
+
+注意：如果该 MariaDB 只用在本机，则务必不要设置防火墙允许通过，使用 UNIX Socket 连接该数据库；如果需要在别的服务器上连接数据库，则尽量使用内部网络，而不要将数据库服务暴露在公开的互联网上。
+
+====================================================================================================
+安装 PHP
+# yum install php	//安装
+# systemctl restart httpd.service	//重启 Apache 服务以便在 Web 浏览器中渲染 PHP
+# echo -e "<?php\nphpinfo();\n?>" > /var/www/html/phpinfo.php		//通过在 Apache 文档根目录下创建下面的 php 脚本验证 PHP
+# php /var/www/html/phpinfo.php		//在 Linux 命令行中查看刚才创建的 PHP 文件(phpinfo.php)
+或者
+# links http://127.0.0.1/phpinfo.php
+或者
+http://localhost:80/phpinfo.php
+====================================================================================================
+安装和配置 SSH 服务器
+（1）检查 SSH 版本
+SSH 即 Secure Shell，是 Linux 远程管理的默认协议。 SSH 是随最小化 CentOS 服务器中安装运行的最重要的软件之一。
+检查当前已安装的 SSH 版本。
+    # ssh -V
+（2）保护 SSH 登录
+使用更安全的 SSH 协议，而不是默认的协议，并更改端口号进一步加强安全。
+编辑 SSH 的配置文件 ‘/etc/ssh/ssh_config’。
+去掉下面行的注释或者从协议行中删除 1，然后行看起来像这样（注： SSH v1 是过期废弃的不安全协议）：
+    # Protocol 2,1 (原来)
+    Protocol 2(现在)
+这个改变强制 SSH 使用 协议 2，它被认为比协议 1 更安全，同时也确保在配置中更改端口号 22 为其它。
+（3）取消 SSH Root 直接登录
+取消 SSH 中的‘root login’， 只允许通过普通用户账号登录后才能使用 su 切换到 root，以进一步加强安全。请打开并编辑配置文件 ‘/etc/ssh/sshd_config’ 并更改 PermitRootLogin yes 为 PermitRootLogin no。
+    # PermitRootLogin yes (原来)
+    PermitRootLogin no(现在)
+（4）最后，重启 SSH 服务启用更改。
+    # systemctl restart sshd.service
+====================================================================================================
+安装 Apache Tomcat
+Tomcat 是由 Apache 设计的用来运行 Java HTTP web 服务器的 servlet 容器。
+按照下面的方法安装 tomcat，但需要指出的是安装 tomcat 之前必须先安装 Java。
+    # yum install tomcat
+安装完 tomcat 之后，启动 tomcat 服务。
+    # systemctl start tomcat
+查看 tomcat 版本。
+    # /usr/sbin/tomcat version
+允许 tomcat 服务和默认端口(8080) 通过防火墙并重新加载设置。
+    # firewall-cmd --zone=public --add-port=8080/tcp --permanent
+    # firewall-cmd --reload
+====================================================================================================
+安装 Nmap 监视开放端口
+Nmap 网络映射器用来分析网络，通过运行它可以发现网络的映射关系。nmap 并没有默认安装，你需要从库中安装它。
+    # yum install nmap
+列出主机中所有的开放端口以及对应使用它们的服务。
+    # namp 127.0.01
+你也可以使用 firewall-cmd 列出所有端口，但 nmap 更有用。
+    # firewall-cmd --list-ports
+
+====================================================================================================
+=git相关操作========================================================================================
+====================================================================================================
+[Linux]	[GitHub]
+clone	fork
+add
+commit	commit
+push	pull_request
+merge merge
+
+git常用命令
+1：git clone——复制一个项目
+2：git status——查看项目的状态
+3：git add——将项目从工作区提交到暂存区
+4：git commit——将项目从暂存区提交到本地分支
+5：git reset——恢复某个向緩存區的提交（add提交）
+6：git pull——拉取项目
+7：git push——推送项目
+8：git log——查看日志
+9：git --help——查看帮助（这个非常的重要，可以通过此命令学习许许多多的命令的使用方式）
+10：git --version——查看版本
+
+冲突，多人协同开发，在同一个位置上做了不同的修改，这时需要人肉的方式来解决这类问题，即对冲突部分代码进行取舍
+1：git pull https://github.com/test
+2. git diff
+3：编辑器打开冲突文件，人肉解决冲突
+4：git add 再将应用从工作区提交到暂存区
+5：git commit 再将应用从暂存区提交到本地分支
+6：git push 再将应用从本地分支提交到远程版本库
+
+版本回滚操作步骤:
+1. 命令: git log // 显示所有提交记录.
+2. 在所有提交记录中,选择需要回退到的commit ID(一个长字符串),复制.
+3. 命令: git reset --hard XXYYZCCRERR // 最后一串是commit ID.完成回滚操作.
+4. 命令: git log // 显示新的提交记录.
+
+这里 利用 git reset 命令,可以任意回滚到过去,同时也可以穿越到未来.
+很方便.
+(回到未来 （fast -forward)
+git reflog查看该用户的所有操作
+git reset --hard commit id
+
+====================================================================================================
+=配置环境变量=======================================================================================
+====================================================================================================
+[root@localhost ~]# vi /etc/profile
+
+export JAVA_HOME=/usr/local/share/jdk1.8.0_131
+export CATALINA_HOME=/usr/local/share/apache-tomcat-8.5.14
+export CATALINA_BASE=/usr/local/share/apache-tomcat-8.5.14
+export PATH=$PATH:$JAVA_HOME/bin
+export CLASSPATH=.:$CLASSPATH:$JAVA_HOME/lib
+
+[root@localhost ~]# source /etc/profile
+
+http://192.168.1.123:8080（验证）
+
+注意问题：
+linux 环境变量不小心被改了几乎所有的基本命令（ls,vi 等）都不能用了，怎么改回来？
+解决方法：
+一般重新启动下就好了。
+也可以用命令：
+export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+但是只对对当前会话窗口有用。
+
+====================================================================================================
+=firewall相关操作===================================================================================
+====================================================================================================
+1. 允许 http 服务通过防火墙(永久)：firewall-cmd --add-service=http
+2. 允许 3221 号端口通过防火墙(永久)：firewall-cmd --permanent --add-port=3221/tcp
+3. 重新加载防火墙：firewall-cmd --reload（或systemctl restart firewalld.service）
+4. 重启 Apache HTTP 服务器：systemctl restart httpd.service（然后新的端口号才能生效）
+5. 添加 Apache 服务到系统层使其随系统自动启动：
+	systemctl start httpd.service
+	systemctl enable httpd.service
+6. 列出所有端口：firewall-cmd --list-ports
+7. 查看运行状态：systemctl status firewalld
+   或firewall-cmd --state
+8. 获取所有的区域列表：firewall-cmd --get-zones
+9. 在切换之前先获取区域的详细信息：firewall-cmd --zone=work --list-all
+10. 获取默认区域：firewall-cmd --get-default-zone
+11. 切换到另一个区域，比如 ‘work’：firewall-cmd --set-default-zone=work
+12. 列出区域中的所有服务：firewall-cmd --list-services
+13. 添加临时服务，比如 http，然后重载 firewalld：
+firewall-cmd --add-service=http
+firewall-cmd --reload
+14. 添加永久服务，比如 http，然后重载 firewalld：
+firewall-cmd --add-service=http --permanent
+firewall-cmd --reload
+15. 删除临时服务，比如 http：
+firewall-cmd --remove-service=http
+firewall-cmd --reload
+16. 删除永久服务，比如 http：
+firewall-cmd --zone=work --remove-service=http --permanent
+firewall-cmd --reload
+17. 允许一个临时端口(比如 331)：
+firewall-cmd --add-port=331/tcp
+firewall-cmd --reload
+18. 允许一个永久端口(比如 331)：
+firewall-cmd --add-port=331/tcp --permanent
+firewall-cmd --reload
+19. 阻塞/移除临时端口(比如 331)：
+firewall-cmd --remove-port=331/tcp
+firewall-cmd --reload
+20. 阻塞/移除永久端口(比如 331)；
+firewall-cmd --remove-port=331/tcp --permanent
+firewall-cmd --reload
+21. 停用 firewalld：
+systemctl stop firewalld
+systemctl disable firewalld
+firewall-cmd --state
+22. 启用 firewalld
+systemctl enable firewalld
+systemctl start firewalld
+firewall-cmd --state
+
+====================================================================================================
+=Tomcat相关操作=====================================================================================
+====================================================================================================
+目录介绍如下：
+bin：二进制执行文件。里面最常用的文件是startup.bat，如果是 Linux 或 Mac 系统启动文件为 startup.sh。
+conf:配置目录。里面最核心的文件是server.xml。可以在里面改端口号等。默认端口号是8080，也就是说，此端口号不能被其他应用程序占用。
+lib：库文件。tomcat运行时需要的jar包所在的目录
+logs：日志
+temp：临时产生的文件，即缓存
+webapps：web的应用程序。web应用放置到此目录下浏览器可以直接访问
+work：编译以后的class文件。
+
+
+1. 停止：systemctl stop tomcat
+2. 启动：systemctl start tomcat
+3. 开机自启动：systemctl enable tomcat.service
+
+====================================================================================================
+=systemctl相关操作==================================================================================
+====================================================================================================
+centos7 使用 systemctl 替换了 service命令
+参考：redhat文档：
+https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/sect-Managing_Services_with_systemd-Services.html#sect-Managing_Services_with_systemd-Services-List
+查看全部服务命令：
+systemctl list-unit-files --type service
+查看服务
+systemctl status name.service
+启动服务
+systemctl start name.service
+停止服务
+systemctl stop name.service
+重启服务
+systemctl restart name.service增加开机启动
+systemctl enable name.service
+删除开机启动
+systemctl disable name.service
+其中.service 可以省略。
+
+====================================================================================================
+=Putty传输文件操作==================================================================================
+====================================================================================================
+编写批处理文件：
+
+@echo off
+cd /d c:\Program Files\PuTTY & dir & cmd
+====================================================================================================
+pscp：单文件传输
+
+pscp -l root -pw 123456 d:\test.txt 192.168.1.123:/tmp	（传输）
+plink -l root -pw 123456 192.168.1.123 ls /tmp		（验证）
+====================================================================================================
+psftp：多文件传输
+
+psftp -l root -pw 123456 192.168.1.123	（连接）
+cd /tmp			（切换目录）
+mput d:\temp\*.*	（上传文件）
+ls /tmp			（验证）
+====================================================================================================
+psftp -l root -pw 123456 192.168.1.123	（连接）
+lcd e:			（切换本地盘符）
+mget /temp/*.*		（下载文件）
+dir e:
+
+del：删目录；
+dir：列目录；
+cd：切换服务器目录；
+lcd：切换本地目录；
+put/get：单文件上传/下载；
+mput/get：多文件上传/下载；
+quit：结束本次会话；
+close：关闭sftp会话；
+
+====================================================================================================
+scp、sftp走的是 ssh 协议，开启了sshd就相当于开启了scp和sftp
+
+比较：
+FTP 基于TCP来传输文件，明文传输用户信息和数据。
+SFTP 基于SSH来加密传输文件，可靠性高，可断点续传。（可先连接远端主机，再进行一系列操作）
+SCP 是基于SSH来加密拷贝文件，但要知道详细目录，不可断点续传。（上传和下载都是一次性操作）
+
+（1）scp
+scp就是secure copy，是用来进行远程文件拷贝的。数据传输使用 ssh，并且和ssh 使用相同的认证方式，提供相同的安全保证 。 与rcp 不同的是，scp 在需要进行验证时会要求你输入密码或口令。
+
+传送命令
+SCP（Secure Copy）
+scp 命令是 SSH 中最方便有用的命令了，试想，在两台服务器之间直接传送文件，仅仅用 scp 一个命令就完全解决了。
+你可以在一台服务器上以 root 身份运行 #scp servername:/home/ftp/pub/file1 ./ 这样就把另一台服务器上的文件 /home/ftp/pub/file1 直接传到本机器的当前目录下，
+当然你也可以用 #scp /tmp/file2 servername:/boot 把本机上的文件 /tmp/file2 送到另一台机器的 /boot 目录下。
+而且整个传送过程仍然是用 SSH 加密的。
+
+应用实例
+最简单的应用如下 :
+scp 本地用户名@IP地址:文件名1 远程用户名@IP地址:文件名2
+[本地用户名@IP地址:]可以不输入，可能需要输入远程用户名所对应的密码。
+可能有用的几个参数 :
+-v 和大多数 linux 命令中的 -v 意思一样，用来显示进度。可以用来查看连接、认证，或是配置错误。
+-C 使能压缩选项。
+-P 选择端口。注意 -p 已经被 rcp 使用。
+-4 强行使用 IPV4 地址。
+-6 强行使用 IPV6 地址。
+-r Recursively copy entire directories。
+须注意使用者的权限是否可读取远程上的档案，若想知道更多关于 scp 的使用方法，可去看看 scp 的使用手册。
+
+ssh-keygen
+产生公开钥(pulib key)和私人钥(private key)，以保障 ssh 联机的安性，
+当 ssh 连 shd 服务器，会交换公开钥上，系统会检查 /etc/ssh_know_hosts 内储存的 key，
+如果找到客户端，就用这个 key 产生一个随机产生的session key 传给服务器，两端都用这个 key 来继续完成 ssh 剩下来的阶段。
+它会产生 identity.pub、identity 两个档案，
+私人钥存放于identity，公开钥存放于 identity.pub 中，
+接下来使用 scp 将 identity.pub copy 到远程机器的家目录下.ssh下的authorized_keys。
+.ssh/authorized_keys(这个 authorized_keys 档案相当于协议的 rhosts 档案)， 之后使用者能够不用密码去登入。
+RSA的认证绝对是比 rhosts 认证更来的安全可靠。
+执行：
+scp identity.pub .tw:.ssh/authorized_keys
+若在使用 ssh-keygen 产生钥匙对时没有输入密码，则如上所示不需输入密码即可从去登入在此，
+这里输入的密码可以跟帐号的密码不同，也可以不输入密码。
+====================================================================================================
+Linux scp命令用于Linux之间复制文件和目录。
+scp是 secure copy的缩写, scp是linux系统下基于ssh登陆进行安全的远程文件拷贝命令。
+scp [可选参数] file_source file_target
+scp file_source file_target
+scp -r file_source file_target
+
+#语法
+scp [-1246BCpqrv] [-c cipher] [-F ssh_config] [-i identity_file]
+[-l limit] [-o ssh_option] [-P port] [-S program]
+[[user@]host1:]file1 [...] [[user@]host2:]file2
+
+#简易写法:
+scp [可选参数] file_source file_target
+
+#参数说明：
+    -1： 强制scp命令使用协议ssh1
+    -2： 强制scp命令使用协议ssh2
+    -4： 强制scp命令只使用IPv4寻址
+    -6： 强制scp命令只使用IPv6寻址
+    -B： 使用批处理模式（传输过程中不询问传输口令或短语）
+    -C： 允许压缩。（将-C标志传递给ssh，从而打开压缩功能）
+    -p：保留原文件的修改时间，访问时间和访问权限。
+    -q： 不显示传输进度条。
+    -r： 递归复制整个目录。
+    -v：详细方式显示输出。scp和ssh(1)会显示出整个过程的调试信息。这些信息用于调试连接，验证和配置问题。
+    -c cipher： 以cipher将数据传输进行加密，这个选项将直接传递给ssh。
+    -F ssh_config： 指定一个替代的ssh配置文件，此参数直接传递给ssh。
+    -i identity_file： 从指定文件中读取传输时使用的密钥文件，此参数直接传递给ssh。
+    -l limit： 限定用户所能使用的带宽，以Kbit/s为单位。
+    -o ssh_option： 如果习惯于使用ssh_config(5)中的参数传递方式，
+    -P port：注意是大写的P, port是指定数据传输用到的端口号
+    -S program： 指定加密传输时所使用的程序。此程序必须能够理解ssh(1)的选项。
+
+#实例
+1、从本地复制到远程
+命令格式：
+scp local_file remote_username@remote_ip:remote_folder
+或者
+scp local_file remote_username@remote_ip:remote_file
+或者
+scp local_file remote_ip:remote_folder
+或者
+scp local_file remote_ip:remote_file
+    第1,2个指定了用户名，命令执行后需要再输入密码，第1个仅指定了远程的目录，文件名字不变，第2个指定了文件名；
+    第3,4个没有指定用户名，命令执行后需要输入用户名和密码，第3个仅指定了远程的目录，文件名字不变，第4个指定了文件名；
+
+#复制目录命令格式：
+scp -r local_folder remote_username@remote_ip:remote_folder
+或者
+scp -r local_folder remote_ip:remote_folder
+    第1个指定了用户名，命令执行后需要再输入密码；
+    第2个没有指定用户名，命令执行后需要输入用户名和密码；
+
+2、从远程复制到本地
+从远程复制到本地，只要将从本地复制到远程的命令的后2个参数调换顺序即可，如下实例
+
+#说明
+1.如果远程服务器防火墙有为scp命令设置了指定的端口，我们需要使用 -p 参数来设置命令的端口号，命令格式如下：
+#scp命令使用端口号 4588
+scp -p 4588 remote@www.w3cschool.cc:/usr/local/sin.sh /home/administrator
+2.使用scp命令要确保使用的用户具有可读取远程服务器相应文件的权限，否则scp命令是无法起作用的。
+
+====================================================================================================
+（2）sftp
+sftp [remote_username@]remote_ip
+
+#如何在 Linux 中使用 sFTP 传输文件/文件夹
+
+默认情况下，SFTP 协议采用和 SSH 传输协议一样的方式建立到远程服务器的安全连接。虽然，用户验证使用类似于 SSH 默认设置的密码方式，但是，建议创建和使用 SSH 无密码登录，以简化和更安全地连接到远程主机。
+
+要连接到远程 sftp 服务器，如下建立一个安全 SSH 连接并创建 SFTP 会话：
+$ sftp tecmint@192.168.56.10
+
+登录到远程主机后，你可以如下运行交互式的 sFTP 命令：
+sftp> ls        #list directory
+sftp> pwd        #print working directory on remote host
+sftp> lpwd        #print working directory on local host
+sftp> mkdir uploads        #create a new directory
+
+#如何使用sFTP上传文件夹
+
+要将整个目录上传到远程 Linux 主机中，请使用put命令。但是，如果目录名称不存在于远程主机上的工作目录中，你将收到错误，如下面的屏幕截图所示。
+
+因此，首先在远程主机上创建一个具有相同名称的目录，然后从本地主机上传它，-r 参数允许拷贝子目录和子文件：
+sftp> put -r Tecmint.com-articles        #error
+sftp> mkdir Tecmint.com-articles
+sftp> put -r Tecmint.com-articles
+
+要保留修改时间、访问时间以及被传输的文件的模式，请使用 -p 标志。
+sftp> put -pr Tecmint.com-articles
+
+#如何使用 sFTP 下载文件夹
+
+要从远程 Linux 主机下载整个 fstools-0.0 文件夹到本机中，如下所示使用 get 命令带上 -r 标志：
+sftp> get -r fstools-0.0
+
+#使用 sFTP 下载目录
+
+如果文件夹已经下载完成了，接着查看本机的工作目录。
+
+要退出 sFTP shell，输入：
+sftp> bye
+或者
+sftp> exit
+
+请注意，为了防止用户访问远程主机上的整个文件系统，出于安全原因，你可以使用 chroot Jail将 sFTP 用户限制到其主目录中。
+
+put -r dir/.
+在一个已连接的sftp中执行这个命令，dir/后面必须有 “ . ”，否则会报错。
+注意：这个命令是上传 dir 目录中的文件和子目录，并不上传 dir 目录本身。
+下载整个目录就比较简单了：get -r dir
+
+====================================================================================================
+=压缩相关操作=======================================================================================
+====================================================================================================
+解压
+tar -xvf file.tar	//解压tar包
+tar -xzvf file.tar.gz	//解压tar.gz
+tar -xjvf file.tar.bz2	//解压tar.bz2
+tar -xZvf file.tar.Z	//解压tar.Z
+unrar e file.rar	//解压rar
+unzip file.zip		//解压zip
+
+解压后默认目录为当前目录
+要指定目录的话 要加 －C，格式如下：
+＃ tar -zxvf test.tar.gz -C /usr/local/share
+注意权限，如果没root权限的话，你只能把文件解压到 ~/的指定目录中。
+
+====================================================================================================
+=yum相关操作========================================================================================
+====================================================================================================
+1. 用YUM安装软件包命令：yum install package_name
+2. 用YUM删除软件包命令：yum remove package_name
+3. 更新源列表：yum  update
+4. 更新所有已安装的软件包：yum upgrade
+5. 更新整个系统到最新的发行版（更新到最新包，甚至会删除其他包）：yum dist-upgrade
+	yum -y update && yum -y upgrade
+6. 安装Apache HTTP服务器：yum install httpd
+
+====================================================================================================
+=nmap相关操作=======================================================================================
+====================================================================================================
+1. 安装：yum install nmap
+2. 扫描所有端口，查看开放端口：nmap 192.168.1.123
+关闭端口和开放端口应该是两种不同的概念，每个端口都有对应的服务，因此要关闭端口，只要关闭相应的服务就可以了。
+
+====================================================================================================
+=du相关操作=========================================================================================
+====================================================================================================
+显示目录占用的磁盘空间大小：du -h /usr/
+
+-h：以人类可读的方式显示
+-a：显示目录占用的磁盘空间大小，还要显示其下目录和文件占用磁盘空间的大小
+-s：显示目录占用的磁盘空间大小，不要显示其下子目录和文件占用的磁盘空间大小
+-c：显示几个目录或文件占用的磁盘空间大小，还要统计它们的总和
+--apparent-size：显示目录或文件自身的大小
+-l ：统计硬链接占用磁盘空间的大小
+-L：统计符号链接所指向的文件占用的磁盘空间大小
+du -sh : 查看当前目录总共占的容量。而不单独列出各子项占用的容量
+du -lh --max-depth=1 : 查看当前目录下一级子文件和子目录占用的磁盘容量。
+
+====================================================================================================
+=挂载相关操作=======================================================================================
+====================================================================================================
+mount /xxx/xxx.iso /mnt -o loop
+
+xxx替换为你iso文件的绝对路径，如使用以上命令，则可以把iso里的文件mount到/mnt目录下，cd /mnt后便可以对文件进行操作。/mnt也可以替换成任意其他路径。
+==============================
+在终端用mount -o loop /mnt/*/1.iso /mnt/cdrom 命令，(其中*是你工具盘放置的路径)。
+当提示charudi二张光盘时，键入命令umount /mnt/cdrom 。
+然后再键入mount -o loop /mnt/*/2.iso/mnt/cdrom(把第一条命令的文件名的1改成2，就是第二张光盘的名字了)。这样再回车。等待就可以了。
+取消挂载用umount /mnt/cdrom
+
+====================================================================================================
+=目录相关操作=======================================================================================
+====================================================================================================
+一、目录创建
+在/home/wwwroot目录下新建一个sinozzz123的文件夹
+mkdir /home/wwwroot/sinozzz123
+
+二、目录复制
+1.把/home/wwwroot/sinozzz里面的文件和文件夹等复制到home/wwwroot/sinozzz123目录下
+cp -rf /home/wwwroot/sinozzz/* /home/wwwroot/sinozzz123
+
+2.把/home/wwwroot/sinozzz123/abc/下的文件夹和文件复制到home/wwwroot/sinozzz123目录下
+cp -rf /home/wwwroot/sinozzz123/abc/* /home/wwwroot/sinozzz123
+
+3.把/home/wwwroot/sinozzz目录复制到/home/wwwroot/sinozzz123目录下，即把sinozzz复制变成sinozzz123的子目录,变成/home/wwwroot/sinozzz123/sinozzz的路径
+cp -rf /home/wwwroot/sinozzz /home/wwwroot/sinozzz123
+
+三、目录剪切
+1.使用mv命令剪切文件。
+如需要将/home/wwwroot/sinozzz123/music/目录下的1.mp3文件剪切到/home/wwwroot/sinozzz123/abc目录下，执行下面的命令即可：
+# mv /home/wwwroot/sinozzz123/music/1.mp3 /home/wwwroot/sinozzz123/abc
+
+2.使用mv命令剪切文件夹。
+把/home/wwwroot/sinozzz123/soft文件夹剪切到/home/wwwroot/sinozzz123/abc目录下
+# mv /home/wwwroot/sinozzz123/soft /home/wwwroot/sinozzz123/abc
+
+3.使用mv命令剪切文件夹和文件
+把/home/wwwroot/sinozzz123/photo/下的文件夹和文件剪切到/home/wwwroot/sinozzz123/abc目录下
+# mv /home/wwwroot/sinozzz123/photo/* /home/wwwroot/sinozzz123/abc
+
+四、目录重命名
+在Linux下，移动文件跟重命名都是同一个命令，mv（就是move的意思）
+命令： mv 源文件名 目标文件名
+
+1.把/home/wwwroot/sinozzz123/index.htm重命名为/home/wwwroot/sinozzz123/index.html
+# mv /home/wwwroot/sinozzz123/index.htm /home/wwwroot/sinozzz123/index.html
+
+2.把/home/wwwroot/sinozzz123目录重命名为/home/wwwroot/sinozzz456
+# mv /home/wwwroot/sinozzz123 /home/wwwroot/sinozzz456
+
+五、目录删除
+linux删除目录很简单，很多人还是习惯用rmdir，不过一旦目录非空，就陷入深深的苦恼之中，现在使用rm -rf命令即可。
+直接rm就可以了，不过要加两个参数-rf
+即：rm -rf   目录名字
+-r 就是向下递归，不管有多少级目录，一并删除
+-f 就是直接强行删除，不作任何提示的意思
+
+1.删除文件使用实例：
+rm -f /home/wwwroot/sinozzz456/index.html
+将会强制删除/home/wwwroot/sinozzz456/index.html这个文件
+
+2.清空文件夹实例：
+rm -rf /home/wwwroot/sinozzz456/abc/*
+将会强制删除/home/wwwroot/sinozzz456/abc目录下所有文件、文件夹，保留/home/wwwroot/sinozzz456/abc目录
+
+3.删除文件夹实例：
+rm -rf /home/wwwroot/sinozzz456
+将会强制删除/home/wwwroot/sinozzz456目录以及其下所有文件、文件夹
+
+需要提醒的是：使用这个rm -rf的时候一定要格外小心，linux没有回收站的
+当然，rm还有更多的其他参数和用法，man rm就可以查看了
+如果是在/home/wwwroot/目录下进行操作，则可以省去每个命令的/home/wwwroot/部分
+====================================================================================================
+=VBox增强功能=======================================================================================
+====================================================================================================
+虚拟机安装VBoxAdditions增强功能
+
+1. 在VirtualBox上安装好CentOS后，需将VBoxAdditions增强功能安装上，该功能有如下作用：
+（1）实现客户机和主机间的鼠标平滑移动
+（2）与主机实现文件共享
+（3）安装虚拟显卡驱动，实现2D和3D视频图形加速，自动调整客户机分辨率
+（4）支持无缝模式
+（5）与主机共享剪贴板的内容，也就是说直接可以在主机、客户机之间复制、粘贴（不支持文件）
+
+2. 安装过程
+（1）在VirtualBox的软件菜单里面选择“设备”--“安装增强功能”
+（2）在桌面上出现一个光驱符号，表明光驱加载成功。
+（3）打开终端，进入/media文件夹，会看到一个文件，名字为VBoxAdditions，进入该目录。
+（4）超级用户运行sh VBoxLinuxAdditions.run 。
+
+3.
+错误1、Building the main Guest Additions module [FAILED]
+安装的过程中，出现Building the main Guest Additions module[FAILED]错误,
+查看log文件是 /var/log/vboxadd-install.log
+/tmp/vbox.0/Makefile.include.header:97: *** Error: unable to find the sources of your current Linux kernel.
+
+原因：
+安装增强功能需要kernel-devel和gcc包，并且必须保证kernel-devel和kernel版本的一致。若两者版本不一致，则必须升级kernel，以便 Guest Additions 安装能够正常工作。
+查看kernel版本
+uname –r
+查看源中查看软件源中kernel-devel的版本：
+yum info kernel-devel
+
+解决办法：
+#更新内核。
+ yum update kernel
+#需要安装相应的kernel-devel和gcc程序包,gcc也是必须的
+ yum install kernel-devel gcc
+升级完后必须重启系统，新的kernel才能被使用。
+
+4.
+错误2、Building the OpenGL support module[FAILED]
+
+解决方法
+export MAKE='/usr/bin/gmake -i'
+cd /meida/VBOXADDITIONS_5.0.16_105871
+./VBoxLinuxAdditions.run
+
+====================================================================================================
+1. 创建目录：mkdir /media/cdrom/
+2. 挂载：mount -o loop media/VBoxGuestAdditions.iso media/cdrom/
+mount -o loop media/cdrom/VBoxGuestAdditions.iso ./
+3. 安装编译所需软件：
+#yum install kernel-headers
+#yum install kernel-devel
+#yum install make
+#yum install gcc*
+
+#yum install bzip2
+4. 安装VBoxLinuxAdditions.run：
+./VBoxLinuxAdditions.run
+5. 等待编译完成，挂载共享目录
+mkdir /mnt/share
+mount -t vboxsf share /mnt/share
+
+纯命令行模式下：
+1. 在/media/目录下新建cdrom/：mkdir /media/cdrom/
+2. 先上传镜像文件：pscp -l root -pw 123456 e:\VBoxGuestAdditions.iso /media/cdrom/
+3. 再挂载虚拟光驱：mount /dev/cdrom/ /media/cdrom/
+4. 运行安装程序：./VBoxLinuxAdditions.run
+====================================================================================================
+=权限相关操作=======================================================================================
+====================================================================================================
+chmod +x file_name
+
+1. 命令描述
+变更文件或目录的权限。在UNIX系统家族里，文件或目录权限的控制分别以读取，写入，执行3种一般权限来区分，另有3种特殊权限可供运用，再搭配拥有者与所属群组管理权限范围。您可以使用chmod指令去变更文件与目录的权限，设置方式采用文字或数字代号皆可。符号连接的权限无法变更，如果您对符号连接修改权限，其改变会作用在被连接的原始文件。权限范围的表示法如下：
+u：User，即文件或目录的拥有者。
+g：Group，即文件或目录的所属群组。
+o：Other，除了文件或目录拥有者或所属群组之外，其他用户皆属于这个范围。
+a：All，即全部的用户，包含拥有者，所属群组以及其他用户。
+有关权限代号的部分，列表于下：
+r：读取权限，数字代号为"4"。
+w：写入权限，数字代号为"2"。
+x：执行或切换权限，数字代号为"1"。
+-：不具任何权限，数字代号为"0"。
+s：特殊?b>功能说明：变更文件或目录的权限。
+2. 语法
+chmod [-cfRv][--help][--version][<权限范围>+/-/=<权限设置...>][文件或目录...]
+chmod [-cfRv][--help][--version][数字代号][文件或目录...]
+chmod [-cfRv][--help][--reference=<参考文件或目录>][--version][文件或目录...]
+3. 选项说明
+-c或--changes 　效果类似"-v"参数，但仅回报更改的部分。
+-f或--quiet或--silent 　不显示错误信息。
+-R或--recursive 　递归处理，将指定目录下的所有文件及子目录一并处理。
+-v或--verbose 　显示指令执行过程。
+--help 　在线帮助。
+--reference=<参考文件或目录> 　把指定文件或目录的权限全部设成和参考文件或目录的权限相同
+--version 　显示版本信息。
+<权限范围>+<权限设置> 　开启权限范围的文件或目录的该项权限设置。
+<权限范围>-<权限设置> 　关闭权限范围的文件或目录的该项权限设置。
+<权限范围>=<权限设置> 　指定权限范围的文件或目录的该项权限设置。
+4. 范例
+范例一 ：将档案 file1.txt 设为所有人皆可读取 :
+chmod ugo+r file1.txt
+将档案 file1.txt 设为所有人皆可读取 :
+chmod a+r file1.txt
+将档案 file1.txt 与 file2.txt 设为该档案拥有者，与其所属同一个群体者可写入，但其他以外的人则不可写入 :
+chmod ug+w,o-w file1.txt file2.txt
+将 ex1.设定为只有该档案拥有者可以执行 :
+chmod u+x ex1
+将目前目录下的所有档案与子目录皆设为任何人可读取 :
+chmod -R a+r *
+当其他用户执行Oracle的sqlplus这个程序时，他的身份因这个程序暂时变成oracle
+chmod u+s sqlplus
+此外,chmod也可以用数字来表示权限如 chmod 777 file
+语法为：chmod abc file
+其中a,b,c各为一个数字，分别表示User、Group、及Other的权限。
+r=4，w=2，x=1
+若要rwx属性则4+2+1=7；
+若要rw-属性则4+2=6；
+若要r-x属性则4+1=5。
+范例二：
+chmod a=rwx file
+和
+chmod 777 file
+效果相同
+chmod ug=rwx,o=x file
+和
+chmod 771 file
+效果相同
+若用chmod 4755 filename可使此程式具有root的权限
+范例三：
+如果在cd /media/amasun/Java/develop/array之后执行
+chmod 777 ./
+是将本目录(即/media/amasun/java/develop/array)设为任何人可读,写,执行
+如果是管理员也就是常说的ROOT用户的话，基本上有可以查看所有文件的权力.
