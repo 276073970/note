@@ -42,6 +42,13 @@ Red: Removed
 （2）若要将修改内容贡献到【仓库a】中去，需在GitHub页面先fork【仓库a】到自己账户，通过将相应修改先push到自己GitHub账户的【仓库a】，再向原库主发起pull request，请求与其合并（merge）。
 （3）fork了别人的项目到自己的repository后，若别人的项目更新了，可先fetch对方的更新到自己的本地版本库，然后再判断，最后决定与自己本地版本库的内容进行merge。
 （4）虽然pull直接包含了这两步操作，即pull = fetch + merge，但是要多用fetch + merge，这样可以检查fetch下来的更新是否合适。如果你觉得对方1的更新没有问题，那直接pull也是可以的。
+17. pull和push的权限范围
+（1）本地repository可从其他远端GitHub库clone版本库到本地，或pull某库的某分支到本地分支，也可在自己GitHub账户上直接fork其他repository。
+（2）但对于非项目合作者（contributors），即未在远端GitHub库主的服务器下添加你的SSH公钥，则不能将本地修改后的repository直接push到远端库主的repository。
+（3）非contributors只能fork、clone、pull其他repository后，先从本地repository向自己的GitHub库push更新，然后再向原库主发起pull request，请求与其合并。
+18. 对于GitHub上同一个repository的不同分支，不同的开发小组可对各自关注的分支同时进行开发，之后在合适的时间点再将各个分支进行合并即可。
+19. GibHub网页上的fork功能，可将其他库主的repository复制到自己的GitHub服务器上来（默认创建一个同名的repository），该复制过来的repository的任一分支，都可向原库主发起pull request。
+20. 若被我们fork的repository产生更新，则可再GitHub网页上“反向”发起一个pull request，再merge到自己的repository。
 
 ####################################################################################################
 ####################################################################################################
