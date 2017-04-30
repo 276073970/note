@@ -34,8 +34,8 @@ Red: Removed
 （3）若remote repo更新内容（减少），则local repo执行git push指令前必须先执行git pull origin master指令。remote repo减少的文件或内容会无条件自动从local repo扣除，且此时执行git diff指令无显示内容；
 （4）若local reop更新内容（减少），则可直接执行git push指令。local repo减少的文件或内容会无条件自动从remote reop扣除。
 15. git clone和git pull区别。
-（1）git clone：远程操作的第一步，通常是从远程主机克隆一个版本库。从远程服务器克隆一个一模一样的版本库到本地,复制的是整个版本库，是一个本地从无到有的过程。在克隆后得到的目录中可直接执行相关的git操作。
-（2）git pull：相当于是从远程服务器获取某branch（分支）的最新版本，并merge（合并）到本地的对应branch。其中：git pull = git fetch + git merge（先git fetch更安全一些）。
+（1）git clone：远程操作的第一步，通常是从远程主机克隆一个版本库。从远程服务器克隆一个一模一样的版本库到本地,复制的是整个版本库，包括里面的日志信息、各分支等，是一个本地从无到有的过程。在克隆后得到的目录中可直接执行相关的git操作。
+（2）git pull：相当于是从远程服务器获取某branch（分支）的最新版本，并merge（合并）到本地的对应branch。其中：git pull = git fetch + git merge（先git fetch更安全一些）。使用pull的前提是本地以存在repository。
 （3）若不采用clone远端版本库的方式，可先在本地创建工作目录（通常与远端版本库同名），并将其进行git初始化，再和远端版本库相关联，之后即可正常执行相关的git操作。
 16. pull request的作用。
 （1）若【库主A】没有把我们添加为项目合作者（contributors），我们将A的某个【仓库a】clone到本地版本库，对其进行相应修改后，无法直接将其push到远端A的版本库。
