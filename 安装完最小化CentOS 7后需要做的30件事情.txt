@@ -1,0 +1,607 @@
+我们会基于工业标准的需求来介绍以下列出的这些重要工作。我们希望这些东西在你配置服务器的时候能有所帮助。
+
+
+
+    1. 注册并启用红帽订阅
+    2. 使用静态 IP 地址配置网络
+    3. 设置服务器的主机名称
+    4. 更新或升级最小化安装的 CentOS
+    5. 安装命令行 Web 浏览器
+    6. 安装 Apache HTTP 服务器
+    7. 安装 PHP
+    8. 安装 MariaDB 数据库
+    9. 安装并配置 SSH 服务器
+    10. 安装 GCC (GNU 编译器集)
+    11. 安装 Java
+    12. 安装 Apache Tomcat
+    13. 安装 Nmap 检查开放端口
+    14. 配置防火墙
+    15. 安装 Wget
+    16. 安装 Telnet
+    17. 安装 Webmin
+    18. 启用第三方库
+    19. 安装 7-zip 工具
+    20. 安装 NTFS-3G 驱动
+    21. 安装 Vsftpd FTP 服务器
+    22. 安装和配置 sudo
+    23. 安装并启用 SELinux
+    24. 安装 Rootkit Hunter
+    25. 安装 Linux Malware Detect (LMD)
+    26. 用 Speedtest-cli 测试服务器带宽
+    27. 配置 Cron 作业
+    28. 安装 Owncloud
+    29. 启用 VirtualBox 虚拟化
+    30. 用密码保护 GRUB
+
+
+
+1. 注册并启用红帽订阅
+RHEL 7 最小化安装完成后，就应该注册并启用系统红帽订阅库， 并执行一个完整的系统更新。这只当你有一个可用的红帽订阅时才能有用。你要注册才能启用官方红帽系统库，并时不时进行操作系统更新。（LCTT 译注：订阅服务是收费的）
+注意: 这一步仅适用于有一个有效订阅的红帽企业版 Linux。如果你用的是 CentOS 服务器，请查看后面的章节。
+
+
+
+2. 使用静态 IP 地址配置网络
+
+你第一件要做的事情就是为你的 CentOS 服务器配置静态 IP 地址、路由以及 DNS。我们会使用 ip 命令代替 ifconfig 命令。当然，ifconfig 命令对于大部分 Linux 发行版来说还是可用的，还能从默认库安装。
+    # yum install net-tools [它提供 ifconfig 工具，如果你不习惯 ip 命令，还可以使用它]
+
+但正如我之前说，我们会使用 ip 命令来配置静态 IP 地址。所以，确认你首先检查了当前的 IP 地址。
+    # ip addr show
+
+现在用你的编辑器打开并编辑文件 /etc/sysconfig/network-scripts/ifcfg-enp0s3 （LCTT 译注：你的网卡名称可能不同，如果希望修改为老式网卡名称，参考：http://www.linuxidc.com/Linux/2014-10/108255.htm）。这里，我使用 vi 编辑器，另外你要确保你是 root 用户才能保存更改。
+    # vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+
+我们会编辑文件中的四个地方。注意下面的四个地方并保证不碰任何其它的东西。也保留双引号，在它们中间输入你的数据。
+    IPADDR ="[静态 IP]"
+    NETMASK ="[子网掩码]"
+    GATEWAY ="[默认网关]"
+    DNS1 ="[DNS 1]"
+    DNS2 ="[DNS 2]"
+
+更改了 ‘ifcfg-enp0s3’ 之后，它看起来像下面的图片。注意你的 IP，网关和 DNS 可能会变化，请和你的 ISP(译者注：互联网服务提供商，即给你提供接入的服务的电信或 IDC) 确认。保存并退出。
+重启网络服务并检查 IP 是否和分配的一样。如果一切都顺利，用 Ping 查看网络状态。
+    # service network restart
+
+重启网络后，确认检查了 IP 地址和网络状态。
+    # ip addr show
+    # ping -c4 google.com
+
+
+
+3. 设置服务器的主机名称
+
+下一步是更改 CentOS 服务器的主机名称。查看当前分配的主机名称。
+    # echo $HOSTNAME
+
+要设置新的主机名称，我们需要编辑 ‘/etc/hostsname’ 文件并用想要的名称替换旧的主机名称。
+    # vi /etc/hostname
+
+设置完了主机名称之后，务必注销后重新登录确认主机名称。登录后检查新的主机名称。
+    $ echo $HOSTNAME
+
+你也可以用 ‘hostname’ 命令查看你当前的主机名。
+    $ hostname
+
+
+
+4. 更新或升级最小化安装的 CentOS
+
+这样做除了更新安装已有的软件最新版本以及安全升级，不会安装任何新的软件。总的来说更新（update）和升级（upgrade）是相同的，除了事实上 升级 = 更新 + 更新时进行废弃处理。
+    # yum update && yum upgrade
+
+重要: 你也可以运行下面的命令，这不会弹出软件更新的提示，你也就不需要输入 ‘y’ 接受更改。
+
+然而，查看服务器上会发生的变化总是一个好主意，尤其是在生产中。因此使用下面的命令虽然可以为你自动更新和升级，但并不推荐。
+    # yum -y update && yum -y upgrade
+
+
+
+5. 安装命令行 Web 浏览器
+
+大部分情况下，尤其是在生产环境中，我们通常用没有 GUI 的命令行安装 CentOS，在这种情况下我们必须有一个能通过终端查看网站的命令行浏览工具。为了实现这个目的，我们打算安装名为 ‘links’ 的著名工具。
+    # yum install links
+
+
+
+6. 安装 Apache HTTP 服务器
+
+不管你因为什么原因使用服务器，大部分情况下你都需要一个 HTTP 服务器运行网站、多媒体、用户端脚本和很多其它的东西。
+    # yum install httpd
+
+如果你想更改 Apache HTTP 服务器的默认端口号(80)为其它端口，你需要编辑配置文件 ‘/etc/httpd/conf/httpd.conf’ 并查找以下面开始的行：
+    LISTEN 80
+把端口号 ‘80’ 改为其它任何端口(例如 3221)，保存并退出。
+
+增加刚才分配给 Apache 的端口通过防火墙，然后重新加载防火墙。
+允许 http 服务通过防火墙(永久)。
+    # firewall-cmd –add-service=http
+
+允许 3221 号端口通过防火墙(永久)。
+    # firewall-cmd –permanent –add-port=3221/tcp
+
+重新加载防火墙。
+    # firewall-cmd –reload
+
+完成上面的所有事情之后，是时候重启 Apache HTTP 服务器了，然后新的端口号才能生效。
+    # systemctl restart httpd.service
+
+现在添加 Apache 服务到系统层使其随系统自动启动。
+    # systemctl start httpd.service
+    # systemctl enable httpd.service
+
+如下图所示，用 links 命令行工具 验证 Apache HTTP 服务器。
+    # links 127.0.0.1
+
+
+
+7. 安装 PHP
+
+PHP 是用于 web 基础服务的服务器端脚本语言。它也经常被用作通用编程语言。在最小化安装的 CentOS 中安装 PHP：
+    # yum install php
+
+安装完 php 之后，确认重启 Apache 服务以便在 Web 浏览器中渲染 PHP。
+    # systemctl restart httpd.service
+
+下一步，通过在 Apache 文档根目录下创建下面的 php 脚本验证 PHP。
+    # echo -e "<?php\nphpinfo();\n?>" > /var/www/html/phpinfo.php
+
+现在在 Linux 命令行中查看我们刚才创建的 PHP 文件(phpinfo.php)。
+    # php /var/www/html/phpinfo.php
+    或者
+    # links http://127.0.0.1/phpinfo.php
+
+
+
+8. 安装 MariaDB 数据库
+
+MariaDB 是 MySQL 的一个分支。RHEL 以及它的衍生版已经从 MySQL 迁移到 MariaDB。这是一个主流的数据库管理系统，也是一个你必须拥有的工具。不管你在配置怎样的服务器，或迟或早你都会需要它。在最小化安装的 CentOS 上安装 MariaDB，如下所示：
+    # yum install mariadb-server mariadb
+
+启动 MariaDB 并配置它开机时自动启动。
+    # systemctl start mariadb.service
+    # systemctl enable mariadb.service
+
+允许 mysql(mariadb) 服务通过防火墙（LCTT 译注：如果你的 MariaDB 只用在本机，则务必不要设置防火墙允许通过，使用 UNIX Socket 连接你的数据库；如果需要在别的服务器上连接数据库，则尽量使用内部网络，而不要将数据库服务暴露在公开的互联网上。）
+    # firewall-cmd –add-service=mysql
+
+现在是时候确保 MariaDB 服务器安全了（LCTT 译注：这个步骤主要是设置 mysql 管理密码）。
+    # /usr/bin/mysql_secure_installation
+
+
+
+9. 安装和配置 SSH 服务器
+
+SSH 即 Secure Shell，是 Linux 远程管理的默认协议。 SSH 是随最小化 CentOS 服务器中安装运行的最重要的软件之一。
+
+检查当前已安装的 SSH 版本。
+    # SSH -V
+
+使用更安全的 SSH 协议，而不是默认的协议，并更改端口号进一步加强安全。编辑 SSH 的配置文件 ‘/etc/ssh/ssh_config’。
+去掉下面行的注释或者从协议行中删除 1，然后行看起来像这样（LCTT 译注： SSH v1 是过期废弃的不安全协议）：
+    # Protocol 2,1 (原来)
+    Protocol2(现在)
+
+这个改变强制 SSH 使用 协议 2，它被认为比协议 1 更安全，同时也确保在配置中更改端口号 22 为其它。
+取消 SSH 中的‘root login’， 只允许通过普通用户账号登录后才能使用 su 切换到 root，以进一步加强安全。请打开并编辑配置文件 ‘/etc/ssh/sshd_config’ 并更改 PermitRootLogin yes 为 PermitRootLogin no。
+    # PermitRootLogin yes (原来)
+    PermitRootLoginno(现在)
+
+最后，重启 SSH 服务启用更改。
+    # systemctl restart sshd.service
+
+请查看:
+    加密和保护 SSH 服务器的 5 个最佳实践
+    5 个简单步骤实现使用 SSH Keygen 无密码登录 SSH
+    在 PuTTY 中实现 “无密码 SSH 密钥验证”
+
+
+
+10. 安装 GCC (GNU 编译器集)
+
+GCC 即 GNU 编译器集，是一个 GNU 项目开发的支持多种编程语言的编译系统（LCTT 译注：在你需要自己编译构建软件时需要它）。在最小化安装的 CentOS 没有默认安装。运行下面的命令安装 gcc 编译器。
+    # yum install gcc
+
+检查安装的 gcc 版本。
+    # gcc --version
+
+
+
+11. 安装 Java
+
+Java是一种通用的基于类的，面向对象的编程语言。在最小化 CentOS 服务器中没有默认安装（LCTT 译注：如果你没有任何 Java 应用，可以不用装它）。按照下面命令从库中安装 Java。
+    # yum install java
+
+检查安装的 Java 版本。
+    # java -version
+
+
+
+12. 安装 Apache Tomcat
+
+Tomcat 是由 Apache 设计的用来运行 Java HTTP web 服务器的 servlet 容器。按照下面的方法安装 tomcat，但需要指出的是安装 tomcat 之前必须先安装 Java。
+    # yum install tomcat
+
+安装完 tomcat 之后，启动 tomcat 服务。
+    # systemctl start tomcat
+
+查看 tomcat 版本。
+    # /usr/sbin/tomcat version
+
+允许 tomcat 服务和默认端口(8080) 通过防火墙并重新加载设置。
+    # firewall-cmd –zone=public –add-port=8080/tcp --permanent
+    # firewall-cmd –reload
+
+现在该保护 tomcat 服务器了，添加一个用于访问和管理的用户和密码。我们需要编辑文件 ‘/etc/tomcat/tomcat-users.xml’。查看类似下面的部分：
+    <tomcat-users>
+    ....
+    </tomcat-users>
+    <rolerolename="manager-gui"/>
+    <rolerolename="manager-script"/>
+    <rolerolename="manager-jmx"/>
+    <rolerolename="manager-status"/>
+    <rolerolename="admin-gui"/>
+    <rolerolename="admin-script"/>
+    <userusername="tecmint"password="tecmint"roles="manager-gui,manager-script,manager-jmx,manager-status,admin-gui,admin-script"/>
+    </tomcat-users>
+
+我们在这里添加用户 “tecmint” 到 tomcat 的管理员/管理组中，使用 “tecmint” 作为密码。先停止再启动 tomcat 服务以使更改生效，并添加 tomcat 服务到随系统启动。
+    # systemctl stop tomcat
+    # systemctl start tomcat
+    # systemctl enable tomcat.service
+
+
+
+13. 安装 Nmap 监视开放端口
+
+Nmap 网络映射器用来分析网络，通过运行它可以发现网络的映射关系。nmap 并没有默认安装，你需要从库中安装它。
+    # yum install nmap
+
+列出主机中所有的开放端口以及对应使用它们的服务。
+    # namp 127.0.01
+
+你也可以使用 firewall-cmd 列出所有端口，但我发现 nmap 更有用。
+    # firewall-cmd –list-ports
+
+
+
+14. 配置 FirewallD
+
+firewalld 是动态管理服务器的防火墙服务。在 CentOS 7 中 Firewalld 移除了 iptables 服务。在红帽企业版 Linux 和它的衍生版中默认安装了 Firewalld。如果有 iptables 的话为了使每个更改生效需要清空所有旧的规则然后创建新规则。
+
+然而用firewalld，不需要清空并重新创建新规则就可以实现更改生效。
+
+检查 Firewalld 是否运行。
+    # systemctl status firewalld
+    或
+    # firewall-cmd –state
+
+获取所有的区域列表。
+    # firewall-cmd --get-zones
+
+在切换之前先获取区域的详细信息。
+    # firewall-cmd --zone=work --list-all
+
+获取默认区域。
+    # firewall-cmd --get-default-zone
+
+切换到另一个区域，比如 ‘work’。
+    # firewall-cmd --set-default-zone=work
+
+列出区域中的所有服务。
+    # firewall-cmd --list-services
+
+添加临时服务，比如 http，然后重载 firewalld。
+    # firewall-cmd --add-service=http
+    # firewall-cmd –reload
+
+添加永久服务，比如 http，然后重载 firewalld。
+    # firewall-cmd --add-service=http --permanent
+    # firewall-cmd --reload
+
+删除临时服务，比如 http。
+    # firewall-cmd --remove-service=http
+    # firewall-cmd --reload
+
+删除永久服务，比如 http
+    # firewall-cmd --zone=work --remove-service=http --permanent
+    # firewall-cmd --reload
+
+允许一个临时端口(比如 331)。
+    # firewall-cmd --add-port=331/tcp
+    # firewall-cmd --reload
+
+允许一个永久端口(比如 331)。
+    # firewall-cmd --add-port=331/tcp --permanent
+    # firewall-cmd --reload
+
+阻塞/移除临时端口(比如 331)。
+    # firewall-cmd --remove-port=331/tcp
+    # firewall-cmd --reload
+
+阻塞/移除永久端口(比如 331)。
+    # firewall-cmd --remove-port=331/tcp --permanent
+    # firewall-cmd --reload
+
+停用 firewalld。
+    # systemctl stop firewalld
+    # systemctl disable firewalld
+    # firewall-cmd --state
+
+启用 firewalld。
+    # systemctl enable firewalld
+    # systemctl start firewalld
+    # firewall-cmd --state
+
+
+
+15. 安装 Wget
+
+Wget 是从 web 服务器获取(下载)内容的命令行工具。它是你使用 wget 命令获取 web 内容或下载任何文件必须要有的重要工具。
+    # yum install wget
+
+
+
+16. 安装 Telnet 客户端
+
+Telnet 是通过 TCP/IP 允许用户登录到相同网络上的另一台计算机的网络协议。和远程计算机的连接建立后，它就成为了一个允许你在自己的计算机上用所有提供给你的权限和远程主机交互的虚拟终端。（LCTT 译注：除非你真的需要，不要安装 telnet 服务，也不要用 telnet 客户端连接另外一个 telnet 服务，因为 telnet 是明文传输的。不过如下用 telnet 客户端检测另外一个服务的端口是否工作是常用的操作。）
+
+Telnet 对于检查远程计算机或主机的监听端口也非常有用。
+    # yum install telnet
+    # telnet google.com 80
+
+
+
+17. 安装 Webmin
+
+Webmin 是基于 Web 的 Linux 配置工具。它像一个中央系统，用于配置各种系统设置，比如用户、磁盘分配、服务以及 HTTP 服务器、Apache、MySQL 等的配置。
+    # wget http://prdownloads.sourceforge.net/webadmin/webmin-1.740-1.noarch.rpm
+    # rpm -ivh webmin-*.rpm
+
+安装完 webmin 后，你会在终端上得到一个消息，提示你用 root 密码在端口 10000 登录你的主机 (http://ip-address:10000)。 如果运行的是无接口的服务器你可以转发端口然后从有接口的服务器上访问它。（LCTT 译注：无接口[headless]服务器指没有访问接口或界面的服务器，在此次场景，指的是是出于内网的服务器，可采用外网/路由器映射来访问该端口）
+
+
+
+18. 启用第三方库
+
+添加不受信任的库并不是一个好主意，尤其是在生产环境中，这可能导致致命的问题。但仅作为例子在这里我们会添加一些社区证实可信任的库，以安装第三方工具和软件包。
+
+为企业版 Linux（EPEL）库添加额外的软件包。
+    # yum install epel-release
+
+添加社区企业版 Linux （Community Enterprise Linux）库：
+    # rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm
+
+注意！ 添加第三方库的时候尤其需要注意。
+
+
+
+19. 安装 7-zip 工具
+
+在最小化安装 CentOS 时你并没有获得类似 unzip 或者 untar 的工具。我们可以选择根据需要来安装每个工具，或一个能处理所有格式的工具。7-zip 就是一个能压缩和解压所有已知类型文件的工具。
+    # yum install p7zip
+
+注意: 该软件包从 Fedora EPEL 7 的库中下载和安装。
+
+
+
+20. 安装 NTFS-3G 驱动
+
+NTFS-3G，一个很小但非常有用的 NTFS 驱动，在大部分类 UNIX 发行版上都可用。它对于挂载和访问 Windows NTFS 文件系统很有用。尽管也有其它可用的替代品，比如 Tuxera，但 NTFS-3G 是使用最广泛的。
+    # yum install ntfs-3g
+
+ntfs-3g 安装完成之后，你可以使用以下命令挂载 Windows NTFS 分区（我的 Windows 分区是 /dev/sda5）。
+    # mount -ro ntfs-3g /dev/sda5 /mnt
+    # cd /mnt
+    # ls -l
+
+21. 安装 Vsftpd FTP 服务器
+
+VSFTPD 表示 Very Secure File Transfer Protocol Daemon，是用于类 UNIX 系统的 FTP 服务器。它是现今最高效和安全的 FTP 服务器之一。
+    # yum install vsftpd
+
+编辑配置文件 ‘/etc/vsftpd/vsftpd.conf’ 用于保护 vsftpd。
+    # vi /etc/vsftpd/vsftpd.conf
+
+编辑一些值并使其它行保留原样，除非你知道自己在做什么。
+    anonymous_enable=NO
+    local_enable=YES
+    write_enable=YES
+    chroot_local_user=YES
+
+你也可以更改端口号，记得让 vsftpd 端口通过防火墙。
+    # firewall-cmd --add-port=21/tcp
+    # firewall-cmd --reload
+
+下一步重启 vsftpd 并启用开机自动启动。
+    # systemctl restart vsftpd
+    # systemctl enable vsftpd
+
+22. 安装和配置 sudo
+
+sudo 通常被称为 super do 或者 suitable user do，是一个类 UNIX 操作系统中用其它用户的安全权限执行程序的软件。让我们来看看怎样配置 sudo。
+    # visudo
+
+这会打开 /etc/sudoers 并进行编辑
+
+    （1）给一个已经创建好的用户（比如 tecmint）赋予所有权限（等同于 root）。
+        tecmint ALL=(ALL) ALL
+
+    （2）如果给一个已经创建好的用户（比如 tecmint）赋予除了重启和关闭服务器以外的所有权限（等同于 root）。
+    首先，再一次打开文件并编辑如下内容：
+        cmnd_Alias nopermit =/sbin/shutdown,/sbin/reboot
+    然后，用逻辑操作符（!）添加该别名。
+        tecmint ALL=(ALL) ALL,!nopermit
+
+    （3）如果准许一个组（比如 debian）运行一些 root 权限命令，比如（增加或删除用户）。
+        cmnd_Alias permit =/usr/sbin/useradd,/usr/sbin/userdel
+    然后，给组 debian 增加权限。
+        debian ALL=(ALL) permit
+
+
+
+23. 安装并启用 SELinux
+
+SELinux 表示 Security-Enhanced Linux，是内核级别的安全模块。
+    # yum install selinux-policy
+
+查看 SELinux 当前模式。
+    # getenforce
+输出是 Enforcing，意味着 SELinux 策略已经生效。
+
+如果需要调试，可以临时设置 selinux 模式为允许。不需要重启。
+    # setenforce 0
+
+调试完了之后再次设置 selinux 为强制模式，无需重启。
+    # setenforce 1
+
+（LCTT 译注：在生产环境中，SELinux 固然会提升安全，但是也确实会给应用部署和运行带来不少麻烦。具体是否部署，需要根据情况而定。）
+
+
+
+24. 安装 Rootkit Hunter
+
+Rootkit Hunter，简写为 RKhunter，是在 Linux 系统中扫描 rootkits 和其它可能有害攻击的程序。
+    # yum install rkhunter
+
+在 Linux 中，从脚本文件以计划作业的形式运行 rkhunter 或者手动扫描有害攻击。
+    # rkhunter --check
+
+
+
+25. 安装 Linux Malware Detect (LMD)
+
+Linux Malware Detect (LMD) 是 GNU GPLv2 协议下发布的开源 Linux 恶意程序扫描器，它是特别为面临威胁的主机环境所设计的。LMD 完整的安装、配置以及使用方法可以查看：
+
+    安装 LMD 并和 ClamAV 一起使用作为反病毒引擎  http://www.linuxidc.com/Linux/2015-03/115620.htm
+
+
+
+26. 用 Speedtest-cli 测试服务器带宽
+
+speedtest-cli 是用 python 写的用于测试网络下载和上传带宽的工具。关于 speedtest-cli 工具的完整安装和使用请阅读我们的文章用命令行查看 Linux 服务器带宽  http://www.linuxidc.com/Linux/2014-09/106454.htm
+
+
+
+27. 配置 Cron 任务
+
+这是最广泛使用的软件工具之一。它是一个任务调度器，比如，现在安排一个以后可以自动运行的作业。它用于未处理记录的日志和维护，以及其它日常工作，比如常规备份。所有的调度都写在文件 /etc/crontab 中。
+
+crontab 文件包含下面的 6 个域：
+
+    分时日期月份星期命令
+    (0-59)(0-23)(1-31)(1/jan-12/dec)(0-6/sun-sat)Command/script
+要在每天 04:30 运行一个 cron 任务（比如运行 /home/$USER/script.sh）。
+
+    分时日期月份星期命令
+    304*** speedtest-cli
+
+就把下面的条目增加到 crontab 文件 ‘/etc/crontab/’。
+    304***/home/$user/script.sh
+
+把上面一行增加到 crontab 之后，它会在每天的 04:30 am 自动运行，输出取决于脚本文件的内容。另外脚本也可以用命令代替。关于更多 cron 任务的例子，可以阅读Linux 上的 11 个 Cron 任务例子
+
+
+
+28. 安装 Owncloud
+
+Owncloud 是一个基于 HTTP 的数据同步、文件共享和远程文件存储应用。更多关于安装 owncloud 的内容，你可以阅读这篇文章：在 Linux 上创建个人/私有云存储  http://www.linuxidc.com/Linux/2014-01/95474.htm
+
+
+
+29. 启用 Virtualbox 虚拟化
+
+虚拟化是创建虚拟操作系统、硬件和网络的过程，是当今最热门的技术之一。我们会详细地讨论如何安装和配置虚拟化。
+
+我们的最小化 CentOS 服务器是一个无用户界面服务器（LCTT 译注：无用户界面[headless]服务器指没有监视器和鼠标键盘等外设的服务器）。我们通过安装下面的软件包，让它可以托管虚拟机，虚拟机可通过 HTTP 访问。
+    # yum groupinstall 'Development Tools' SDL kernel-devel kernel-headers dkms
+
+更改工作目录到 ‘/etc/yum.repos.d/’ 并下载 VirtualBox 库。
+    # wget -q http://download.virtualbox.org/virtualbox/debian/Oracle_vbox.asc
+
+安装刚下载的密钥。
+    # rpm --import oracle_vbox.asc
+
+升级并安装 VirtualBox。
+    # yum update && yum install virtualbox-4.3
+
+下一步，下载和安装 VirtualBox 扩展包。
+    # wget http://download.virtualbox.org/virtualbox/4.3.12/Oracle_VM_VirtualBox_Extension_Pack-4.3.12-93733.vbox-extpack
+    # VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-4.3.12-93733.vbox-extpack
+
+添加用户 ‘vbox’ 用于管理 VirtualBox 并把它添加到组 vboxusers 中。
+    # adduser vbox
+    # passwd vobx
+    # usermod -G vboxusers vbox
+
+安装 HTTPD 服务器。
+    # yum install httpd
+
+安装 PHP （支持 soap 扩展）。
+    # yum install php php-devel php-common php-soap php-gd
+
+下载 phpVirtualBox（一个 PHP 写的开源的 VirtualBox 用户界面）。
+    # wget http://sourceforge.net/projects/phpvirtualbox/files/phpvirtualbox-4.3-1.zip
+
+解压 zip 文件并把解压后的文件夹复制到 HTTP 工作目录。
+    # unzip phpvirtualbox-4.*.zip
+    # cp phpvirtualbox-4.3-1 -R /var/www/html
+
+下一步，重命名文件 /var/www/html/phpvirtualbox/config.php-example 为 var/www/html/phpvirtualbox/config.php。
+    # mv config.php.example config.php
+
+打开配置文件并添加我们上一步创建的 ‘username ’ 和 ‘password’。
+    # vi config.php
+
+最后，重启 VirtualBox 和 HTTP 服务器。
+    # service vbox-service restart
+    # service httpd restart
+
+转发端口并从一个有用户界面的服务器上访问它。
+    http://192.168.0.15/phpvirtualbox-4.3-1/
+
+
+
+30. 用密码保护 GRUB
+
+用密码保护你的 boot 引导程序这样你就可以在启动时获得额外的安全保障。同时你也可以在实物层面获得保护。通过在引导时给 GRUB 加锁防止任何无授权访问来保护你的服务器。
+
+首先备份两个文件，这样如果有任何错误出现，你可以有回滚的选择。备份 ‘/etc/grub2/grub.cfg’ 为 ‘/etc/grub2/grub.cfg.old’。
+    # cp /boot/grub2/grub.cfg /boot/grub2/grub.cfg.old
+
+同样，备份 ‘/etc/grub.d/10_linux’ 为 ‘/etc/grub.d/10_linux.old’。
+    # cp /etc/grub.d/10_linux /etc/grub.d/10_linux.old
+
+打开文件 ‘/etc/grub.d/10_linux’ 并在文件末尾添加下列行。
+    cat <<EOF
+    set superusers="tecmint"
+    Password tecmint avi@123
+    EOF
+
+注意在上面的文件中，用你自己的用户名和密码代替 “tecmint” 和 “avi@123”。
+
+现在通过运行下面的命令生成新的 grub.cfg 文件。
+    # grub2-mkconfig --output=/boot/grub2/grub.cfg
+
+创建 grub.cfg 文件之后，重启机器并敲击 ‘e’ 进入编辑。你会发现它会要求你输入 “有效验证” 来编辑 boot 菜单。
+输入登录验证之后，你就可以编辑 grub boot 菜单。
+
+你也可以用加密的密码代替上一步的明文密码。首先按照下面推荐的生成加密密码。
+    # grub2-mkpasswd-pbkdf2
+    [两次输入密码]
+
+打开 ‘/etc/grub.d/10_linux’ 文件并在文件末尾添加下列行。
+    cat <<EOF
+    set superusers=”tecmint”
+    Password_pbkdf2 tecmint
+    grub.pbkdf2.sha512...你的加密密码...
+    EOF
+
+用你系统上生成的密码代替原来的密码，别忘了交叉检查密码。
+
+同样注意在这种情况下你也需要像上面那样生成 grub.cfg。重启并敲击 ‘e’ 进入编辑，会提示你输入用户名和密码。
+
+
+
+
+我们已经介绍了大部分工业标准发行版 RHEL 7 和 CentOS 7 安装后必要的操作。如果你发现我们缺少了一些点或者你有新的东西可以扩充这篇文章，你可以和我们一起分享，我们会通过扩充在这篇文章中包括你的分享。
