@@ -29,10 +29,10 @@ Red: Removed
 12. 对于已被跟踪的文件（已add过的文件），经修改后（增删内容或删除了该文件），可使用git commit -a命令将其直接提交到本地版本库。但对于工作区中未被add过的新文件，仍需先对其执行add指令后，才可执行commit相关的指令。
 13. 执行git status指令，只会显示与当前工作目录相关联的本地版本库的状况信息，而不会显示与本地版本库相关联的远端版本库的状况信息。
 14. local repository与remote repository交互操作时：
-（1）若remote repo更新内容（增添），则local repo执行git push指令前必须先执行git pull origin master指令。remote repo新增添的新文件或新内容会无条件追加到local repo，且此时执行git diff指令无显示内容；
-（2）若local reop更新内容（增添），则可直接执行git push指令。local repo新增添的新文件或新内容会无条件追加到remote reop。
-（3）若remote repo更新内容（减少），则local repo执行git push指令前必须先执行git pull origin master指令。remote repo减少的文件或内容会无条件从local repo扣除，且此时执行git diff指令无显示内容；
-（4）若local reop更新内容（减少），
+（1）若remote repo更新内容（增添），则local repo执行git push指令前必须先执行git pull origin master指令。remote repo新增添的新文件或新内容会无条件自动追加到local repo，且此时执行git diff指令无显示内容；
+（2）若local reop更新内容（增添），则可直接执行git push指令。local repo新增添的新文件或新内容会无条件自动追加到remote reop。
+（3）若remote repo更新内容（减少），则local repo执行git push指令前必须先执行git pull origin master指令。remote repo减少的文件或内容会无条件自动从local repo扣除，且此时执行git diff指令无显示内容；
+（4）若local reop更新内容（减少），则可直接执行git push指令。local repo减少的文件或内容会无条件自动从remote reop扣除。
 
 ####################################################################################################
 ####################################################################################################
