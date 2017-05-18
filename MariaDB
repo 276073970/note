@@ -1,0 +1,238 @@
+第18章 使用MariaDB数据库管理系统
+
+====================================================================================================
+====================================================================================================
+18.1 数据库管理系统
+
+数据库是指按照某些特定结构来存储数据资料的软件仓库程序。
+
+数据库管理系统是一种能够对数据库内容进行建立、修改、删除、查找、维护等等操作的软件程序。
+数据库管理系统通过将计算机中具体的物理数据转换成适合用户理解的抽象逻辑数据，有效降低管理数据库的技术门槛，因此即便是学习Linux运维方向的工程师也能够对数据库内容进行基本的管理操作。
+
+Mysql是一款当前市场占有率非常高的数据库管理系统，它的技术十分成熟，配置步骤相对简单、并且具有良好的可扩展性。
+但由于2009年Sun公司被收购了，Mysql项目也被转入到了oracle公司中变成了一项虽然开源、但却又存在多项专利封闭的软件程序。
+
+因此由Mysql项目创始者重新研发了一款名为MariaDB的全新数据库管理系统。
+这款软件当前是由开源社区维护的分支产品，几乎完全兼容Mysql数据库管理系统。
+同时由于各大公司之间也存在着竞争关系或利益关系，因此在Mysql软件被收购后逐渐从开源陷入封闭的过程中，已经有类似于谷歌公司、维基百科公司等等技术领袖决定转移Mysql数据库的业务到MariaDB数据库。
+Linux开源系统的领袖厂商红帽 公司也已经决定把RHEL7系统、Centos7系统以及最新Fedora系统的全线产品的默认数据库管理系统定为mariadb，并在这十几年的发展中，首次将数据库课程加入到了红帽RHCE认证的考核内容中。
+随后还有大量如Opensuse、Slackware等等数十个常见Linux系统做出了同样的表态。
+
+学会了MariaDB数据库的命令后，在今后的工作中遇到遇到了Mysql数据库也能够轻松上手。
+
+====================================================================================================
+====================================================================================================
+18.2 初始化mariaDB服务
+
+安装部署MariaDB数据库主程序及服务端程序
+[root@linuxprobe ~]# yum install mariadb mariadb-server
+
+启动服务程序，并加入到开机启动中
+[root@linuxprobe ~]# systemctl start mariadb
+[root@linuxprobe ~]# systemctl enable mariadb
+
+确认MariaDB数据库软件程序安装完毕并启动成功后请不要立即使用，为了确保数据库的安全性和正常运转，需要先进行对数据库程序初始化操作，这个过程需要经历五个步骤：
+（1）首先需要当前用户输入root用户在数据库中的密码值（并非root管理员用户在系统中的密码）。初次设置前默认密码值应该为空，因此直接回车即可；
+（2）然后设置root用户在数据库中的专有密码；
+（3）是否删除匿名帐户、是否允许root管理员帐户从远程登陆数据库（保证数据库上运行业务的安全性）；
+（4）是否删除默认的测试数据库，并取消对其的一系列访问权限；
+（5）最后是刷新授权表，使初始化的设定立即生效。
+
+[root@linuxprobe ~]# mysql_secure_installation
+
+Enter current password for root (enter for none):	//当前数据库密码为空，直接敲击回车
+
+root user without the proper authorisation.
+Set root password? [Y/n] y
+New password:						//输入要为root用户设置的数据库密码
+Re-enter new password:					//重复再输入一次密码
+
+Remove anonymous users? [Y/n] y				//删除匿名帐号
+
+Disallow root login remotely? [Y/n] y			//禁止root用户从远程登录
+
+Remove test database and access to it? [Y/n] y		//删除test数据库并取消对其的访问权限
+
+Reload privilege tables now? [Y/n] y			//刷新授权表，让初始化后的设定立即生效
+
+很多生产环境中需要使用站库分离的技术，因此如果需要让root管理员帐户能够用远程访问数据库时，可在刚刚初始化过程中设置允许root管理员帐户从远程访问的策略，然后再设置防火墙允许对本机mysql服务程序的访问请求即可：
+[root@linuxprobe ~]# firewall-cmd --permanent --add-service=mysql
+[root@linuxprobe ~]# firewall-cmd --reload
+
+初次登陆MariaDB数据库：
+参数-u：指定用超级管理员root用户登陆
+参数-p：验证该用户的密码值
+[root@linuxprobe ~]# mysql -u root -p
+Enter password:		//此处输入root用户在数据库中的密码
+
+每次执行数据库命令后都要用“;”（分号）结尾，即每条数据库命令后面都要加上结束符。这应该也是数据库操作命令与Linux命令最显著的区别的，应记住且慢慢习惯这种设定。
+其中：
+登录数据库：mysql -u root -p
+切换数据库：use db_name[;]
+退出数据库：exit[;]
+该三条命令后可不加“;”
+MariaDB [(none)]> show databases;	//查看下当前数据库管理系统有那些数据库
+
+用数据库命令修改超级管理员root用户在数据库管理系统中的密码值（这样退出后再尝试登陆，就会被提示访问失败）
+MariaDB [(none)]> set password = password('your_new_password');
+MariaDB [(none)]> exit
+
+====================================================================================================
+====================================================================================================
+18.3 管理用户以及授权
+
+在生产环境中总不能一直“死啃”root管理员帐户。
+为了保证数据库系统的安全性，以及让其他工程师人员协同管理数据库内容，可以在MariaDB数据库管理系统中为他们创建出多个数据库专用的帐户，然后再进行合理的权限分配。如此也能大大提升工作效率。
+登陆数据库管理系统后便可以按照：
+CREATE USER 用户名@主机名 IDENTIFIED BY '密码';
+的格式来创建出数据库专用帐号信息（切记每条数据库命令后“;”不能省）。
+MariaDB [(none)]> create user user_name@localhost IDENTIFIED BY 'password';
+
+帐户信息可以使用select命令语句来进行查询。
+下面代码查询的是该用户的主机名称、帐户名称以及经过加密的密码值信息：
+MariaDB [(none)]> use mysql
+MariaDB [mysql]> select host,user,password from user where user="user_name";
+
+不过当前该用户仅仅是普通帐户而已，没有对任何数据库内容的任何权限：
+[root@linuxprobe ~]# mysql -u user_name -p
+Enter password:		//此处输入luke用户的数据库密码
+连完整的数据库列表都没法看到（刚刚用root用户可以查看到3个）。
+
+GRANT授权命令的常见格式如下表：
+		命令					作用
+GRANT 权限 ON 数据库.表单名称 TO 用户名@主机名	对某个特定数据库中的特定表单给予授权。
+GRANT 权限 ON 数据库.* TO 用户名@主机名		对某个特定数据库中的所有表单给予授权。
+GRANT 权限 ON *.* TO 用户名@主机名			对所有数据库及所有表单给予授权。
+GRANT 权限1,权限2 ON 数据库.* TO 用户名@主机名	对某个数据库中的所有表单给予多个授权。
+GRANT ALL PRIVILEGES ON *.* TO 用户名@主机名	对所有数据库及所有表单给予全部授权，（谨慎操作）。
+
+在做这种高级操作前需要先登陆到root管理员帐户身份上来，然后再进行授权操作：
+[root@linuxprobe ~]# mysql -u root -p
+MariaDB [(none)]> use mysql;
+MariaDB [mysql]> GRANT SELECT,UPDATE,DELETE,INSERT on mysql.user to user_name@localhost;
+
+授权操作执行后,查看被授用户的权限：
+MariaDB [(none)]&gt; show grants for luke@localhost;
+
+再尝试切换到被授用户就会发现能够看到mysql这个数据库，切换进库后发现能够看到一个叫做user的表单（其余表单会因无权限而被继续隐藏）：
+[root@linuxprobe ~]# mysql -u user_name -p
+MariaDB [(none)]> use mysql
+MariaDB [mysql]> show tables;
+MariaDB [mysql]> exit
+
+切换成root管理员帐户，尝试把刚刚的授权给移除掉：
+[root@linuxprobe ~]# mysql -u root -p
+MariaDB [(none)]> use mysql;
+MariaDB [(none)]> revoke SELECT,UPDATE,DELETE,INSERT on mysql.user from luke@localhost;
+授权命令是grant、移除授权命令是revoke，其余部分都是一致的。
+
+====================================================================================================
+====================================================================================================
+18.4 创建数据库与表单
+
+一个数据库中可以存放多个数据表，数据表是数据库中最实质的内容。
+数据库命令及对应的作用：
+		用法						作用
+CREATE database 数据库名称;					创建新的数据库。
+DESCRIBE 表单名称;						描述表单。
+UPDATE 表单名称 SET attribute=新值 WHERE attribute > 原始值;	更新表单中的数据。
+USE 数据库名称;							指定使用的数据库。
+SHOW databases;							显示当前已有的数据库。
+SHOW tables;							显示当前数据库中的表单。
+SELECT * FROM 表单名称;						从表单中选中某个记录值。
+DELETE FROM 表单名 WHERE attribute=值;				从表单中删除某个记录值。
+
+建立数据库是管理一切数据内容的起点：
+MariaDB [(none)]> create database db_name;
+MariaDB [(none)]> show databases;
+
+想创建数据表单，就要先切换到某个指定的数据库中。表单初始化即需要定义存储数据内容的结构：
+MariaDB [(none)]> use db_name;
+MariaDB [linuxprobe]> create table table_name (name char(15),age int,sex char(5));
+MariaDB [linuxprobe]> describe table_name;
+
+====================================================================================================
+====================================================================================================
+18.5 管理表单及数据
+
+向表单插入内容：insert命令（写清表单名称以及对应的字段项目）
+查询表单内容：select命令（需加上想要查询的字段，使用“*”（星号）通配符可显示所有内容）
+MariaDB [linuxprobe]> INSERT INTO table_name(name,age,sex) VALUES('linuxprobe','20','man');
+MariaDB [linuxprobe]> select * from table_name;
+
+更新表单内容：update命令
+MariaDB [linuxprobe]> update table_name set age=55;
+
+删除表单中内容：delete命令
+MariaDB [linuxprobe]> delete from table_name;
+
+想让查询结果更加精准，就需要把select结合where命令来一起使用。
+where是用于在数据库中进行匹配查询的条件命令，可以设置一个查询的条件，那么就仅会查找出符合该条件的数据内容。
+常用的参数包括：
+参数 	作用
+= 	相等。
+<>或!= 	不相等。
+> 	大于。
+< 	小于。
+>= 	大于或等于。
+<= 	小于或等于。
+BETWEEN 在某个范围内。
+LIKE 	搜索一个例子。
+IN 	在列中搜索多个值。
+
+====================================================================================================
+====================================================================================================
+18.6 数据库的备份及恢复
+
+数据库的备份及恢复也是比较实用的技术。
+备份数据库数据：mysqldump命令
+格式为：
+mysqldump [参数] [数据库名称]
+其中参数与mysql命令大致相同：
+参数-u：定义登陆数据库的用户名称
+参数-p：代表密码提示符
+
+把db_name数据库内容导出成一个文件,保存到root管理员用户的家目录中：
+[root@linuxprobe ~]# mysqldump -u root -p db_name > /root/save_name.dump
+Enter password:		//输入root密码以确认身份
+
+进入MariaDB数据库管理系统,将db_name数据库删除，再重新建立（数据库表单也将被彻底的清空）
+MariaDB [(none)]> drop database db_name;
+MariaDB [(none)]> show databases;
+MariaDB [(none)]> create database db_name;
+
+数据恢复：使用输入重定向符，将刚刚备份的数据库文件导入到mysql命令中，命令执行成功后再次登陆到MariaDB数据库，即可看到恢复的数据库及表单：
+[root@linuxprobe ~]# mysql -u root -p linuxprobe < /root/linuxprobeDB.dump 
+Enter password:		//此处输入root管理员帐户在数据库中的密码值
+[root@linuxprobe ~]# mysql -u root -p
+MariaDB [(none)]> use db_name;
+MariaDB [linuxprobe]> show tables;
+MariaDB [linuxprobe]> describe table_name;
+
+====================================================================================================
+====================================================================================================
+章节的复习作业
+
+1:红帽RHEL7系统为何选择使用MariaDB替代MYSQL数据库管理系统？
+答案：因为MariaDB基于开放的开源社区，遵守GPL协议且不受商业封闭垄断。
+
+2:对MariaDB或Mysql数据库管理系统的初始化操作命令是什么？
+答案：初始化操作是执行mysql_secure_installation命令，建议每次安装后都执行它。
+
+3:查看已有数据库或数据库表单的命令是什么？
+答案：查看数据库列表需执行show databases;命令，而查看数据库表单列表则需执行show tables;命令。
+
+4:切换至某个数据库的命令是什么？
+答案：执行“use 数据库名称”命令即可切换成功。
+
+5:若想为某个用户进行授权或取消授权操作，应该执行什么命令？
+答案：对用户授权应执行grant命令，而取消授权操作应执行revoke命令。
+
+6:若想要只查看mybook表单中的name书籍名称字段，应该执行什么命令？
+答案：应执行select name from mybook命令。
+
+7:若想要只查看mybook表单中的price销售价格大于75元的书籍信息，应该执行什么命令？
+答案：应执行select * from mybook where price>75命令。
+
+8:若想要将数据库linuxprobe备份导出为文件，应该执行什么命令？
+答案：应执行mysqldump -u root -p linuxprobe > /root/linuxprobeDB.dump命令。
