@@ -39,7 +39,8 @@ RDBMS提供以下功能 -
     他们自动更新索引。
     他们解释SQL查询和操作从表操作或源数据。 
 
-RDBMS术语
+1. RDBMS术语
+
 在我们开始讨论MariaDB之前，让我们来看一下与数据库相关的一些术语。
     Database - 数据库是由保存相关数据的表组成的数据源。
     Table -表，这意味着电子表格，是包含数据的矩阵。
@@ -52,7 +53,8 @@ RDBMS术语
     Index - 索引实际上与书的索引相同。
     Referential Integrity - 此术语指确保所有外键值指向现有行。 
 
-MARIA数据库
+2. MARIA数据库
+
 MariaDB是由MySQL的原始开发人员创建的MySQL的流行分支。 
 它源于与MySQL收购Oracle有关的问题。 
 它支持小数据处理任务和企业需求。 
@@ -81,11 +83,14 @@ MariaDB的重要特性是 -
 MariaDB的所有下载都位于官方MariaDB基金会网站的下载部分。 
 单击所需版本的链接，并显示多个操作系统，体系结构和安装文件类型的下载列表。
 
-在LINUX / UNIX上安装
+1. 在LINUX / UNIX上安装
+
 如果你熟悉Linux / Unix系统，只需下载源码来构建你的安装。 
+
 我们推荐的安装方式是使用分发包。 MariaDB提供用于以下Linux / Unix发行版的软件包 - 
     RedHat / CentOS / Fedora
     Debian / Ubuntu 
+
 以下发行版在其存储库中包含MariaDB软件包 - 
     openSUSE
     Arch Linux
@@ -93,11 +98,39 @@ MariaDB的所有下载都位于官方MariaDB基金会网站的下载部分。
     Mint
     Slackware
 
+2. 在Windows上安装
+
+3. 测试安装
+
+执行几个简单的任务，以确认MariaDB的功能和安装。
+
+使用管理实用程序获取服务器状态
+使用mysqladmin二进制查看服务器版本。
+[root@host]# mysqladmin --version
+
+它应显示版本，分发，操作系统和体系结构。 
+如果您看不到该类型的输出，请检查您的安装是否存在问题。
+
+使用客户端执行简单命令
+打开MariaDB的命令提示符。 这应该连接到MariaDB并允许执行命令。 输入一个简单的命令如下 -
+mysql> SHOW DATABASES;
+
+安装后
+成功安装MariaDB后，设置root密码。 全新安装将具有空白密码。 输入以下内容设置新密码 -
+mysqladmin -u root password "[enter your password here]";
+输入以下内容以使用新凭据连接到服务器 -
+mysql -u root -p
+Enter password:*******
+
+兼容性
+MySQL和MariaDB本质上是相同的。 但是，有足够的差异来创建升级问题。
+
 ====================================================================================================
 ====================================================================================================
 三、MariaDB 创建表
 
 在本章中，我们将学习如何创建表。 
+
 在创建表之前，首先确定其名称，字段名称和字段定义。
 以下是表创建的一般语法：
 CREATE TABLE table_name (column_name column_type);
@@ -110,6 +143,7 @@ database products_tbl(
    submission_date DATE,
    PRIMARY KEY ( product_id )
 );
+
 上述示例使用“NOT NULL”作为字段属性，以避免由空值导致的错误。 
 属性“AUTO_INCREMENT”指示MariaDB将下一个可用值添加到ID字段。 
 关键字主键将列定义为主键。 
@@ -118,6 +152,7 @@ database products_tbl(
 创建表的两个主要方法是使用命令提示符和PHP脚本。 
 
 1. 命令提示符
+
 使用CREATE TABLE命令执行任务，如下所示 -
 root@host# mysql -u root -p
 Enter password:*******
@@ -139,6 +174,7 @@ mysql> SHOW TABLES;
 确保所有命令都以分号结尾。
 
 2. PHP创建表脚本
+
 PHP为表创建提供mysql_query()。 它的第二个参数包含必要的SQL命令 -
 <html>
    <head>
@@ -186,12 +222,14 @@ mysql> Table created successfully
 
 在本章中，我们将学习删除表。
 
-表删除很容易，但记住所有删除的表是不可恢复的。 表删除的一般语法如下 -
+表删除很容易，但记住所有删除的表是不可恢复的。 
+表删除的一般语法如下 -
 DROP TABLE table_name ;
 
 存在执行表删除的两个选项：使用命令提示符或PHP脚本。
 
 1. 命令提示符
+
 在命令提示符下，只需使用DROP TABLE SQL命令 -
 root@host# mysql -u root -p
 Enter password:*******
@@ -202,6 +240,7 @@ mysql> SELECT * from products_tbl
 ERROR 1146 (42S02): Table 'products_tbl' doesn't exist
 
 2. PHP 删除表脚本
+
 PHP提供mysql_query()用于删除表。 简单地传递它的第二个参数适当的SQL命令 -
 <html>
    <head>
@@ -251,12 +290,12 @@ INSERT INTO tablename (field,field2,...) VALUES (value, value2,...);
 
 该语句需要对字符串值使用单引号或双引号。 
 语句的其他选项包括“INSERT ... SET”语句，“INSERT ... SELECT”语句和其他几个选项。
-
 注意 - 出现在语句中的VALUES（）函数仅适用于INSERT语句，如果在其他位置使用，则返回NULL。
 
 存在两种执行操作的选项：使用命令行或使用PHP脚本。
 
 1. 命令提示符
+
 在提示时，有许多方法来执行选择操作。 下面给出标准语句 -
 belowmysql>
 INSERT INTO products_tbl (ID_number, Nomenclature) VALUES (12345,
@@ -276,6 +315,7 @@ INSERT INTO products VALUES (1, “first row”), (2, “second row”);
 INSERT INTO products SELECT * FROM inventory WHERE status = 'available';
 
 2. PHP插入脚本
+
 在PHP函数中使用相同的“INSERT INTO ...”语句来执行操作。 
 您将再次使用mysql_query()函数。
 
@@ -334,9 +374,12 @@ MariaDB包括许多选项，其中一些是自动的。
 如果您将MariaDB安装在非标准位置，则可能需要在脚本文件中编辑位置信息。 
 只需在脚本中添加“停止”参数，即可停止MariaDB。
 
-如果您想在Linux下自动启动它，请将启动脚本添加到init系统中。 每个分发具有不同的过程。 请参阅系统文档。
+如果您想在Linux下自动启动它，请将启动脚本添加到init系统中。 
+每个分发具有不同的过程。 
+请参阅系统文档。
 
 1. 创建用户帐户
+
 使用以下代码创建新的用户帐户 -
 'newusername'@'localhost' IDENTIFIED BY 'userpassword';
 此代码向用户表中添加一行没有任何权限。 您还可以选择使用哈希值作为密码。 
@@ -349,6 +392,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON database1 TO 'newusername'@'localhost';
 这允许使用用户帐户。
 
 2. 配置文件
+
 在Unix / Linux上构建之后，应该编辑配置文件“/etc/my.conf”以显示如下 -
 
 # Example mysql config file.
@@ -415,6 +459,7 @@ set-variable = key_buffer = 128M
 确保运行10.0.1版本的MariaDB时使用“$ LOGNAME”。
 
 3. 管理命令
+
 查看以下您将在使用MariaDB时经常使用的重要命令列表：
     USE [database name] - 设置当前默认数据库。
     SHOW DATABASES - 列出服务器上当前的数据库。
@@ -440,7 +485,8 @@ SELECT语句提供了多个选项来指定使用的表 -
     table_name.column_name
     database_name.table_name.column_name 
 
-所有select语句必须包含一个或多个select表达式。 选择表达式由以下选项之一组成 - 
+所有select语句必须包含一个或多个select表达式。 
+选择表达式由以下选项之一组成 - 
     列名。
     使用运算符和函数的表达式。
     规范"table_name.*"以选择给定表中的所有列
@@ -449,6 +495,7 @@ SELECT语句提供了多个选项来指定使用的表 -
 可以在执行select语句时使用命令提示符或PHP脚本。
 
 1. 命令提示符
+
 在命令提示符下，执行如下语句：
 root@host# mysql -u root -p password;
 Enter password:*******
@@ -462,6 +509,7 @@ mysql> SELECT * from products_tbl
 +-------------+---------------+
 
 2. PHP选择脚本
+
 在PHP函数中使用相同的SELECT语句来执行操作。 您将再次使用mysql_query()函数。 查看下面给出的示例 -
 <?php
    $dbhost = 'localhost:3036';
@@ -609,6 +657,7 @@ WHERE子句允许使用以下运算符 -
 WHERE子句可以在命令提示符或PHP脚本中使用。
 
 1. 命令提示符
+
 在命令提示符下，只需使用标准命令 -
 root@host# mysql -u root -p password;
 Enter password:*******
@@ -638,6 +687,7 @@ WHERE (product_name = 'Bun Janshu 3000' AND product_id < 344)
 OR (product_name = 'Bun Janshu 3000');
 
 2. PHP脚本使用Where子句
+
 在使用WHERE子句的操作中应用mysql_query()函数 -
 <?php
    $dbhost = 'localhost:3036';
@@ -697,6 +747,7 @@ OR (product_name = 'Bun Janshu 3000');
 与MariaDB建立连接的一种方法是在命令提示符下使用mysql二进制文件。
 
 1. MySQL脚本
+
 查看下面给出的示例。
 [root@host]# mysql -u root -p
 Enter password:******
@@ -714,6 +765,7 @@ mysql>
 mysql> exit
 
 2. PHP连接脚本
+
 连接到MariaDB并与之断开连接的另一种方法是使用PHP脚本。 
 PHP提供了用于打开数据库连接的mysql_connect()函数。 
 它使用五个可选参数，并在成功连接后返回MariaDB链接标识符，或在失败的连接上返回false。 
@@ -739,6 +791,7 @@ bool mysql_close ( resource $link_identifier );
 
 如果省略资源，则最近打开的资源将关闭。 
 它在成功关闭时返回true，或false。
+
 尝试下面的示例代码连接MariaDB服务器 -
 <html>
    <head>
@@ -781,6 +834,7 @@ UPDATE table_name SET field=new_value, field2=new_value2,... [WHERE ...]
 从命令提示符或使用PHP脚本执行UPDATE命令。
 
 1. 命令提示符
+
 在命令提示符下，只需使用标准commandroot -
 root@host# mysql -u root -p password;
 Enter password:*******
@@ -797,6 +851,7 @@ mysql> SELECT * from products_tbl WHERE ID_number='112';
 +-------------+---------------------+----------------------+      
 
 2. PHP更新查询脚本
+
 在UPDATE命令语句中使用mysql_query()函数 -
 <?php
    $dbhost = ‘localhost:3036’;
@@ -834,11 +889,13 @@ mysql> Updated data successfully
 在这些帐户下，您有两个选项来创建数据库 - mysqladmin二进制文件和PHP脚本。
 
 1. mysqladmin脚本
+
 以下示例演示如何使用mysqladmin脚本创建名为Products的数据库 -
 [root@host]# mysqladmin -u root -p create PRODUCTS
 Enter password:******
 
 2. PHP创建数据库脚本
+
 PHP在创建MariaDB数据库时使用mysql_query函数。 
 该函数使用两个参数，一个可选，并在成功时返回值“true”，否则返回“false”。
 
@@ -909,6 +966,7 @@ DELETE FROM table_name [WHERE …]
 从命令提示符或使用PHP脚本执行DELETE命令。
 
 1. 命令提示符
+
 在命令提示符下，只需使用标准命令 -
 root@host# mysql –u root –p password;
 Enter password:*******
@@ -919,6 +977,7 @@ mysql> SELECT * from products_tbl WHERE ID_number='133';
 ERROR 1032 (HY000): Can't find record in 'products_tbl'
 
 2. PHP删除查询脚本
+
 在DELETE命令语句中使用mysql_query()函数 -
 <?php
    $dbhost = 'localhost:3036';
@@ -958,6 +1017,7 @@ ERROR 1032 (HY000): Can't find record in 'products_tbl'
 此外，用于删除的PHP脚本不会提示您在删除之前的确认。
 
 1. mysqladmin脚本
+
 以下示例演示如何使用mysqladmin脚本删除现有数据库 -
 [root@host]# mysqladmin -u root -p drop PRODUCTS
 Enter password:******
@@ -965,6 +1025,7 @@ mysql> DROP PRODUCTS
 ERROR 1008 (HY000): Can't drop database 'PRODUCTS'; database doesn't exist
 
 2. PHP删除数据库脚本
+
 PHP在删除MariaDB数据库时使用mysql_query函数。 
 该函数使用两个参数，一个可选，并在成功时返回值“true”，否则返回“false”。
 
@@ -1036,6 +1097,7 @@ WHERE field LIKE condition
 在命令提示符或PHP脚本中使用LIKE子句。
 
 1. 命令提示符
+
 在命令提示符下，只需使用标准命令 -
 root@host# mysql -u root -p password;
 Enter password:*******
@@ -1054,6 +1116,7 @@ mysql> SELECT * from products_tbl
 +-------------+----------------+----------------------+
 
 2. PHP脚本使用like子句
+
 在使用LIKE子句的语句中使用mysql_query（）函数
 <?php
    $dbhost = 'localhost:3036';
@@ -1113,6 +1176,7 @@ mysql> Fetched data successfully
 有两种方法来执行此任务：从命令提示符或通过PHP脚本。
 
 1. 命令提示符
+
 在命令提示符下选择数据库时，只需使用SQL命令'use'
 [root@host]# mysql -u root -p
 Enter password:******
@@ -1132,6 +1196,7 @@ mysql> SELECT database();
 确保命令符合正确的大小写。
 
 2. PHP选择数据库脚本
+
 PHP提供了用于数据库选择的mysql_select_db函数。 
 该函数使用两个参数，一个可选，并在成功选择时返回值“true”，或者在失败时返回false。
 
@@ -1191,6 +1256,7 @@ ORDER BY field, field2,... ASC[or DESC]
 在命令提示符处或PHP脚本中使用ORDER BY子句。
 
 1. 命令提示符
+
 在命令提示符下，只需使用标准命令 -
 root@ host# mysql -u root -p password;
 Enter password:*******
@@ -1208,6 +1274,7 @@ mysql> SELECT * from products_tbl ORDER BY product_manufacturer ASC
 +-------------+----------------+----------------------+
 
 2. PHP脚本中使用ORDER BY子句
+
 在使用ORDER BY子句的语句中再次使用mysql_query()函数 -
 <?php
    $dbhost = 'localhost:3036';
@@ -1271,23 +1338,31 @@ mysql> Fetched data successfully
 MariaDB数据类型可以分为数字，日期和时间以及字符串值。
 
 1. 数字数据类型
+
 MariaDB支持的数字数据类型如下 -
     TINYINT - 此数据类型表示落入-128到127的有符号范围内的小整数，以及0到255的无符号范围。
     BOOLEAN - 此数据类型将值0与“false”相关联，值1与“true”相关联。
     SMALLINT - 此数据类型表示-32768到32768的有符号范围内的整数，以及0到65535的无符号范围。
     MEDIUMINT - 此数据类型表示有符号范围-8388608到8388607中的整数，无符号范围0到16777215。
-    INT（也为INTEGER） - 此数据类型表示正常大小的整数。当标记为unsigned时，范围跨越0到4294967295.当有符号（默认设置）时，范围跨越-2147483648到2147483647.当列设置为ZEROFILL（无符号状态）时，其所有值都由零添加INT值中的M个数字。
+    INT（也为INTEGER） - 此数据类型表示正常大小的整数。
+                       当标记为unsigned时，范围跨越0到4294967295.当有符号（默认设置）时，范围跨越-2147483648到2147483647。‘
+                       当列设置为ZEROFILL（无符号状态）时，其所有值都由零添加INT值中的M个数字。
     BIGINT - 此数据类型表示有符号范围9223372036854775808到9223372036854775807内的整数，无符号范围0到18446744073709551615。
-    DECIMAL（DEC，NUMERIC，FIXED） - 该数据类型表示精确的定点数，M指定其数字，D指定小数后的数字。 M值不添加“ - ”或小数点。如果D设置为0，则不会出现小数或小数部分，并且该值将舍入为最接近的DECIMAL INSERT。最大允许位数为65，小数位数的最大值为30.默认值M的默认值为10，省略时D为0。
+    DECIMAL（DEC，NUMERIC，FIXED） - 该数据类型表示精确的定点数，M指定其数字，D指定小数后的数字。 M值不添加“ - ”或小数点。
+                                    如果D设置为0，则不会出现小数或小数部分，并且该值将舍入为最接近的DECIMAL INSERT。
+                                    最大允许位数为65，小数位数的最大值为30.默认值M的默认值为10，省略时D为0。
     FLOAT - 此数据类型表示值0的小的浮点数或以下范围内的数字 - 
-        -3.402823466E + 38至-1.175494351E-38
-        1.175494351E-38至3.402823466E + 38 
+            -3.402823466E + 38至-1.175494351E-38
+            1.175494351E-38至3.402823466E + 38 
     DOUBLE（也是REAL和DOUBLE PRECISION） - 此数据类型表示值0的正常大小的浮点数，或以下范围内的值 - 
-        -1.7976931348623157E + 308至-2.2250738585072014E-308
-        2.2250738585072014E-308至1.7976931348623157E + 308 
-    BIT - 此数据类型表示位字段，M指定每个值的位数。省略M时，默认值为1.位值可以通过“b'[value]'”应用，其中值表示0和1中的位值。零填充从左边自动发生全长;例如，“10”变为“0010”。 
+                                         -1.7976931348623157E + 308至-2.2250738585072014E-308
+                                         2.2250738585072014E-308至1.7976931348623157E + 308 
+    BIT - 此数据类型表示位字段，M指定每个值的位数。
+          省略M时，默认值为1.位值可以通过“b'[value]'”应用，其中值表示0和1中的位值。
+          零填充从左边自动发生全长;例如，“10”变为“0010”。 
 
 2. 日期和时间数据类型
+
 MariaDB支持的日期和时间数据类型如下 - 
     DATE - 此数据类型表示日期范围“1000-01-01”到“9999-12-31”，并使用“YYYY-MM-DD”日期格式。
     TIME - 此数据类型表示“-838：59：59.999999”到“838：59：59.999999”的时间范围。
@@ -1296,6 +1371,7 @@ MariaDB支持的日期和时间数据类型如下 -
     YEAR - 此数据类型表示4位数格式的年份。 四位数格式允许在1901到2155和0000范围内的值。 
 
 3. 字符串数据类型
+
 MariaDB支持的字符串类型值如下 -
     String literals - 此数据类型表示用引号括起来的字符序列。
     CHAR - 此数据类型表示包含指定长度的空格的右侧带有固定长度的字符串。 M表示字符的列长度，取值范围为0〜255，缺省值为1。
@@ -1338,6 +1414,7 @@ JOIN有许多形式，如左连接，右连接或内连接。
 在命令提示符或PHP脚本中使用JOIN。
 
 1. 命令提示符
+
 在命令提示符下，只需使用标准语句 -
 root@host# mysql -u root -p password;
 Enter password:*******
@@ -1358,6 +1435,7 @@ mysql> SELECT products.ID_number, products.Nomenclature, inventory.inventory_ct
 +-------------+----------------+-----------------+
 
 2. PHP脚本使用JOIN
+
 使用mysql_query()函数执行连接操作 -
 <?php
    $dbhost = 'localhost:3036';
@@ -1425,6 +1503,7 @@ NULL不区分大小写，并具有以下别名 -
     \ N 
 
 1. NULL运算符
+
 标准比较运算符不能与NULL（例如，=，>，> =，<=，<或或！=）一起使用，因为所有与NULL值的比较都返回NULL，而不是true或false。 
 与NULL或可能包含它的比较必须使用“<=>”（NULL-SAFE）运算符。
 
@@ -1435,15 +1514,18 @@ NULL不区分大小写，并具有以下别名 -
     COALESCE - 返回列表的第一个非NULL值，或者在没有一个值的情况下返回NULL值。 
 
 2. 对NULL值排序
+
 在排序操作中，NULL值具有最低值，因此DESC次序在底部产生NULL值。 M
 ariaDB允许为NULL值设置更高的值。
 
 有两种方法可以做到这一点，如下所示 -
 SELECT column1 FROM product_tbl ORDER BY ISNULL(column1), column1;
+
 另一种方式 -
 SELECT column1 FROM product_tbl ORDER BY IF(column1 IS NULL, 0, 1), column1 DESC;
 
 3. NULL函数
+
 当任何参数为NULL时，函数通常输出NULL。 
 但是，还有专门用于管理NULL值的函数。 他们是 - 
     IFNULL() - 如果第一个表达式不为NULL，它返回它。 当它求值为NULL时，它返回第二个表达式。
@@ -1452,6 +1534,7 @@ SELECT column1 FROM product_tbl ORDER BY IF(column1 IS NULL, 0, 1), column1 DESC
 像SUM和AVG的函数忽略NULL值。
 
 4. 插入NULL值
+
 在声明为NOT NULL的列中插入NULL值时，会发生错误。 
 在默认SQL模式下，NOT NULL列将根据数据类型插入一个默认值。
 
@@ -1463,6 +1546,7 @@ SELECT column1 FROM product_tbl ORDER BY IF(column1 IS NULL, 0, 1), column1 DESC
 UNIQUE索引可以包含许多NULL值，但是，主键不能为NULL。
 
 5. NULL值和Alter命令
+
 当您使用ALTER命令修改列时，如果没有NULL规范，MariaDB会自动分配值。 
 
 ====================================================================================================
@@ -1474,6 +1558,7 @@ UNIQUE索引可以包含许多NULL值，但是，主键不能为NULL。
 要记住的重要事情是数据库类型，关键信息和所涉及的结构。 此信息确定您的最佳选择。
 
 1. 选项
+
 备份的主要选项包括逻辑备份和物理备份。 
 逻辑备份保存用于恢复数据的SQL语句。 
 物理备份包含数据副本。
@@ -1481,6 +1566,7 @@ UNIQUE索引可以包含许多NULL值，但是，主键不能为NULL。
     物理备份的大小小于逻辑备份，并且执行和恢复所需的时间也更少。 物理备份还包括日志和配置文件，但逻辑备份不包括。 
 
 2. 备份工具
+
 用于MariaDB备份的主要工具是mysqldump。 
 它提供逻辑备份和灵活性。 
 它也证明是小数据库的一个很好的选择。 
@@ -1496,6 +1582,7 @@ $ mysqldump -u root -p PRODUCTS products_tbl > export_file.txt
 $ mysqldump -u root -p database_name | mysql -h other-host.com database_name
 
 3. 使用SELECT ... INTO OUTFILE语句
+
 导出数据的另一个选项使用SELECT ... INTO OUTFILE语句。 
 
 这个简单的选项输出表到一个简单的格式化文本文件 -
@@ -1511,6 +1598,7 @@ mysql> SELECT * FROM products_tbl
     在UNIX环境中，输出文件是世界可读的，但其服务器所有权会影响您删除它的能力。 确保您有权限。 
 
 4. 在备份中使用CONNECT
+
 CONNECT处理程序允许导出数据。 
 这证明主要在SELECT ... INTO OUTFILE操作不支持文件格式的情况下有用。
 
@@ -1524,6 +1612,7 @@ author, plugin_description description, plugin_maturity maturity
 from information_schema.plugins where plugin_type = 'STORAGE ENGINE';
 
 5. 其他工具
+
 备份的其他选项如下 - 
     XtraBackup - 此选项针对XtraDB / InnoDB数据库，并与任何存储引擎一起工作。从Percona的官方网站了解有关此工具的更多信息。
     Snapshots - 某些文件系统允许快照。该过程包括使用读锁刷新表，装入快照，解锁表，复制快照，然后卸载快照。
@@ -1531,6 +1620,7 @@ from information_schema.plugins where plugin_type = 'STORAGE ENGINE';
     TokuBackup - Percona提供的此解决方案提供热备份，考虑到InnoDB备份选项的问题和限制。它生成文件的事务性声音副本，而应用程序继续操作它们。有关详细信息，请咨询Percona网站。 
 
 6. INNODB注意事项
+
 InnoDB使用缓冲池来提高性能。在备份中，配置InnoDB以避免将整个表复制到缓冲池中，因为逻辑备份通常执行全表扫描。 
 
 ====================================================================================================
@@ -1569,10 +1659,8 @@ P1 | P2 | P3	它匹配任何模式。
 查看下面给出的模式匹配示例 - 
 以“pr”开头的产品 -
 SELECT name FROM product_tbl WHERE name REGEXP '^pr';
-
 以“na”结尾的产品 -
 SELECT name FROM product_tbl WHERE name REGEXP 'na$';
-
 以元音开头的产品 -
 SELECT name FROM product_tbl WHERE name REGEXP '^[aeiou]';
 
@@ -1586,6 +1674,7 @@ SELECT name FROM product_tbl WHERE name REGEXP '^[aeiou]';
 加载数据有三个选项：LOAD DATA语句，mysqlimport和一个简单的mysqldump还原。
 
 1. 使用LOAD DATA
+
 LOAD DATA语句用作批量加载器。 
 
 查看加载文本文件的使用示例 -
@@ -1595,31 +1684,33 @@ mysql> LOAD DATA LOCAL INFILE 'products_copy.txt' INTO TABLE empty_tbl;
     使用LOCAL关键字可防止MariaDB对主机执行深层搜索，并使用非常具体的路径。
     语句假定一种格式，包括由换行符（换行符）终止的行和用制表符分隔的数据值。
     使用FIELDS子句可以明确指定行上字段的格式。 使用LINES子句指定行尾。 查看下面的示例。 
-mysql> LOAD DATA LOCAL INFILE 'products_copy.txt' INTO TABLE empty_tbl
-   FIELDS TERMINATED BY '|'
-   LINES TERMINATED BY '';
+    mysql> LOAD DATA LOCAL INFILE 'products_copy.txt' INTO TABLE empty_tbl
+           FIELDS TERMINATED BY '|'
+           LINES TERMINATED BY '';
     该语句假定数据文件中的列使用表的相同顺序。 如果您需要设置不同的顺序，您可以加载文件如下 - 
-mysql> LOAD DATA LOCAL INFILE 'products_copy.txt' INTO TABLE empty_tbl (c, b, a);
+    mysql> LOAD DATA LOCAL INFILE 'products_copy.txt' INTO TABLE empty_tbl (c, b, a);
 
 2. 使用MYSQLIMPORT
+
 mysqlimport工具用作LOAD DATA包装器，允许从命令行进行相同的操作。
 
 加载数据如下 -
 $ mysqlimport -u root -p --local database_name source_file.txt
+
 指定格式如下 -
 $ mysqlimport -u root -p --local --fields-terminated-by="|" 
    --lines-terminated-by="
 " database_name source_file.txt
 
-3. 使用--columns选项指定列顺序 -
+使用--columns选项指定列顺序 -
 $ mysqlimport -u root -p --local --columns=c,b,a 
    database_name source_file.txt
 
-4. 使用MYSQLDUMP
+3. 使用MYSQLDUMP
 使用mysqldump还原需要这个简单的语句将转储文件加载回主机 -
 shell> mysql database_name < source_file.sql
 
-5. 特殊字符和报价
+4. 特殊字符和报价
 在LOAD DATA语句中，引号和特殊字符可能无法正确解释。 
 语句采用不带引号的值，并将反斜线视为转义字符。 
 使用FIELDS子句指定格式。 
@@ -1628,4 +1719,519 @@ shell> mysql database_name < source_file.sql
 
 ====================================================================================================
 ====================================================================================================
-二十三、MariaDB 备份加载方法
+二十四、MariaDB 事务
+
+事务是顺序组操作。 
+它们作为单个单元运行，并且直到组中的所有操作都成功执行时才终止。 
+组中的单个故障会导致整个事务失败，并导致对数据库没有影响。
+
+事务符合ACID（原子性，一致性，隔离和耐久性） - 
+    原子性 - 它通过中止故障和回滚更改来确保所有操作的成功。
+    一致性 - 它确保数据库对成功的事务应用更改。
+    隔离 - 它使事务的独立事务操作。
+    持久性 - 它确保在系统故障的情况下成功事务的持久性。 
+
+在事务语句的开头是START TRANSACTION语句，后跟COMMIT和ROLLBACK语句 - 
+    START TRANSACTION - 开始事务。
+    COMMIT - 保存对数据的更改。
+    ROLLBACK - 结束事务，销毁任何更改。
+事务成功时执行COMMIT，失败时执行ROLLBACK。
+
+注 - 有些语句会导致隐式提交，并且在事务中使用时也会导致错误。 
+这样的语句的示例包括但不限于CREATE，ALTER和DROP。
+
+MariaDB事务还包括SAVEPOINT和LOCK TABLES等选项。 
+SAVEPOINT设置一个恢复点以利用ROLLBACK。 
+LOCK TABLES允许在会话期间控制对表的访问，以防止在某些时间段内进行修改。
+
+AUTOCOMMIT变量提供对事务的控制。 
+设置为1会强制所有操作都被视为成功事务，而设置为0会导致持久性更改只发生在显式COMMIT语句上。
+
+事务的结构
+事务语句的一般结构包括从START TRANSACTION开始。 
+下一步是插入一个或多个命令/操作，插入用于检查错误的语句，插入ROLLBACK语句以管理发现的任何错误，最后插入COMMIT语句以对成功的操作应用更改。
+
+查看下面给出的示例 -
+START TRANSACTION;
+SELECT name FROM products WHERE manufacturer = 'XYZ Corp';
+UPDATE spring_products SET item = name;
+COMMIT;
+
+====================================================================================================
+====================================================================================================
+二十五、MariaDB 实用功能
+
+本章包含最常用功能的列表，提供定义，说明和示例。
+
+1. MariaDB聚合函数
+
+最常用的聚合函数如下 -
+名称	描述
+COUNT	它对记录总数进行统计。
+	示例 - SELECT COUNT（*）FROM customer_table;
+MIN	它揭示了一组记录的最小值。
+	示例 - SELECT组织，MIN（帐户）FROM合同GROUP BY组织;
+MAX	它揭示了一组记录的最大值。
+	示例 - SELECT组织，MAX（account_size）FROM合同GROUP BY组织;
+AVG	它计算一组的记录的平均值。
+	示例 -选择AVG（account_size）FROM合同;
+SUM	它计算一组记录的总和。
+	示例 - SELECT SUM（account_size）FROM合同;
+
+2. MariaDB年龄计算
+
+TIMESTAMPDIFF函数提供了一种计算年龄 -
+SELECT CURDATE() AS today;
+SELECT ID, DOB, TIMESTAMPDIFF(YEAR,DOB,'2015-07-01') AS age FROM officer_info;
+
+3. MariaDB字符串连接
+
+CONCAT函数在连接操作后返回结果字符串。 
+您可以使用一个或多个参数。 
+
+检查其语法如下 -
+SELECT CONCAT(item, item,...);
+
+查看以下示例 -
+SELECT CONCAT('Ram', 'bu', 'tan');
+Output:Rambutan
+
+4. MariaDB日期/时间函数
+
+以下是重要的日期函数 -
+名称		描述
+CURDATE()	它以yyyy-mm-dd或yyyymmdd格式返回日期。
+		示例 - SELECT CURDATE();
+DATE()		它以多种格式返回日期。
+		示例-CREATE TABLE product_release_tbl(x DATE);
+CURTIME()	它以HH：MM：SS或HHMMSS.uuuuuu格式返回时间。
+		示例 - SELECT CURTIME();
+DATE_SUB()	它从指定的日期增加或减少天数。
+		示例 - SELECT DATE_SUB('2016-02-08',INTERVAL 60 DAY);
+DATEDIFF()	它确定两个日期之间的天数。
+		示例 - SELECT DATEDIFF('2016-01-01 23:59:59','2016-01-03');
+DATE ADD()	它增加或减去日期和时间的任何时间单位。
+		示例 - SELECT DATE_ADD('2016-01-04 23:59:59',INTERVAL 22 SECOND);
+EXTRACT()	它从日期中提取单位。
+		示例 - SELECT EXTRACT(YPAR FROM'2016-01-08');
+NOW()		它以yyyy-mm-dd hh：mm：ss或yyyymmddhhmmss.uuuuuu格式返回当前日期和时间。
+		示例 - SELECT NOW();
+DATE FORMAT()	它根据指定的格式字符串格式化日期。
+		示例 - SELECT DATE_FORMAT('2016-01-09 20:20:00','%W%M%Y');
+
+以下是一些重要的时间函数 -
+它返回日期的秒数。
+名称		描述
+HOUR()		它返回时间的小时或已过去的小时数。
+		示例 - SELECT HOUR('19:17:09');
+LOCALTIME()	它的作用就像NOW()。
+MICROSECOND()	它返回时间的微秒。
+		示例 - SELECT MICROSECOND('16:30:00.543876');
+MINUTE()	它返回时间的分钟。
+		示例 - SELECT MINUTE('2016-05-22 17:22:01');
+SECOND()	它返回日期的秒数。
+		示例 - SELECT SECOND('2016-03-12 16:30:04.000001');
+TIME_FORMAT()	它根据指定的格式字符串格式化时间。
+		示例 - SELECT TIME_FORMAT('22:02:20','%H%k%h%I%l');
+TIMESTAMP()	它为活动提供了格式为yyyy-mm-dd hh：mm：dd的时间戳。
+		示例 - CREATE TABLE orders_(ID INT,tmst TIMESTAMP);
+
+5. MariaDB数字函数
+
+下面给出了一些重要的数字函数在MariaDB -
+名称		描述	
+TRUNCATE()	它返回一个截断的数字到小数位数指定。
+		示例 - SELECT TRUNCATE(101.222,1);
+COS()		它返回x弧度的余弦。
+		示例 - SELECT COS(PI());
+CEILING()	它返回不小于x的最小整数。
+		示例 - SELECT CEILING(2.11);
+DEGREES()	它将弧度转换为度。
+		示例 - SELECT DEGREES(PI());
+DIV()		它执行整数除法。
+		示例 - SELECT 100 DIV 4;
+EXP()		它返回e的x的幂。
+		示例 - SELECT EXP(2);
+FLOOR()		它返回不超过x的最大整数。
+		示例 - SELECT FLOOR(2.01);
+LN()		它返回x的自然对数。
+		示例 - SELECT LN(3);
+LOG()		它返回给定基数的自然对数或对数。
+		示例 - SELECT LOG(3);
+SQRT()		它返回平方根。
+		示例 - SELECT SQRT(16);
+
+6. MariaDB字符串函数
+
+下面给出了重要的字符串函数 -
+名称		描述
+INSTR()		它返回一个子串的第一个实例的位置。
+		示例 - SELECT INSTR('rambutan','tan');
+RIGHT()		它返回最右边的字符串字符。
+		示例 - SELECT RIGHT('rambutan',3);
+LENGTH()	它返回字符串的字节长度。
+		示例 - SELECT LENGTH('rambutan');
+LOCATE()	它返回一个子串的第一个实例的位置。
+		示例 - SELECT LOCATE('tan','rambutan');
+INSERT()	它返回一个字符串，在某个位置有一个指定的子字符串，被修改。
+		示例 - SELECT INSERT('ramputan',4,1,'b');
+LEFT()		它返回最左边的字符。
+		示例 - SELECT LEFT('rambutan',3);
+UPPER()		它将字符更改为大写。
+		示例 - SELECT UPPER(lastname);
+LOWER()		它将字符更改为小写。
+		示例 - SELECT LOWER(lastname);
+STRCMP（）	它比较字符串，当他们相等，则返回0。
+		示例 -选择STRCMP（'蛋'，'奶酪'）;
+REPLACE()	它在替换字符后返回一个字符串。
+		示例 - SELECT REPLACE('sully','l','n');
+REVERSE()	它反转字符串中的字符。
+		示例 - SELECT REVERSE('racecar');
+REPEAT()	它返回一个字符串，重复给定字符x次。
+		示例 - SELECT REPEAT('ha',10);
+SUBSTRING()	它从字符串返回一个子串，从位置x开始。
+		示例 - SELECT SUBSTRING('rambutan',3);
+TRIM()		它从字符串中删除尾随/前导字符。
+		示例 - SELECT TRIM(LEADING'_'FROM'_rambutan'); 
+
+====================================================================================================
+====================================================================================================
+二十六、MariaDB 表更改命令
+
+ALTER命令提供了一种方法来更改现有表的结构，这意味着删除或添加列，修改索引，更改数据类型或更改名称等修改。 
+ALTER还会在元数据锁定处于活动状态时等待应用更改。
+
+1. 使用ALTER修改列
+
+ALTER与DROP配对会删除现有列。 
+但是，如果列是唯一的剩余列，它将失败。
+
+查看下面给出的示例 -
+mysql> ALTER TABLE products_tbl DROP version_num;
+
+使用ALTER ... ADD语句添加列 -
+mysql> ALTER TABLE products_tbl ADD discontinued CHAR(1);
+
+使用关键字FIRST和AFTER指定列的位置 -
+ALTER TABLE products_tbl ADD discontinued CHAR(1) FIRST;
+ALTER TABLE products_tbl ADD discontinued CHAR(1) AFTER quantity;
+
+注意FIRST和AFTER关键字只适用于ALTER ... ADD语句。 
+此外，您必须删除一个表，然后添加它，以重新定位它。
+
+使用ALTER语句中的MODIFY或CHANGE子句更改列定义或名称。 
+这些子句具有类似的效果，但是使用明显不同的语法。
+
+查看下面给出的CHANGE示例 -
+mysql> ALTER TABLE products_tbl CHANGE discontinued status CHAR(4);
+
+在使用CHANGE的语句中，指定原始列，然后指定将替换它的新列。 
+查看下面的MODIFY示例 -
+mysql> ALTER TABLE products_tbl MODIFY discontinued CHAR(4);
+
+ALTER命令还允许更改默认值。 
+查看示例 -
+mysql> ALTER TABLE products_tbl ALTER discontinued SET DEFAULT N;
+
+您还可以使用它通过将其与DROP子句配对来删除默认约束 -
+mysql> ALTER TABLE products_tbl ALTER discontinued DROP DEFAULT;
+
+2. 使用ALTER修改表
+
+使用TYPE子句更改表类型 -
+mysql> ALTER TABLE products_tbl TYPE = INNODB;
+
+重命名具有RENAME关键字的表 -
+mysql> ALTER TABLE products_tbl RENAME TO products2016_tbl;
+
+====================================================================================================
+====================================================================================================
+二十七、MariaDB 索引和统计表
+
+索引是用于加速记录检索的工具。 
+索引为索引列中的每个值生成一个条目。
+
+有四种类型的索引 - 
+    Primary（一条记录表示所有记录）
+    Unique（一条记录表示多个记录）
+    Plain
+    Full-Text（允许文本搜索中的许多选项）。 
+
+术语“密钥”和“索引”在该用法中是相同的。
+
+索引与一个或多个列关联，并支持快速搜索和高效的记录组织。 
+创建索引时，请考虑查询中经常使用的列。 
+然后在它们上创建一个或多个索引。 
+此外，将索引视为基本的主键表。
+
+虽然索引加速搜索或SELECT语句，但由于对表和索引执行操作，它们使插入和更新拖动。
+
+1. 创建索引
+
+您可以通过CREATE TABLE ... INDEX语句或CREATE INDEX语句创建索引。 
+支持可读性，维护和最佳实践的最佳选项是CREATE INDEX。
+
+查看下面给出的Index的一般语法 -
+CREATE [UNIQUE or FULLTEXT or...] INDEX index_name ON table_name column;
+
+回顾一个使用的例子 -
+CREATE UNIQUE INDEX top_sellers ON products_tbl product;
+
+2. 删除索引
+
+可以使用DROP INDEX或ALTER TABLE ... DROP删除索引。 
+支持可读性，维护和最佳实践的最佳选项是DROP INDEX。
+
+查看下面给出的Drop Index的一般语法 -
+DROP INDEX index_name ON table_name;
+
+回顾一个使用的例子 -
+DROP INDEX top_sellers ON product_tbl;
+
+3. 重命名索引
+
+使用ALTER TABLE语句重命名索引。 
+
+查看下面给出的一般语法 -
+ALTER TABLE table_name DROP INDEX index_name, ADD INDEX new_index_name;
+
+回顾一个使用的例子 -
+ALTER TABLE products_tbl DROP INDEX top_sellers, ADD INDEX top_2016sellers;
+
+4. 管理索引
+
+您将需要检查和跟踪所有索引。 
+使用SHOW INDEX列出与给定表相关联的所有现有索引。 
+您可以使用诸如“\ G”之类的选项来设置显示内容的格式，该选项指定垂直格式。
+
+查看以下示例 -
+mysql > SHOW INDEX FROM products_tblG
+
+5. 表统计
+
+索引被大量使用以优化查询，因为更快地访问记录以及提供的统计信息。 
+然而，许多用户发现索引维护麻烦。 
+MariaDB 10.0使存储引擎独立统计表可用，它计算每个存储引擎中每个表的数据统计信息，甚至是未编制索引的列的统计信息。
+
+====================================================================================================
+====================================================================================================
+二十八、MariaDB 临时表
+
+由于速度或一次性数据，一些操作可能受益于临时表。 
+临时表的生命期在会话终止时结束，无论是从命令提示符，PHP脚本还是通过客户端程序使用它们。 
+它也不以典型的方式出现在系统中。 
+SHOW TABLES命令不会显示包含临时表的列表。
+
+1. 创建临时表
+
+CREATE TABLE语句中的TEMPORARY关键字生成临时表。 
+
+查看下面给出的示例 -
+mysql>CREATE TEMPORARY TABLE order (
+   item_name VARCHAR(50) NOT NULL
+      , price DECIMAL(7,2) NOT NULL DEFAULT 0.00
+      , quantity INT UNSIGNED NOT NULL DEFAULT 0
+);
+
+在创建临时表时，可以使用LIKE子句克隆现有表，这意味着其所有常规特征。 
+用于生成临时表的CREATE TABLE语句不会作为TEMPORARY关键字的结果提交事务。
+
+虽然临时表在会话结束时与非临时表脱离，但它们可能有一定的冲突 - 
+    他们有时会与过期会话中的ghost临时表冲突。
+    它们有时与非临时表的影子名称冲突。 
+
+注意 - 临时表允许与现有非临时表具有相同的名称，因为MariaDB将其视为差异引用。
+
+2. 行政
+
+MariaDB需要向用户授予创建临时表的权限。 
+使用GRANT语句将此权限授予非管理员用户。
+GRANT CREATE TEMPORARY TABLES ON orders TO 'machine122'@'localhost';
+
+3. 删除临时表
+
+虽然临时表基本上在会话结束时删除，您可以选择删除它们。 
+删除临时表需要使用TEMPORARY关键字，最佳实践建议在临时表之前删除临时表。
+mysql> DROP TABLE order;
+
+====================================================================================================
+====================================================================================================
+二十九、MariaDB 克隆表
+
+某些情况下需要生成现有表的精确副本。 
+CREATE ... SELECT语句不能产生此输出，因为它忽略了索引和默认值。
+
+复制表的过程如下 - 
+    使用SHOW CREATE TABLE来生成详细描述源表的整个结构的CREATE TABLE语句。
+    编辑语句以给表一个新名称，并执行它。
+    如果还需要复制表数据，请使用INSERT INTO ... SELECT语句。 
+mysql> INSERT INTO inventory_copy_tbl (product_id,product_name,product_manufacturer,ship_date)
+       SELECT product_id,product_name,product_manufacturer,ship_date,
+       FROM inventory_tbl;
+
+另一种创建副本的方法使用CREATE TABLE AS语句。 
+该语句复制所有列，列定义，并用源表数据填充副本。
+
+检查其语法如下 -
+CREATE TABLE clone_tbl AS
+   SELECT columns
+   FROM original_tbl
+   WHERE conditions];
+
+查看其使用示例如下 -
+CREATE TABLE products_copy_tbl AS
+   SELECT *
+   FROM products_tbl;
+
+====================================================================================================
+====================================================================================================
+三十、MariaDB 序列
+
+在版本10.0.3中，MariaDB引入了一种称为序列的存储引擎。 
+其ad hoc为操作生成整数序列，然后终止。 
+该序列包含正整数，以降序或升序排列，并使用起始，结束和递增值。
+
+它不允许在多个查询中使用，只能在其原始查询因为其虚拟（不写入磁盘）性质。 
+但是，序列表可以通过ALTER命令转换为标准表。 
+如果删除转换的表，序列表仍然存在。 
+序列也不能产生负数或以最小/最大值旋转。
+
+1. 安装序列引擎
+
+使用序列需要安装序列引擎，MariaDB作为插件而不是二进制分发。 
+使用以下命令安装它 -
+INSTALL SONAME "ha_sequence";
+
+安装后，验证它 -
+SHOW ENGINESG
+
+请记住，在引擎安装后，您不能创建具有使用序列语法的名称的标准表，但可以创建具有序列语法名称的临时表。
+
+2. 创建序列
+
+有两种方法创建序列 - 
+    创建表并使用AUTO_INCREMENT属性将列定义为自动递增。
+    使用现有数据库并使用序列SELECT查询来生成序列。 
+    查询使用seq_ [FROM] _to_ [TO]或seq_ [FROM] _to_ [TO] _step_STEP语法。 
+
+最佳实践更喜欢使用第二种方法。 查看下面给出的序列创建的示例 -
+SELECT * FROM seq_77_to_99;
+
+序列有很多用途 - 
+    在列中找到缺少的值，以防止操作中的相关问题 - 
+    SELECT myseq.seq FROM seq_22_to_28 myseq LEFT JOIN table1 t ON myseq.seq = x.y WHERE x.y IS NULL;
+    构造值的组合 - 
+    SELECT x1.seq, x2.seq FROM seq_5_to_9 x1 JOIN seq_5_to_9 x2 ORDER BY 5, 6;
+    查找数字的倍数 - 
+    SELECT seq FROM seq_3_to_100_step_4;
+    构造用于预订系统等应用程序的日期序列。
+    构造时间序列。 
+
+====================================================================================================
+====================================================================================================
+三十一、MariaDB 管理重复
+
+如前面的课程所讨论的，MariaDB在某些情况下允许重复记录和表。 
+由于不同的数据或对象类型，或作为操作对象的唯一寿命或存储的结果，这些重复中的一些事实上不是重复的。 
+这些副本通常也没有问题。
+
+在某些情况下，重复确实会导致问题，并且它们常常由于隐式动作或MariaDB命令的宽松策略而出现。 
+有多种方法可以控制此问题，查找重复项，删除重复项，并防止重复创建。
+
+1. 策略和工具
+
+有四个关键方法来管理重复 - 
+    使用JOIN关联，并用临时表删除他们。
+    使用INSERT ... ON DUPLICATE KEY UPDATE在发现重复时更新。
+    使用DISTINCT修剪SELECT语句的结果并删除重复的。
+    使用INSERT IGNORE停止插入重复项。 
+
+2. 使用连接临时表
+
+只需像内部联接那样执行半连接，然后删除使用临时表找到的重复。
+
+3. 使用INSERT
+
+当INSERT ... ON DUPLICATE KEY UPDATE发现重复的唯一或主键时，它执行更新。 发现多个唯一键时，它只更新第一个。 因此，不要在具有多个唯一索引的表上使用它。
+
+查看以下示例，该示例显示在插入到填充字段时在包含索引值的表中发生的情况 -
+INSERT INTO add_dupl VALUES (1,'Apple');
+ERROR 1062 (23000): Duplicate entry '1' for key 'PRIMARY'
+
+注意 - 如果没有找到任何键，INSERT ... ON DUPLICATE KEY UPDATE语句的执行方式与正常的insert语句相似。
+
+2. 使用DISTINCT
+
+DISTINCT子句从结果中删除重复项。 
+
+DISTINCT子句的一般语法如下 -
+SELECT DISTINCT fields
+FROM table
+[WHERE conditions];
+
+注 - 带有DISTINCT子句的语句的结果 - 
+    当使用一个表达式时，它为它返回唯一的值。
+    当使用多个表达式时，它返回唯一的组合。
+    它不会忽略NULL值; 因此，结果还包含NULL作为唯一值。 
+
+使用单个表达式的DISTINCT子句查看以下语句 -
+SELECT DISTINCT product_id
+FROM products
+WHERE product_name = 'DustBlaster 5000';
+
+使用多个表达式查看以下示例 -
+SELECT DISTINCT product_name, product_id
+FROM products
+WHERE product_id < 30
+
+3. 使用INSERT IGNORE
+
+INSERT IGNORE语句指示MariaDB在发现重复记录时取消插入。 
+
+查看下面给出的使用示例 -
+mysql> INSERT IGNORE INTO customer_tbl (LN, FN)
+   VALUES( 'Lex', 'Luther');
+
+另外，注意重复的逻辑。 
+某些表基于表数据的性质需要重复。 
+满足您在管理重复记录的策略中的需要。 
+
+====================================================================================================
+====================================================================================================
+三十二、MariaDB SQL注入保护
+
+接受用户输入的简单行为打开了利用的大门。 
+这个问题主要来自数据的逻辑管理，但幸运的是，很容易避免这些主要缺陷。
+
+SQL注入的机会通常发生在输入诸如名称的数据的用户上，并且代码逻辑无法分析该输入。 
+相反，代码允许攻击者插入MariaDB语句，该语句将在数据库上运行。
+
+始终考虑用户输入的数据，可疑的，在任何处理之前需要强大的验证。 
+通过模式匹配执行此验证。 
+例如，如果期望的输入是用户名，将输入的字符限制为字母数字字符和下划线，并且限制为一定长度。 
+
+查看下面给出的示例 -
+if(check_match("/^w{8,20}$/", $_GET['user_name'], $matches)) {
+   $result = mysql_query("SELECT * FROM system_users WHERE user_name = $matches[0]");
+} else {
+   echo "Invalid username";
+}
+
+此外，在创建输入约束时使用REGEXP运算符和LIKE子句。
+
+考虑所有类型的必要的显式控制输入，如 - 
+    控制使用的转义字符。
+    控制特定的适当数据类型以进行输入。 将输入限制为必需的数据类型和大小。
+    控制输入数据的语法。 不要允许任何模式外的任何东西。
+    控制允许的条款。 黑名单SQL关键字。 
+
+你可能不知道注入攻击的危险，或者可能认为它们不重要，但它们是安全问题的列表。 
+此外，考虑这两个条目的效果 -
+1=1
+-or-
+*
+
+允许任何一个与正确的命令一起输入的代码可能导致揭示数据库上的所有用户数据或删除数据库上的所有数据，并且两种注入都不是特别聪明。 
+在某些情况下，攻击者甚至不花时间检查孔; 他们用简单的输入执行盲攻击。
+
+另外，考虑由与MariaDB配合的任何编程/脚本语言提供的模式匹配和正则表达式工具，它们提供更多的控制，有时更好的控制。 
