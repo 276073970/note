@@ -1,0 +1,74 @@
+GIT: error: pathspec 'xxx did not match any file(s) known to git
+
+====================================================================================================
+====================================================================================================
+I have some trouble with a git repository of mine and I cant find the error :(
+
+Thing is, I had this repository already in use for a PHP project. everything was fine. Then, I "added" composer to it. I.e., I copied the composer file to the repositorie's root, created a composer.json, and used "composer install". Hence, composer.lock and vendor/ were created for me.
+
+Since I didnt want those to be included in the repo, I added the following to the .gitignore
+
+composer
+composer.lock
+vendor/
+
+Now, whenever I use "git add" oder "git commit" from the root, I will get the following errors:
+
+$ git commit * -m "fixed issue #123"
+error: pathspec 'composer' did not match any file(s) known to git.
+error: pathspec 'composer.lock' did not match any file(s) known to git.
+error: pathspec 'vendor' did not match any file(s) known to git.
+
+Obviously, the commit (or add) does not work so I have to manually specify files to add or commit. Bummer.
+
+I cannot find the problem :( Anyone knows how to fix this?
+
+BTW I am using git version 2.4.9 (Apple Git-60)
+
+====================================================================================================
+====================================================================================================
+I often have this problem if something has changed, added files to gitignore or something else. Maybe you have to rebuild the index.
+
+Updated: added recursive and file param to git rm
+
+In my case this worked:
+
+remove cached files (only the paths are removed from the index, not the real files!!!)
+
+git rm -r --cached .
+
+add all files to the index
+
+git add .
+
+commit
+
+git commit -m "hopefully fixed pathspec error"
+
+UPDATE: If this won't work, try the following:
+
+    Get a new checkout from your repo
+    remove composer, composer.lock, vendor/ from your .gitignore
+    run the above suggestion again
+    move the folders composer, composer.lock, vendor/ outside your repo
+    add and commit, maybe add with -A to add that the files are deleted
+    add composer, composer.lock, vendor/ to your .gitignore and commit
+    move back the folders composer, composer.lock, vendor/ to your repo
+
+Now it should be gone from the repo and due to your .gitignore, never will be commited again. Hopefully the pathspec error is gone :)
+
+====================================================================================================
+====================================================================================================
+this worked! thanks a lot!!! – Xenonite Nov 10 '15 at 12:11
+
+You're welcome, I'm glad it worked :) – swidmann Nov 10 '15 at 12:12
+
+Well seems like it worked just for one commit. Now, I get the EXACT same errors again. And this time, the fix does not work :( – Xenonite Nov 10 '15 at 20:20
+ 
+====================================================================================================
+====================================================================================================
+can you try git add -A instead of git add .? – swidmann Nov 10 '15 at 21:26
+
+====================================================================================================
+====================================================================================================
+I did as swidmann says in his last update but instead of git add . , I did git add -A . And after that It worked for next commit and all the future commit too... :D – Jaythaking Mar 31 '16 at 16:51

@@ -1,0 +1,1631 @@
+总结：
+1）mysql_connect();
+$conn = mysql_connect($dbhost, $dbuser, $dbpass);
+2）mysql_error();
+3）mysql_select_db();
+mysql_select_db( 'database_name' );
+4）$retval = mysql_query();
+$retval = mysql_query( $sql, $conn );
+5）mysql_close();
+mysql_close($conn);
+6）mysql_free_result();
+mysql_free_result($retval);
+
+====================================================================================================
+====================================================================================================
+PHP连接MariaDB数据库
+
+教程简介:
+MariaDB是MySQL关系数据库管理系统的一个分支。 
+MySQL的原始开发人员在Oracle收购MySQL后提出的关注之后创建了MariaDB。 
+本教程将提供MariaDB的快速介绍，并帮助您实现MariaDB编程和管理的高水平的安慰。
+
+====================================================================================================
+====================================================================================================
+一、MariaDB 介绍
+
+数据库应用程序与主应用程序分开存在，并存储数据集合。 
+每个数据库都使用一个或多个API来创建，访问，管理，搜索和复制其包含的数据。
+
+数据库还使用非关系数据源，例如对象或文件。 
+然而，数据库证明是大数据集的最佳选择，这将遭受缓慢的检索和与其他数据源写入。
+
+关系数据库管理系统或RDBMS将数据存储在各种表中。
+这些表之间的关系使用主键和外键建立。
+
+RDBMS提供以下功能 - 
+    它们使您能够使用表，列和索引来实现数据源。
+    它们确保多个表行间引用的完整性。
+    他们自动更新索引。
+    他们解释SQL查询和操作从表操作或源数据。 
+
+RDBMS术语
+在我们开始讨论MariaDB之前，让我们来看一下与数据库相关的一些术语。
+    Database - 数据库是由保存相关数据的表组成的数据源。
+    Table -表，这意味着电子表格，是包含数据的矩阵。
+    Column - 表示数据元素的列是保存一种类型的数据的结构;例如，送货日期。
+    Row - 行是对相关数据进行分组的结构;例如，用于客户的数据。它也被称为元组，条目或记录。
+    Redundancy - 此术语指的是存储数据两次，以加速系统。
+    Primary Key - 这指的是唯一的标识值。此值不能在表中出现两次，并且只有一个行与其关联。
+    Foreign Key - 外键用作两个表之间的链接。
+    Compound Key -复合键，或复合键，是指多个列的关键。它指的是多列由于缺乏独特的质量一列。
+    Index - 索引实际上与书的索引相同。
+    Referential Integrity - 此术语指确保所有外键值指向现有行。 
+
+MARIA数据库
+MariaDB是由MySQL的原始开发人员创建的MySQL的流行分支。 
+它源于与MySQL收购Oracle有关的问题。 
+它支持小数据处理任务和企业需求。 
+它旨在成为MySQL的替代，只需要简单的卸载MySQL和安装MariaDB。 
+MariaDB提供与MySQL等相同的功能。
+MariaDB的主要特性
+
+MariaDB的重要特性是 - 
+    所有MariaDB都在GPL，LGPL或BSD下。
+    MariaDB包括各种存储引擎，包括高性能存储引擎，用于与其他RDBMS数据源一起工作。
+    MariaDB使用标准和流行的查询语言。
+    MariaDB在多个操作系统上运行，并支持各种各样的编程语言。
+    MariaDB提供对PHP的支持，PHP是最流行的Web开发语言之一。
+    MariaDB提供Galera集群技术。
+    MariaDB还提供了许多在MySQL中不可用的操作和命令，并消除/取代影响性能的功能。 
+
+入门
+在开始本教程之前，请确保您具有PHP和HTML的一些基本知识，特别是我们的PHP和HTML教程中讨论的材料。
+本指南重点介绍在PHP环境中使用MariaDB，因此我们的示例将对PHP开发人员最有用。
+如果您不熟悉或需要查看，我们强烈建议您查看我们的PHP教程。
+
+====================================================================================================
+====================================================================================================
+二、MariaDB 安装
+
+MariaDB的所有下载都位于官方MariaDB基金会网站的下载部分。 
+单击所需版本的链接，并显示多个操作系统，体系结构和安装文件类型的下载列表。
+
+在LINUX / UNIX上安装
+如果你熟悉Linux / Unix系统，只需下载源码来构建你的安装。 
+我们推荐的安装方式是使用分发包。 MariaDB提供用于以下Linux / Unix发行版的软件包 - 
+    RedHat / CentOS / Fedora
+    Debian / Ubuntu 
+以下发行版在其存储库中包含MariaDB软件包 - 
+    openSUSE
+    Arch Linux
+    Mageia
+    Mint
+    Slackware
+
+====================================================================================================
+====================================================================================================
+三、MariaDB 创建表
+
+在本章中，我们将学习如何创建表。 
+在创建表之前，首先确定其名称，字段名称和字段定义。
+以下是表创建的一般语法：
+CREATE TABLE table_name (column_name column_type);
+
+查看在PRODUCTS数据库中创建表所使用的命令 -
+database products_tbl(
+   product_id INT NOT NULL AUTO_INCREMENT,
+   product_name VARCHAR(100) NOT NULL,
+   product_manufacturer VARCHAR(40) NOT NULL,
+   submission_date DATE,
+   PRIMARY KEY ( product_id )
+);
+上述示例使用“NOT NULL”作为字段属性，以避免由空值导致的错误。 
+属性“AUTO_INCREMENT”指示MariaDB将下一个可用值添加到ID字段。 
+关键字主键将列定义为主键。 
+多个列以逗号分隔可以定义主键。
+
+创建表的两个主要方法是使用命令提示符和PHP脚本。 
+
+1. 命令提示符
+使用CREATE TABLE命令执行任务，如下所示 -
+root@host# mysql -u root -p
+Enter password:*******
+mysql> use PRODUCTS;
+Database changed
+mysql> CREATE TABLE products_tbl(
+   -> product_id INT NOT NULL AUTO_INCREMENT,
+   -> product_name VARCHAR(100) NOT NULL,
+   -> product_manufacturer VARCHAR(40) NOT NULL,
+   -> submission_date DATE,
+   -> PRIMARY KEY ( product_id )
+   -> );
+mysql> SHOW TABLES;
++------------------------+
+| PRODUCTS               |
++------------------------+
+| products_tbl           |
++------------------------+
+确保所有命令都以分号结尾。
+
+2. PHP创建表脚本
+PHP为表创建提供mysql_query()。 它的第二个参数包含必要的SQL命令 -
+<html>
+   <head>
+      <title>Create a MariaDB Table</title>
+   </head>
+
+   <body>
+      <?php
+         $dbhost = 'localhost:3036';
+         $dbuser = 'root';
+         $dbpass = 'rootpassword';
+         $conn = mysql_connect($dbhost, $dbuser, $dbpass);
+      
+         if(! $conn ){
+            die('Could not connect: ' . mysql_error());
+         }
+         echo 'Connected successfully<br />';
+         
+         $sql = "CREATE TABLE products_tbl( ".
+            "product_id INT NOT NULL AUTO_INCREMENT, ".
+            "product_name VARCHAR(100) NOT NULL, ".
+            "product_manufacturer VARCHAR(40) NOT NULL, ".
+            "submission_date DATE, ".
+            "PRIMARY KEY ( product_id )); ";
+      
+         mysql_select_db( 'PRODUCTS' );
+         $retval = mysql_query( $sql, $conn );
+      
+         if(! $retval ) {
+            die('Could not create table: ' . mysql_error());
+         }
+         echo "Table created successfully";
+         
+         mysql_close($conn);
+      ?>
+   </body>
+</html>
+
+在成功创建表，你会看到下面的输出 -
+mysql> Table created successfully
+
+====================================================================================================
+====================================================================================================
+四、MariaDB 删除表
+
+在本章中，我们将学习删除表。
+
+表删除很容易，但记住所有删除的表是不可恢复的。 表删除的一般语法如下 -
+DROP TABLE table_name ;
+
+存在执行表删除的两个选项：使用命令提示符或PHP脚本。
+
+1. 命令提示符
+在命令提示符下，只需使用DROP TABLE SQL命令 -
+root@host# mysql -u root -p
+Enter password:*******
+mysql> use PRODUCTS;
+Database changed
+mysql> DROP TABLE products_tbl
+mysql> SELECT * from products_tbl
+ERROR 1146 (42S02): Table 'products_tbl' doesn't exist
+
+2. PHP 删除表脚本
+PHP提供mysql_query()用于删除表。 简单地传递它的第二个参数适当的SQL命令 -
+<html>
+   <head>
+      <title>Create a MariaDB Table</title>
+   </head>
+
+   <body>
+      <?php
+         $dbhost = 'localhost:3036';
+         $dbuser = 'root';
+         $dbpass = 'rootpassword';
+         $conn = mysql_connect($dbhost, $dbuser, $dbpass);
+         
+         if(! $conn ) {
+            die('Could not connect: ' . mysql_error());
+         }
+         echo 'Connected successfully<br />';
+         
+         $sql = "DROP TABLE products_tbl";
+         mysql_select_db( 'PRODUCTS' );
+         $retval = mysql_query( $sql, $conn );
+      
+         if(! $retval ) {
+            die('Could not delete table: ' . mysql_error());
+         }
+         echo "Table deleted successfully";
+         
+         mysql_close($conn);
+      ?>
+   </body>
+</html>
+
+成功删除表后，您将看到以下输出 -
+mysql> Table deleted successfully
+
+====================================================================================================
+====================================================================================================
+五、MariaDB 插入查询
+
+在本章中，我们将学习如何在表中插入数据。
+
+将数据插入表需要INSERT命令。 
+该命令的一般语法是INSERT，后跟表名，字段和值。
+
+查看下面给出的一般语法 -
+INSERT INTO tablename (field,field2,...) VALUES (value, value2,...);
+
+该语句需要对字符串值使用单引号或双引号。 
+语句的其他选项包括“INSERT ... SET”语句，“INSERT ... SELECT”语句和其他几个选项。
+
+注意 - 出现在语句中的VALUES（）函数仅适用于INSERT语句，如果在其他位置使用，则返回NULL。
+
+存在两种执行操作的选项：使用命令行或使用PHP脚本。
+
+1. 命令提示符
+在提示时，有许多方法来执行选择操作。 下面给出标准语句 -
+belowmysql>
+INSERT INTO products_tbl (ID_number, Nomenclature) VALUES (12345,
+“Orbitron 4000”);
+mysql> SHOW COLUMNS FROM products_tbl;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| ID_number   | int(5)      |      |     |         |       |
+| Nomenclature| char(13)    |      |     |         |       |
++-------------+-------------+------+-----+---------+-------+
+
+您可以插入多行 -
+INSERT INTO products VALUES (1, “first row”), (2, “second row”);
+
+您还可以使用SET子句 -
+INSERT INTO products SELECT * FROM inventory WHERE status = 'available';
+
+2. PHP插入脚本
+在PHP函数中使用相同的“INSERT INTO ...”语句来执行操作。 
+您将再次使用mysql_query()函数。
+
+查看下面给出的示例 -
+<?php
+   if(isset($_POST['add'])) {
+      $dbhost = 'localhost:3036';
+      $dbuser = 'root';
+      $dbpass = 'rootpassword';
+      $conn = mysql_connect($dbhost, $dbuser, $dbpass);
+
+      if(! $conn ) {
+         die('Could not connect: ' . mysql_error());
+      }
+
+      if(! get_magic_quotes_gpc() ) {
+         $product_name = addslashes ($_POST['product_name']);
+         $product_manufacturer = addslashes ($_POST['product_name']);
+      } else {
+         $product_name = $_POST['product_name'];
+         $product_manufacturer = $_POST['product_manufacturer'];
+      }
+      $ship_date = $_POST['ship_date'];
+      $sql = "INSERT INTO products_tbl ".
+         "(product_name,product_manufacturer, ship_date) ".
+         "VALUES"."('$product_name','$product_manufacturer','$ship_date')";
+
+      mysql_select_db('PRODUCTS');
+      $retval = mysql_query( $sql, $conn );
+      
+      if(! $retval ) {
+         die('Could not enter data: ' . mysql_error());
+      }
+
+      echo "Entered data successfully";
+      mysql_close($conn);
+   }
+?>
+
+成功插入数据后，您将看到以下输出 -
+mysql> Entered data successfully
+
+您还将使用insert语句来合作验证语句，例如检查以确保正确的数据输入。 
+MariaDB包括许多选项，其中一些是自动的。 
+
+====================================================================================================
+====================================================================================================
+六、MariaDB 管理
+
+在尝试运行MariaDB之前，首先确定其当前状态，运行或关闭。 
+有三个选项用于启动和停止MariaDB - 
+    运行mysqld（MariaDB脚本）。
+    运行mysqld_safe启动脚本。
+    运行mysql.server启动脚本。 
+
+如果您将MariaDB安装在非标准位置，则可能需要在脚本文件中编辑位置信息。 
+只需在脚本中添加“停止”参数，即可停止MariaDB。
+
+如果您想在Linux下自动启动它，请将启动脚本添加到init系统中。 每个分发具有不同的过程。 请参阅系统文档。
+
+1. 创建用户帐户
+使用以下代码创建新的用户帐户 -
+'newusername'@'localhost' IDENTIFIED BY 'userpassword';
+此代码向用户表中添加一行没有任何权限。 您还可以选择使用哈希值作为密码。 
+
+使用以下代码授予用户权限 -
+GRANT SELECT, INSERT, UPDATE, DELETE ON database1 TO 'newusername'@'localhost';
+其他权限包括MariaDB中可能的每个命令或操作。 
+
+创建用户后，执行“FLUSH PRIVILEGES”命令以刷新授权表。 
+这允许使用用户帐户。
+
+2. 配置文件
+在Unix / Linux上构建之后，应该编辑配置文件“/etc/my.conf”以显示如下 -
+
+# Example mysql config file.
+# You can copy this to one of:
+# /etc/my.cnf to set global options,
+# /mysql-data-dir/my.cnf to get server specific options or
+# ~/my.cnf for user specific options.
+
+#
+
+# One can use all long options that the program supports.
+# Run the program with --help to get a list of available options
+
+# This will be passed to all mysql clients
+[client]
+#password = my_password
+#port = 3306
+#socket = /tmp/mysql.sock
+
+# Here is entries for some specific programs
+# The following values assume you have at least 32M ram
+
+# The MySQL server
+[mysqld]
+#port = 3306
+#socket = /tmp/mysql.sock
+temp-pool
+
+# The following three entries caused mysqld 10.0.1-MariaDB (and possibly other
+   versions) to abort...
+# skip-locking
+# set-variable = key_buffer = 16M
+# set-variable = thread_cache = 4
+
+loose-innodb_data_file_path = ibdata1:1000M
+loose-mutex-deadlock-detector
+gdb
+
+######### Fix the two following paths
+
+# Where you want to have your database
+data = /path/to/data/dir
+
+# Where you have your mysql/MariaDB source + sql/share/english
+language = /path/to/src/dir/sql/share/english
+
+[mysqldump]
+quick
+MariaDB
+8
+set-variable = max_allowed_packet=16M
+[mysql]
+no-auto-rehash
+
+[myisamchk]
+set-variable = key_buffer = 128M
+
+编辑行"data ="和"language ="以匹配您的环境。
+
+文件修改后，导航到源目录并执行以下操作 -
+./scripts/mysql_install_db --srcdir = $PWD --datadir = /path/to/data/dir --user = $LOGNAME
+
+如果您将datadir添加到配置文件，请忽略“$ PWD”变量。 
+确保运行10.0.1版本的MariaDB时使用“$ LOGNAME”。
+
+3. 管理命令
+查看以下您将在使用MariaDB时经常使用的重要命令列表：
+    USE [database name] - 设置当前默认数据库。
+    SHOW DATABASES - 列出服务器上当前的数据库。
+    SHOW TABLES - 列出所有非临时表。
+    SHOW COLUMNS FROM [table name] - 提供与指定表有关的列信息。
+    SHOW INDEX FROM TABLENAME [table name] - 提供与指定表相关的表索引信息。
+    SHOW TABLE STATUS LIKE [table name] \ G - - 提供有关非临时表的信息的表，以及LIKE子句用于获取表名后显示的模式。
+
+====================================================================================================
+====================================================================================================
+七、MariaDB 选择查询
+
+在本章中，我们将学习如何从表中选择数据。
+
+SELECT语句检索所选行。 
+它们可以包括UNION语句，排序子句，LIMIT子句，WHERE子句，GROUP BY ... HAVING子句和子查询。
+
+查看以下一般语法 -
+SELECT field, field2,... FROM table_name, table_name2,... WHERE...
+
+SELECT语句提供了多个选项来指定使用的表 - 
+    database_name.table_name
+    table_name.column_name
+    database_name.table_name.column_name 
+
+所有select语句必须包含一个或多个select表达式。 选择表达式由以下选项之一组成 - 
+    列名。
+    使用运算符和函数的表达式。
+    规范"table_name.*"以选择给定表中的所有列
+    字符"*"用于从FROM子句中指定的所有表中选择所有列。 
+
+可以在执行select语句时使用命令提示符或PHP脚本。
+
+1. 命令提示符
+在命令提示符下，执行如下语句：
+root@host# mysql -u root -p password;
+Enter password:*******
+mysql> use PRODUCTS;
+Database changed
+mysql> SELECT * from products_tbl
++-------------+---------------+
+| ID_number   | Nomenclature  |
++-------------+---------------+
+| 12345       | Orbitron 4000 |
++-------------+---------------+
+
+2. PHP选择脚本
+在PHP函数中使用相同的SELECT语句来执行操作。 您将再次使用mysql_query()函数。 查看下面给出的示例 -
+<?php
+   $dbhost = 'localhost:3036';
+   $dbuser = 'root';
+   $dbpass = 'rootpassword';
+   $conn = mysql_connect($dbhost, $dbuser, $dbpass);
+   
+   if(! $conn ) {
+      die('Could not connect: ' . mysql_error());
+   }
+
+   $sql = 'SELECT product_id, product_name,product_manufacturer, ship_date 
+      FROM products_tbl';
+
+   mysql_select_db('PRODUCTS');
+   $retval = mysql_query( $sql, $conn );
+   
+   if(! $retval ) {
+      die('Could not get data: ' . mysql_error());
+   }
+
+   while($row = mysql_fetch_array($retval, MYSQL_ASSOC)) {
+      echo "Product ID :{$row['product_id']} <br> ".
+         "Name: {$row['product_name']} <br> ".
+         "Manufacturer: {$row['product_manufacturer']} <br> ".
+         "Ship Date : {$row['ship_date']} <br>".
+         "--------------------------------<br>";
+   }
+
+   echo "Fetched data successfully";
+   mysql_close($conn);
+?>
+
+在成功的数据检索，你会看到下面的输出 -
+Product ID: 12345
+Nomenclature: Orbitron 4000
+Manufacturer: XYZ Corp
+Ship Date: 01/01/17
+----------------------------------------------
+Product ID: 12346
+Nomenclature: Orbitron 3000
+Manufacturer: XYZ Corp
+Ship Date: 01/02/17
+----------------------------------------------
+mysql> Fetched data successfully
+
+最佳实践建议在每个SELECT语句之后释放游标内存。 PHP为此提供了mysql_free_result()函数。 审查其使用如下所示 -
+<?php
+   $dbhost = 'localhost:3036';
+   $dbuser = 'root';
+   $dbpass = 'rootpassword';
+   $conn = mysql_connect($dbhost, $dbuser, $dbpass);
+   
+   if(! $conn ) {
+      die('Could not connect: ' . mysql_error());
+   }
+
+   $sql = 'SELECT product_id, product_name, product_manufacturer, ship_date
+      FROM products_tbl';
+
+   mysql_select_db('PRODUCTS');
+   $retval = mysql_query( $sql, $conn );
+
+   if(! $retval ) {
+      die('Could not get data: ' . mysql_error());
+   }
+
+   while($row = mysql_fetch_array($retval, MYSQL_NUM)) {
+      echo "Product ID :{$row[0]} <br> ".
+         "Name: {$row[1]} <br> ".
+         "Manufacturer: {$row[2]} <br> ".
+         "Ship Date : {$row[3]} <br> ".
+         "--------------------------------<br>";
+   }
+
+   mysql_free_result($retval);
+   echo "Fetched data successfully";
+   mysql_close($conn);
+?>
+
+====================================================================================================
+====================================================================================================
+八、MariaDB PHP语法
+
+MariaDB与各种编程语言和框架（如PHP，C＃，JavaScript，Ruby on Rails，Django等）合作良好。 
+PHP仍然是所有可用语言中最受欢迎的语言，因为它的简单性和历史足迹。 
+本指南将重点介绍与MariaDB合作的PHP。
+
+PHP提供了使用MySQL数据库的一系列功能。 
+这些函数执行类似访问它或执行操作的任务，它们与MariaDB完全兼容。 
+只需调用这些函数，就像调用任何其他PHP函数。
+
+您将用于MariaDB的PHP函数符合以下格式 -
+mysql_function(value,value,...);
+
+函数的第二部分指定其操作。 
+本指南中使用的两个功能如下 -
+mysqli_connect($connect);
+mysqli_query($connect,"SQL statement");
+
+以下示例演示了对MariaDB函数的PHP调用的一般语法 -
+<html>
+   <head>
+      <title>PHP and MariaDB</title>
+   </head>
+
+   <body>
+      <?php
+         $retval = mysql_function(value, [value,...]);
+      
+         if( !$retval ) {
+            die ( "Error: Error message here" );
+         }
+         // MariaDB or PHP Statements
+      ?>
+   </body>
+</html>
+
+在下一节中，我们将使用PHP函数来检查MariaDB的基本任务。 
+
+====================================================================================================
+====================================================================================================
+九、MariaDB Where子句
+
+WHERE子句过滤各种语句，如SELECT，UPDATE，DELETE和INSERT。 
+他们提出了用于指定行动的标准。 
+它们通常出现在语句中的表名后面，其条件如下。 
+WHERE子句本质上像一个if语句。
+
+查看下面给出的WHERE子句的一般语法 -
+[COMMAND] field,field2,... FROM table_name,table_name2,... WHERE [CONDITION]
+
+请注意WHERE子句的以下特性：
+    它是可选的。
+    它允许指定任何条件。
+    它允许通过使用AND或OR运算符来指定多个条件。
+    区分大小写仅适用于使用LIKE比较的语句。 
+
+WHERE子句允许使用以下运算符 -
+操作者
+= !=
+> <
+>= <=
+
+WHERE子句可以在命令提示符或PHP脚本中使用。
+
+1. 命令提示符
+在命令提示符下，只需使用标准命令 -
+root@host# mysql -u root -p password;
+Enter password:*******
+mysql> use PRODUCTS;
+Database changed
+mysql> SELECT * from products_tbl WHERE product_manufacturer = 'XYZ Corp';
++-------------+----------------+----------------------+
+| ID_number   | Nomenclature   | product_manufacturer |
++-------------+----------------+----------------------+
+| 12345       | Orbitron 4000  | XYZ Corp             |
++-------------+----------------+----------------------+
+| 12346       | Orbitron 3000  | XYZ Corp             |
++-------------+----------------+----------------------+
+| 12347       | Orbitron 1000  | XYZ Corp             |
++-------------+----------------+----------------------+
+
+使用AND条件查看示例 -
+SELECT *
+FROM products_tbl
+WHERE product_name = 'Bun Janshu 3000';
+AND product_id <= 344;
+
+此示例组合了AND和OR条件
+SELECT *
+FROM products_tbl
+WHERE (product_name = 'Bun Janshu 3000' AND product_id < 344)
+OR (product_name = 'Bun Janshu 3000');
+
+2. PHP脚本使用Where子句
+在使用WHERE子句的操作中应用mysql_query()函数 -
+<?php
+   $dbhost = 'localhost:3036';
+   $dbuser = 'root';
+   $dbpass = 'rootpassword';
+   $conn = mysql_connect($dbhost, $dbuser, $dbpass);
+   
+   if(! $conn ) {
+      die('Could not connect: ' . mysql_error());
+   }
+
+   $sql = 'SELECT product_id, product_name, product_manufacturer, ship_date
+      FROM products_tbl
+      WHERE product_manufacturer = "XYZ Corp"';
+   
+   mysql_select_db('PRODUCTS');
+   $retval = mysql_query( $sql, $conn );
+   
+   if(! $retval ) {
+      die('Could not get data: ' . mysql_error());
+   }
+
+   while($row = mysql_fetch_array($retval, MYSQL_ASSOC)) {
+      echo "Product ID :{$row['product_id']} <br> ".
+         "Name: {$row['product_name']} <br> ".
+         "Manufacturer: {$row['product_manufacturer']} <br> ".
+         "Ship Date: {$row['ship_date']} <br> ".
+         "--------------------------------<br>";
+   }
+
+   echo "Fetched data successfully";
+   mysql_close($conn);
+?>
+
+成功的数据检索后，您将看到以下输出 -
+产品编号：12345
+命名：Orbitron 4000
+制造商：XYZ公司
+交货日期：17年1月1日
+----------------------------------------------
+产品编号：12346
+命名：Orbitron 3000
+制造商：XYZ公司
+交货日期：17年1月2日
+----------------------------------------------
+产品编号：12347
+命名：Orbitron 1000
+制造商：XYZ公司
+交货日期：17年1月2日
+----------------------------------------------
+成功的mysql>读取的数据
+
+====================================================================================================
+====================================================================================================
+十、MariaDB 建立连接
+
+与MariaDB建立连接的一种方法是在命令提示符下使用mysql二进制文件。
+
+1. MySQL脚本
+查看下面给出的示例。
+[root@host]# mysql -u root -p
+Enter password:******
+
+上面给出的代码连接到MariaDB并提供一个命令提示符来执行SQL命令。 
+输入代码后，将显示一条欢迎消息，指示连接成功，并显示版本号。
+Welcome to the MariaDB monitor. Commands end with ; or g. 
+Your MariaDB connection id is 122323232 
+Server version: 5.5.40-MariaDB-log
+Type 'help;' or 'h' for help. Type 'c' to clear the current input statement.  
+mysql> 
+该示例使用根访问权限，但任何具有权限的用户当然可以访问MariaDB提示并执行操作。
+
+通过exit命令断开与MariaDB的连接，如下所示 -
+mysql> exit
+
+2. PHP连接脚本
+连接到MariaDB并与之断开连接的另一种方法是使用PHP脚本。 
+PHP提供了用于打开数据库连接的mysql_connect()函数。 
+它使用五个可选参数，并在成功连接后返回MariaDB链接标识符，或在失败的连接上返回false。 
+它还提供了用于关闭数据库连接的mysql_close()函数，它使用单个参数。
+
+语法
+查看以下PHP连接脚本语法 -
+connection mysql_connect(server,user,passwd,new_link,client_flag);
+参数的描述如下 -
+参数		说明
+server		此可选参数指定运行数据库服务器的主机名。 其默认值为“localhost：.3036”。
+user		此可选参数指定访问数据库的用户名。 其默认值是服务器的所有者。
+passwd		此可选参数指定用户的密码。 其默认值为空。
+new_link	此可选参数指定在使用相同参数的第二次调用mysql_connect()时，而不是新连接，将返回当前连接的标识符。
+client flags	客户端的标志，此可选参数使用以下常量值的组合 - 
+		MYSQL_CLIENT_SSL - 它使用ssl加密。
+		MYSQL_CLIENT_COMPRESS - 它使用压缩协议。
+		MYSQL_CLIENT_IGNORE_SPACE - 它允许函数名后的空格。
+		MYSQL_CLIENT_INTERACTIVE - 它允许在关闭连接之前交互式超时秒数不活动。 
+
+请查看下面给出的PHP断开脚本语法 -
+bool mysql_close ( resource $link_identifier );
+
+如果省略资源，则最近打开的资源将关闭。 
+它在成功关闭时返回true，或false。
+尝试下面的示例代码连接MariaDB服务器 -
+<html>
+   <head>
+      <title>Connect to MariaDB Server</title>
+   </head>
+
+   <body>
+      <?php
+         $dbhost = 'localhost:3036';
+         $dbuser = 'guest1';
+         $dbpass = 'guest1a';
+         $conn = mysql_connect($dbhost, $dbuser, $dbpass);
+      
+         if(! $conn ) {
+            die('Could not connect: ' . mysql_error());
+         }
+         
+         echo 'Connected successfully';
+         mysql_close($conn);
+      ?>
+   </body>
+</html>
+
+成功连接后，你会看到下面的输出 -
+mysql> Connected successfully
+
+====================================================================================================
+====================================================================================================
+十一、MariaDB 更新查询
+
+UPDATE命令通过更改值来修改现有字段。 
+它使用SET子句指定要修改的列，并指定分配的新值。 
+这些值可以是字段的表达式或默认值。 
+设置默认值需要使用DEFAULT关键字。 
+该命令还可以使用WHERE子句来指定更新的条件和/或ORDER BY子句以特定顺序更新。
+
+查看以下一般语法 -
+UPDATE table_name SET field=new_value, field2=new_value2,... [WHERE ...]
+
+从命令提示符或使用PHP脚本执行UPDATE命令。
+
+1. 命令提示符
+在命令提示符下，只需使用标准commandroot -
+root@host# mysql -u root -p password;
+Enter password:*******
+mysql> use PRODUCTS;
+Database changed
+mysql> UPDATE products_tbl
+   SET nomenclature = 'Fiber Blaster 300Z'
+      WHERE ID_number = 112;
+mysql> SELECT * from products_tbl WHERE ID_number='112';
++-------------+---------------------+----------------------+
+| ID_number   | Nomenclature        | product_manufacturer |
++-------------+---------------------+----------------------+
+| 112         | Fiber Blaster 300Z  | XYZ Corp             |
++-------------+---------------------+----------------------+      
+
+2. PHP更新查询脚本
+在UPDATE命令语句中使用mysql_query()函数 -
+<?php
+   $dbhost = ‘localhost:3036’;
+   $dbuser = ‘root’;
+   $dbpass = ‘rootpassword’;
+   $conn = mysql_connect($dbhost, $dbuser, $dbpass);
+
+   if(! $conn ) {
+      die(‘Could not connect: ‘ . mysql_error());
+   }
+
+   $sql = ‘UPDATE products_tbl
+      SET product_name = ”Fiber Blaster 300z”
+      WHERE product_id = 112’;
+
+   mysql_select_db(‘PRODUCTS’);
+   $retval = mysql_query( $sql, $conn );
+
+   if(! $retval ) {
+      die(‘Could not update data: ‘ . mysql_error());
+   }
+
+   echo “Updated data successfully”;
+   mysql_close($conn);
+?>
+
+成功数据更新后，您将看到以下输出 -
+mysql> Updated data successfully
+
+====================================================================================================
+====================================================================================================
+十二、MariaDB 创建数据库
+
+在MariaDB中创建或删除数据库需要通常只授予root用户或管理员的权限。 
+在这些帐户下，您有两个选项来创建数据库 - mysqladmin二进制文件和PHP脚本。
+
+1. mysqladmin脚本
+以下示例演示如何使用mysqladmin脚本创建名为Products的数据库 -
+[root@host]# mysqladmin -u root -p create PRODUCTS
+Enter password:******
+
+2. PHP创建数据库脚本
+PHP在创建MariaDB数据库时使用mysql_query函数。 
+该函数使用两个参数，一个可选，并在成功时返回值“true”，否则返回“false”。
+
+语法
+查看以下创建数据库脚本语法 -
+bool mysql_query( sql, connection );
+
+参数的描述如下 -
+参数		说明
+SQL		该参数必须由所要执行操作的SQL查询组成。
+connection	未指定时，此可选参数使用最近使用的连接。
+
+尝试下面的示例代码来创建数据库 -
+<html>
+   <head>
+      <title>Create a MariaDB Database</title>
+   </head>
+
+   <body>
+      <?php
+         $dbhost = 'localhost:3036';
+         $dbuser = 'root';
+         $dbpass = 'rootpassword';
+         $conn = mysql_connect($dbhost, $dbuser, $dbpass);
+      
+         if(! $conn ) {
+            die('Could not connect: ' . mysql_error());
+         }
+
+         echo 'Connected successfully<br />';
+         $sql = 'CREATE DATABASE PRODUCTS';
+         $retval = mysql_query( $sql, $conn );
+      
+         if(! $retval ) {
+            die('Could not create database: ' . mysql_error());
+         }
+
+         echo "Database PRODUCTS created successfully";
+         mysql_close($conn);
+      ?>
+   </body>
+</html>
+
+成功删除后，您将看到以下输出 -
+mysql> Database PRODUCTS created successfully 
+mysql> SHOW DATABASES; 
++-----------------------+ 
+| Database              | 
++-----------------------+ 
+| PRODUCTS              | 
++-----------------------+  
+
+====================================================================================================
+====================================================================================================
+十三、MariaDB 删除查询
+
+DELETE命令从指定的表中删除表行，并返回已删除的数量。 
+访问使用ROW_COUNT()函数删除的数量。 
+WHERE子句指定行，如果没有行，则删除所有行。 
+LIMIT子句控制删除的行数。
+
+在多行的DELETE语句中，它只删除满足条件的那些行; 并且不允许LIMIT和WHERE子句。 
+DELETE语句允许从不同数据库中的表中删除行，但不允许从表中删除，然后从子查询中的同一个表中进行选择。
+
+查看以下DELETE语法 -
+DELETE FROM table_name [WHERE …]
+
+从命令提示符或使用PHP脚本执行DELETE命令。
+
+1. 命令提示符
+在命令提示符下，只需使用标准命令 -
+root@host# mysql –u root –p password;
+Enter password:*******
+mysql> use PRODUCTS;
+Database changed
+mysql> DELETE FROM products_tbl WHERE product_id=133;
+mysql> SELECT * from products_tbl WHERE ID_number='133';
+ERROR 1032 (HY000): Can't find record in 'products_tbl'
+
+2. PHP删除查询脚本
+在DELETE命令语句中使用mysql_query()函数 -
+<?php
+   $dbhost = 'localhost:3036';
+   $dbuser = 'root';
+   $dbpass = 'rootpassword';
+   $conn = mysql_connect($dbhost, $dbuser, $dbpass);
+   
+   if(! $conn ) {
+      die('Could not connect: ' . mysql_error());
+   }
+
+   $sql = 'DELETE FROM products_tbl WHERE product_id = 261';
+   mysql_select_db('PRODUCTS');
+   $retval = mysql_query( $sql, $conn );
+
+   if(! $retval ) {
+      die('Could not delete data: ' . mysql_error());
+   }
+
+   echo "Deleted data successfully";
+   mysql_close($conn);
+?>
+
+成功删除数据后，您将看到以下输出 -
+mysql> Deleted data successfully
+mysql> SELECT * from products_tbl WHERE ID_number='261';
+ERROR 1032 (HY000): Can't find record in 'products_tbl'
+
+====================================================================================================
+====================================================================================================
+十四、MariaDB 删除数据库
+
+在MariaDB中创建或删除数据库需要特权，通常仅授予root用户或管理员。 
+在这些帐户下，您有两个删除数据库的选项：mysqladmin二进制文件和PHP脚本。
+
+请注意，删除的数据库是不可恢复的，因此请谨慎执行此操作。 
+此外，用于删除的PHP脚本不会提示您在删除之前的确认。
+
+1. mysqladmin脚本
+以下示例演示如何使用mysqladmin脚本删除现有数据库 -
+[root@host]# mysqladmin -u root -p drop PRODUCTS
+Enter password:******
+mysql> DROP PRODUCTS
+ERROR 1008 (HY000): Can't drop database 'PRODUCTS'; database doesn't exist
+
+2. PHP删除数据库脚本
+PHP在删除MariaDB数据库时使用mysql_query函数。 
+该函数使用两个参数，一个可选，并在成功时返回值“true”，否则返回“false”。
+
+语法
+查看以下删除数据库脚本语法 -
+bool mysql_query( sql, connection );
+
+参数的说明下面给出 -
+参数		说明
+SQL		此必需参数由执行操作所需的SQL查询组成。
+connection	未指定时，此可选参数使用最近使用的连接。
+
+尝试下面的示例代码删除数据库 -
+<html>
+   <head>
+      <title>Delete a MariaDB Database</title>
+   </head>
+
+   <body>
+      <?php
+         $dbhost = 'localhost:3036';
+         $dbuser = 'root';
+         $dbpass = 'rootpassword';
+         $conn = mysql_connect($dbhost, $dbuser, $dbpass);
+      
+         if(! $conn ) {
+            die('Could not connect: ' . mysql_error());
+         }
+         echo 'Connected successfully<br />';
+         
+         $sql = 'DROP DATABASE PRODUCTS';
+         $retval = mysql_query( $sql, $conn );
+         
+         if(! $retval ){
+            die('Could not delete database: ' . mysql_error());
+         }
+
+         echo "Database PRODUCTS deleted successfully";
+         mysql_close($conn);
+      ?>
+   </body>
+</html>
+
+成功删除后，您将看到以下输出 -
+mysql> Database PRODUCTS deleted successfully 
+
+====================================================================================================
+====================================================================================================
+十五、MariaDB like子句
+
+WHERE子句提供了一种在操作使用完全匹配时检索数据的方法。 
+在需要具有共享特征的多个结果的情况下，LIKE子句适应宽模式匹配。
+
+LIKE子句测试模式匹配，返回true或false。 
+用于比较的模式接受以下通配符：
+"%"，其匹配字符数（0或更多）; 
+"_"，它匹配单个字符。 
+"_"通配符只匹配其集合中的字符，这意味着当使用另一个集合时，它将忽略拉丁字符。 
+匹配在默认情况下不区分大小写，需要对大小写敏感的附加设置。
+
+NOT LIKE子句允许测试相反的条件，非常类似于非运算符。
+
+如果语句表达式或模式求值为NULL，则结果为NULL。
+
+查看下面给出的一般LIKE子句语法 -
+SELECT field, field2,... FROM table_name, table_name2,...
+WHERE field LIKE condition
+
+在命令提示符或PHP脚本中使用LIKE子句。
+
+1. 命令提示符
+在命令提示符下，只需使用标准命令 -
+root@host# mysql -u root -p password;
+Enter password:*******
+mysql> use TUTORIALS;
+Database changed
+mysql> SELECT * from products_tbl
+   WHERE product_manufacturer LIKE 'XYZ%';
++-------------+----------------+----------------------+
+| ID_number   | Nomenclature   | product_manufacturer |
++-------------+----------------+----------------------+
+| 12345       | Orbitron 4000  | XYZ Corp             |
++-------------+----------------+----------------------+
+| 12346       | Orbitron 3000  | XYZ Corp             |
++-------------+----------------+----------------------+
+| 12347       | Orbitron 1000  | XYZ Corp             |
++-------------+----------------+----------------------+
+
+2. PHP脚本使用like子句
+在使用LIKE子句的语句中使用mysql_query（）函数
+<?php
+   $dbhost = 'localhost:3036';
+   $dbuser = 'root';
+   $dbpass = 'rootpassword';
+   $conn = mysql_connect($dbhost, $dbuser, $dbpass);
+   
+   if(! $conn ) {
+      die('Could not connect: ' . mysql_error());
+   }
+
+   $sql = 'SELECT product_id, product_name, product_manufacturer, ship_date
+      FROM products_tbl WHERE product_manufacturer LIKE "xyz%"';
+   
+   mysql_select_db('PRODUCTS');
+   $retval = mysql_query( $sql, $conn );
+   
+   if(! $retval ) {
+      die('Could not get data: ' . mysql_error());
+   }
+
+   while($row = mysql_fetch_array($retval, MYSQL_ASSOC)) {
+      echo "Product ID:{$row['product_id']} <br> ".
+         "Name: {$row['product_name']} <br> ".
+         "Manufacturer: {$row['product_manufacturer']} <br> ".
+         "Ship Date: {$row['ship_date']} <br> ".
+         "--------------------------------<br>";
+   }
+   
+   echo "Fetched data successfully";
+   mysql_close($conn);
+?>
+
+成功的数据检索后，您将看到以下输出 -
+Product ID: 12345
+Nomenclature: Orbitron 4000
+Manufacturer: XYZ Corp
+Ship Date: 01/01/17
+----------------------------------------------
+Product ID: 12346
+Nomenclature: Orbitron 3000
+Manufacturer: XYZ Corp
+Ship Date: 01/02/17
+----------------------------------------------
+Product ID: 12347
+Nomenclature: Orbitron 1000
+Manufacturer: XYZ Corp
+Ship Date: 01/02/17
+----------------------------------------------
+mysql> Fetched data successfully
+
+====================================================================================================
+====================================================================================================
+十六、MariaDB 选择数据库
+
+连接到MariaDB后，必须选择要使用的数据库，因为许多数据库可能存在。 
+有两种方法来执行此任务：从命令提示符或通过PHP脚本。
+
+1. 命令提示符
+在命令提示符下选择数据库时，只需使用SQL命令'use'
+[root@host]# mysql -u root -p
+Enter password:******
+mysql> use PRODUCTS;
+Database changed
+mysql> SELECT database();  
++-------------------------+ 
+| Database                | 
++-------------------------+ 
+| PRODUCTS                | 
++-------------------------+ 
+
+一旦选择了数据库，所有后续命令将在选定的数据库上操作。
+
+注意 - 
+所有名称（例如，数据库，表，字段）区分大小写。 
+确保命令符合正确的大小写。
+
+2. PHP选择数据库脚本
+PHP提供了用于数据库选择的mysql_select_db函数。 
+该函数使用两个参数，一个可选，并在成功选择时返回值“true”，或者在失败时返回false。
+
+语法
+查看以下select数据库脚本语法。
+bool mysql_select_db( db_name, connection );
+
+参数的说明下面给出 -
+参数		说明
+DB_NAME		这需要参数指定要使用的数据库的名称。
+connection	如果没有指定，此可选参数使用最近使用的连接。
+
+尝试以下示例代码来选择数据库 -
+<html>
+   <head>
+      <title>Select a MariaDB Database</title>
+   </head>
+
+   <body>
+      <?php
+         $dbhost = 'localhost:3036';
+         $dbuser = 'guest1';
+         $dbpass = 'guest1a';
+         $conn = mysql_connect($dbhost, $dbuser, $dbpass);
+      
+         if(! $conn ) {
+            die('Could not connect: ' . mysql_error());
+         }
+         echo 'Connected successfully';
+         
+         mysql_select_db( 'PRODUCTS' );
+         mysql_close($conn);
+      ?>
+   </body>
+</html>
+
+成功选择后，您将看到以下输出 -
+mysql> Connected successfully 
+
+====================================================================================================
+====================================================================================================
+十七、MariaDB ORDER BY排序子句
+
+如前面讨论中提到的，ORDER BY子句对语句的结果进行排序。 
+它指定操作数据的顺序，并包括按升序（ASC）或降序（DESC）顺序排序的选项。 
+在省略订单规格时，默认顺序为升序。
+
+ORDER BY子句出现在各种各样的语句中，例如DELETE和UPDATE。 
+它们总是出现在语句的结尾，而不是在子查询中或在set函数之前，因为它们在最终结果表上操作。 
+您也不能使用整数来标识列。
+
+查看下面给出的ORDER BY子句的一般语法 -
+SELECT field, field2,... [or column] 
+FROM table_name, table_name2,... 
+ORDER BY field, field2,... ASC[or DESC]
+
+在命令提示符处或PHP脚本中使用ORDER BY子句。
+
+1. 命令提示符
+在命令提示符下，只需使用标准命令 -
+root@ host# mysql -u root -p password;
+Enter password:*******
+mysql> use PRODUCTS;
+Database changed
+mysql> SELECT * from products_tbl ORDER BY product_manufacturer ASC
++-------------+----------------+----------------------+
+| ID_number   | Nomenclature   | product_manufacturer |
++-------------+----------------+----------------------+
+| 56789       | SuperBlast 400 | LMN Corp             |
++-------------+----------------+----------------------+
+| 67891       | Zoomzoom 5000  | QFT Corp             |
++-------------+----------------+----------------------+
+| 12347       | Orbitron 1000  | XYZ Corp             |
++-------------+----------------+----------------------+
+
+2. PHP脚本中使用ORDER BY子句
+在使用ORDER BY子句的语句中再次使用mysql_query()函数 -
+<?php
+   $dbhost = 'localhost:3036';
+   $dbuser = 'root';
+   $dbpass = 'rootpassword';
+   $conn = mysql_connect($dbhost, $dbuser, $dbpass);
+   
+   if(! $conn ) {
+      die('Could not connect: ' . mysql_error());
+   }
+
+   $sql = 'SELECT product_id, product_name, product_manufacturer, ship_date 
+      FROM products_tbl ORDER BY product_manufacturer DESC';
+
+   mysql_select_db('PRODUCTS');
+   $retval = mysql_query( $sql, $conn );
+
+   if(! $retval ) {
+      die('Could not get data: ' . mysql_error());
+   }
+
+   while($row = mysql_fetch_array($retval, MYSQL_ASSOC)) {
+      echo "Product ID :{$row['product_id']} <br> ".
+         "Name: {$row['product_name']} <br> ".
+         "Manufacturer: {$row['product_manufacturer']} <br> ".
+         "Ship Date : {$row['ship_date']} <br> ".
+         "--------------------------------<br>";
+   }
+
+   echo "Fetched data successfully";
+   mysql_close($conn);
+?>
+
+成功的数据检索后，您将看到以下输出 -
+Product ID: 12347
+Nomenclature: Orbitron 1000
+Manufacturer: XYZ Corp
+Ship Date: 01/01/17
+----------------------------------------------
+Product ID: 67891
+Nomenclature: Zoomzoom 5000
+Manufacturer: QFT Corp
+Ship Date: 01/01/17
+----------------------------------------------
+Product ID: 56789
+Nomenclature: SuperBlast 400
+Manufacturer: LMN Corp
+Ship Date: 01/04/17
+----------------------------------------------
+mysql> Fetched data successfully
+
+====================================================================================================
+====================================================================================================
+十八、MariaDB 数据类型
+
+良好的字段定义对于优化数据库至关重要。 
+理想的方法要求您专门使用所需类型和大小的字段。 
+例如，如果你只使用一个字段，五个字符宽，不要定义一个字段，20个字符宽。 
+字段（或列）类型也称为给定存储在字段中的数据类型的数据类型。
+
+MariaDB数据类型可以分为数字，日期和时间以及字符串值。
+
+1. 数字数据类型
+MariaDB支持的数字数据类型如下 -
+    TINYINT - 此数据类型表示落入-128到127的有符号范围内的小整数，以及0到255的无符号范围。
+    BOOLEAN - 此数据类型将值0与“false”相关联，值1与“true”相关联。
+    SMALLINT - 此数据类型表示-32768到32768的有符号范围内的整数，以及0到65535的无符号范围。
+    MEDIUMINT - 此数据类型表示有符号范围-8388608到8388607中的整数，无符号范围0到16777215。
+    INT（也为INTEGER） - 此数据类型表示正常大小的整数。当标记为unsigned时，范围跨越0到4294967295.当有符号（默认设置）时，范围跨越-2147483648到2147483647.当列设置为ZEROFILL（无符号状态）时，其所有值都由零添加INT值中的M个数字。
+    BIGINT - 此数据类型表示有符号范围9223372036854775808到9223372036854775807内的整数，无符号范围0到18446744073709551615。
+    DECIMAL（DEC，NUMERIC，FIXED） - 该数据类型表示精确的定点数，M指定其数字，D指定小数后的数字。 M值不添加“ - ”或小数点。如果D设置为0，则不会出现小数或小数部分，并且该值将舍入为最接近的DECIMAL INSERT。最大允许位数为65，小数位数的最大值为30.默认值M的默认值为10，省略时D为0。
+    FLOAT - 此数据类型表示值0的小的浮点数或以下范围内的数字 - 
+        -3.402823466E + 38至-1.175494351E-38
+        1.175494351E-38至3.402823466E + 38 
+    DOUBLE（也是REAL和DOUBLE PRECISION） - 此数据类型表示值0的正常大小的浮点数，或以下范围内的值 - 
+        -1.7976931348623157E + 308至-2.2250738585072014E-308
+        2.2250738585072014E-308至1.7976931348623157E + 308 
+    BIT - 此数据类型表示位字段，M指定每个值的位数。省略M时，默认值为1.位值可以通过“b'[value]'”应用，其中值表示0和1中的位值。零填充从左边自动发生全长;例如，“10”变为“0010”。 
+
+2. 日期和时间数据类型
+MariaDB支持的日期和时间数据类型如下 - 
+    DATE - 此数据类型表示日期范围“1000-01-01”到“9999-12-31”，并使用“YYYY-MM-DD”日期格式。
+    TIME - 此数据类型表示“-838：59：59.999999”到“838：59：59.999999”的时间范围。
+    DATETIME - 此数据类型表示范围“1000-01-01 00：00：00.000000”至“9999-12-31 23：59：59.999999”。它使用“YYYY-MM-DD HH：MM：SS”格式 。
+    TIMESTAMP - 此数据类型表示“YYYY-MM-DD HH：MM：DD”格式的时间戳。 它主要用于详细描述数据库修改的时间，例如插入或更新。
+    YEAR - 此数据类型表示4位数格式的年份。 四位数格式允许在1901到2155和0000范围内的值。 
+
+3. 字符串数据类型
+MariaDB支持的字符串类型值如下 -
+    String literals - 此数据类型表示用引号括起来的字符序列。
+    CHAR - 此数据类型表示包含指定长度的空格的右侧带有固定长度的字符串。 M表示字符的列长度，取值范围为0〜255，缺省值为1。
+    VARCHAR - 此数据类型表示一个可变长度字符串，M范围（最大列长度）为0到65535。
+    BINARY - 此数据类型表示二进制字节字符串，M为列长度（以字节为单位）。
+    VARBINARY - 此数据类型表示可变长度的二进制字节字符串，M为列长度。
+    TINYBLOB - 此数据类型表示最大长度为255（28 - 1）个字节的blob列。在存储中，每个都使用一个字节长度的前缀，表示值中的字节数量。
+    BLOB - 此数据类型表示最大长度为65,535（216 - 1）个字节的blob列。在存储中，每个都使用两字节长度的前缀，表示值中的字节数量。
+    MEDIUMBLOB - 此数据类型表示最大长度为16,777,215（224 - 1）个字节的blob列。在存储中，每个都使用一个三字节长度前缀，表示值中的字节数量。
+    LONGBLOB - 此数据类型表示最大长度为4,294,967,295（232 - 1）个字节的blob列。在存储中，每个使用四字节长度的前缀，表示值中的字节数量。
+    TINYTEXT - 此数据类型表示最大长度为255（28 - 1）个字符的文本列。在存储中，每个都使用一个字节长度的前缀，表示值中的字节数量。
+    TEXT - 此数据类型表示最大长度为65,535（216 - 1）个字符的文本列。在存储中，每个都使用两字节长度的前缀，表示值中的字节数量。
+    MEDIUMTEXT - 此数据类型表示最大长度为16,777,215（224 - 1）个字符的文本列。在存储中，每个都使用三字节长度前缀，表示值中的字节数量。
+    LONGTEXT - 此数据类型表示最大长度为4,294,967,295或4GB（232 - 1）个字符的文本列。在存储中，每个使用四字节长度的前缀，表示值中的字节数量。
+    ENUM - 此数据类型表示一个列表中只有一个值的字符串对象。
+    SET - 此数据类型表示一个列表中具有零个或多个值的字符串对象，最多包含64个成员。 SET值在内部作为整数值存在。 
+
+====================================================================================================
+====================================================================================================
+十九、MariaDB Join数据联接语句
+
+在之前的讨论和示例中，我们检查了从单个表中检索，或从多个来源检索多个值。 
+大多数现实世界的数据操作要复杂得多，需要从多个表进行聚合，比较和检索。
+
+JOIN允许将两个或多个表合并到单个对象中。 
+它们通过SELECT，UPDATE和DELETE语句使用。
+
+使用JOIN查看语句的一般语法如下所示 -
+SELECT column
+FROM table_name1
+INNER JOIN table_name2
+ON table_name1.column = table_name2.column;
+
+注意JOINS的旧语法使用隐式连接和没有关键字。 
+可以使用WHERE子句来实现联接，但关键字最适合可读性，维护和最佳实践。
+
+JOIN有许多形式，如左连接，右连接或内连接。 
+各种连接类型基于共享值或特性提供不同类型的聚合。
+
+在命令提示符或PHP脚本中使用JOIN。
+
+1. 命令提示符
+在命令提示符下，只需使用标准语句 -
+root@host# mysql -u root -p password;
+Enter password:*******
+mysql> use PRODUCTS;
+Database changed
+mysql> SELECT products.ID_number, products.Nomenclature, inventory.inventory_ct
+   FROM products
+   INNER JOIN inventory
+   ON products.ID_numbeer = inventory.ID_number;
++-------------+----------------+-----------------+
+| ID_number   | Nomenclature   | Inventory Count |
++-------------+----------------+-----------------+
+| 12345       | Orbitron 4000  | 150             |
++-------------+----------------+-----------------+
+| 12346       | Orbitron 3000  | 200             |
++-------------+----------------+-----------------+
+| 12347       | Orbitron 1000  | 0               |
++-------------+----------------+-----------------+
+
+2. PHP脚本使用JOIN
+使用mysql_query()函数执行连接操作 -
+<?php
+   $dbhost = 'localhost:3036';
+   $dbuser = 'root';
+   $dbpass = 'rootpassword';
+   $conn = mysql_connect($dbhost, $dbuser, $dbpass);
+
+   if(! $conn ) {
+      die('Could not connect: ' . mysql_error());
+   }
+
+   $sql = 'SELECT a.product_id, a.product_manufacturer, b.product_count   
+      FROM products_tbl a, pcount_tbl b 
+      WHERE a.product_manufacturer = b.product_manufacturer';
+
+   mysql_select_db('PRODUCTS');
+   $retval = mysql_query( $sql, $conn );
+
+   if(! $retval ) {
+      die('Could not get data: ' . mysql_error());
+   }
+
+   while($row = mysql_fetch_array($retval, MYSQL_ASSOC)) {
+      echo "Manufacturer:{$row['product_manufacturer']} <br> ".
+         "Count: {$row['product_count']} <br> ".
+         "Product ID: {$row['product_id']} <br> ".
+         "--------------------------------<br>";
+   }
+
+   echo "Fetched data successfully";
+   mysql_close($conn);
+?>
+
+成功的数据检索后，您将看到以下输出 -
+ID Number: 12345
+Nomenclature: Orbitron 4000
+Inventory Count: 150
+--------------------------------------
+ID Number: 12346
+Nomenclature: Orbitron 3000
+Inventory Count: 200
+--------------------------------------
+ID Number: 12347
+Nomenclature: Orbitron 1000
+Inventory Count: 0
+--------------------------------------
+mysql> Fetched data successfully
+
+====================================================================================================
+====================================================================================================
+二十、MariaDB 空值
+
+使用NULL值时，请记住它们是未知值。 
+它们不是空字符串或零，它们是有效值。 
+在表创建中，列规范允许将它们设置为接受空值，或拒绝它们。 
+只需使用NULL或NOT NULL子句。 
+这在缺少记录信息（如ID号）的情况下具有应用。
+
+用户定义的变量的值为NULL，直到显式赋值。 
+存储的例程参数和局部变量允许将值设置为NULL。 
+当局部变量没有默认值时，它的值为NULL。
+
+NULL不区分大小写，并具有以下别名 - 
+    UNKNOWN（布尔值）
+    \ N 
+
+1. NULL运算符
+标准比较运算符不能与NULL（例如，=，>，> =，<=，<或或！=）一起使用，因为所有与NULL值的比较都返回NULL，而不是true或false。 
+与NULL或可能包含它的比较必须使用“<=>”（NULL-SAFE）运算符。
+
+其他可用的运营商有 - 
+    IS NULL - 它测试NULL值。
+    IS NOT NULL - 它确认不存在NULL值。
+    ISNULL - 在发现NULL值时返回值1，在不存在时返回0。
+    COALESCE - 返回列表的第一个非NULL值，或者在没有一个值的情况下返回NULL值。 
+
+2. 对NULL值排序
+在排序操作中，NULL值具有最低值，因此DESC次序在底部产生NULL值。 M
+ariaDB允许为NULL值设置更高的值。
+
+有两种方法可以做到这一点，如下所示 -
+SELECT column1 FROM product_tbl ORDER BY ISNULL(column1), column1;
+另一种方式 -
+SELECT column1 FROM product_tbl ORDER BY IF(column1 IS NULL, 0, 1), column1 DESC;
+
+3. NULL函数
+当任何参数为NULL时，函数通常输出NULL。 
+但是，还有专门用于管理NULL值的函数。 他们是 - 
+    IFNULL() - 如果第一个表达式不为NULL，它返回它。 当它求值为NULL时，它返回第二个表达式。
+    NULLIF() - 当比较的表达式相等时，它返回NULL，否则返回第一个表达式。 
+
+像SUM和AVG的函数忽略NULL值。
+
+4. 插入NULL值
+在声明为NOT NULL的列中插入NULL值时，会发生错误。 
+在默认SQL模式下，NOT NULL列将根据数据类型插入一个默认值。
+
+当字段是TIMESTAMP，AUTO_INCREMENT或虚拟列时，MariaDB会以不同方式管理NULL值。 
+插入在AUTO_INCREMENT列中会导致序列中的下一个数字插入到其位置。 
+在TIMESTAMP字段中，MariaDB分配当前时间戳。 
+在虚拟列中，本教程后面讨论的主题将分配默认值。
+
+UNIQUE索引可以包含许多NULL值，但是，主键不能为NULL。
+
+5. NULL值和Alter命令
+当您使用ALTER命令修改列时，如果没有NULL规范，MariaDB会自动分配值。 
+
+====================================================================================================
+====================================================================================================
+二十一、MariaDB 备份方法
+
+数据作为业务和操作的基础，并且具有各种可能的威胁（例如，攻击者，系统故障，不良升级和维护错误），备份仍然至关重要。 
+这些备份采用多种形式，并且存在许多选项用于在这些过程中使用更宽泛的选项来创建它们。 
+要记住的重要事情是数据库类型，关键信息和所涉及的结构。 此信息确定您的最佳选择。
+
+1. 选项
+备份的主要选项包括逻辑备份和物理备份。 
+逻辑备份保存用于恢复数据的SQL语句。 
+物理备份包含数据副本。
+    与物理备份相比，逻辑备份提供了在具有不同配置的另一台机器上恢复数据的灵活性，物理备份通常限于相同的机器和数据库类型。 逻辑备份发生在数据库和表级，物理发生在目录和文件级。
+    物理备份的大小小于逻辑备份，并且执行和恢复所需的时间也更少。 物理备份还包括日志和配置文件，但逻辑备份不包括。 
+
+2. 备份工具
+用于MariaDB备份的主要工具是mysqldump。 
+它提供逻辑备份和灵活性。 
+它也证明是小数据库的一个很好的选择。 
+Mysqldump将数据转储为SQL，CSV，XML和许多其他格式。 
+其输出不保留存储过程，视图和事件，没有显式指令。
+
+有三个选项mysqldump备份 - 
+    原始数据 - 通过--tab选项将表转储为原始数据文件，该选项还指定文件的目标 - 
+$ mysqldump -u root -p --no-create-info --tab=/tmp PRODUCTS products_tbl
+    数据/定义export - 此选项允许将单个或多个表导出到文件，并支持备份主机上的所有现有数据库。 检查将内容或定义导出到文件的示例
+$ mysqldump -u root -p PRODUCTS products_tbl > export_file.txt
+    传输 - 您还可以将数据库和表输出到另一个主机
+$ mysqldump -u root -p database_name | mysql -h other-host.com database_name
+
+3. 使用SELECT ... INTO OUTFILE语句
+导出数据的另一个选项使用SELECT ... INTO OUTFILE语句。 
+
+这个简单的选项输出表到一个简单的格式化文本文件 -
+mysql> SELECT * FROM products_tbl
+   -> INTO OUTFILE '/tmp/products.txt';
+其属性允许将文件格式化为您首选的规范。
+
+请注意本声明的以下质量 - 
+    文件名必须指定输出的所需位置。
+    您需要MariaDB文件权限才能执行语句。
+    输出文件名必须是唯一的。
+    您需要主机上的登录凭据。
+    在UNIX环境中，输出文件是世界可读的，但其服务器所有权会影响您删除它的能力。 确保您有权限。 
+
+4. 在备份中使用CONNECT
+CONNECT处理程序允许导出数据。 
+这证明主要在SELECT ... INTO OUTFILE操作不支持文件格式的情况下有用。
+
+查看以下示例 -
+create table products
+engine = CONNECT table_type = XML file_name = 'products.htm' header = yes
+option_list = 'name=TABLE,coltype = HTML,attribute = border=1;cellpadding = 5'
+
+select plugin_name handler, plugin_version version, plugin_author
+author, plugin_description description, plugin_maturity maturity
+from information_schema.plugins where plugin_type = 'STORAGE ENGINE';
+
+5. 其他工具
+备份的其他选项如下 - 
+    XtraBackup - 此选项针对XtraDB / InnoDB数据库，并与任何存储引擎一起工作。从Percona的官方网站了解有关此工具的更多信息。
+    Snapshots - 某些文件系统允许快照。该过程包括使用读锁刷新表，装入快照，解锁表，复制快照，然后卸载快照。
+    LVM - 这种流行的方法使用Perl脚本。它在每个表上获取读取锁并将缓存刷新到磁盘。然后它获取快照并解锁表。有关详细信息，请咨询官方mylvmbackup网站。
+    TokuBackup - Percona提供的此解决方案提供热备份，考虑到InnoDB备份选项的问题和限制。它生成文件的事务性声音副本，而应用程序继续操作它们。有关详细信息，请咨询Percona网站。 
+
+6. INNODB注意事项
+InnoDB使用缓冲池来提高性能。在备份中，配置InnoDB以避免将整个表复制到缓冲池中，因为逻辑备份通常执行全表扫描。 
+
+====================================================================================================
+====================================================================================================
+二十二、MariaDB 正则表达式
+
+除了LIKE子句提供的模式匹配之外，MariaDB通过REGEXP运算符提供基于正则表达式的匹配。 
+运算符基于给定模式对字符串表达式执行模式匹配。
+
+MariaDB 10.0.5引入了PCRE Regular Expressions，这大大增加了匹配范围，如递归模式，前瞻断言等等。
+
+查看下面给出的标准REGEXP运算符语法的使用 -
+SELECT column FROM table_name WHERE column REGEXP '[PATTERN]';
+REGEXP返回1表示模式匹配，或0表示没有模式匹配。
+
+相反的选项以NOT REGEXP的形式存在。 
+MariaDB还提供REGEXP和NOT REGEXP，RLIKE和NOT RLIKE的同义词，它们是出于兼容性原因而创建的。
+
+比较的模式可以是文字字符串或其他内容，如表列。 
+在字符串中，它使用C转义语法，所以加倍任何“\”字符。 
+REGEXP也是不区分大小写的，二进制字符串除外。
+
+下面给出了可以使用的可能模式的表格 -
+图案		说明
+^		它匹配字符串的开头。
+$		它匹配字符串的结尾。
+.		它匹配单个字符。
+[...]		它匹配括号中的任何字符。
+[^ ...]		它匹配括号中未列出的任何字符。
+P1 | P2 | P3	它匹配任何模式。
+*		它匹配前面元素的0个或多个实例。
++		它匹配前一个元素的1个或多个实例。
+{N}		它匹配前面元素的n个实例。
+{M，N}		它匹配m到前面元素的n个实例。
+
+查看下面给出的模式匹配示例 - 
+以“pr”开头的产品 -
+SELECT name FROM product_tbl WHERE name REGEXP '^pr';
+
+以“na”结尾的产品 -
+SELECT name FROM product_tbl WHERE name REGEXP 'na$';
+
+以元音开头的产品 -
+SELECT name FROM product_tbl WHERE name REGEXP '^[aeiou]';
+
+====================================================================================================
+====================================================================================================
+二十三、MariaDB 备份加载方法
+
+在本章中，我们将了解各种备份加载方法。 
+从备份还原数据库是一个简单，有时非常长的过程。
+
+加载数据有三个选项：LOAD DATA语句，mysqlimport和一个简单的mysqldump还原。
+
+1. 使用LOAD DATA
+LOAD DATA语句用作批量加载器。 
+
+查看加载文本文件的使用示例 -
+mysql> LOAD DATA LOCAL INFILE 'products_copy.txt' INTO TABLE empty_tbl;
+
+请注意LOAD DATA语句的以下质量：
+    使用LOCAL关键字可防止MariaDB对主机执行深层搜索，并使用非常具体的路径。
+    语句假定一种格式，包括由换行符（换行符）终止的行和用制表符分隔的数据值。
+    使用FIELDS子句可以明确指定行上字段的格式。 使用LINES子句指定行尾。 查看下面的示例。 
+mysql> LOAD DATA LOCAL INFILE 'products_copy.txt' INTO TABLE empty_tbl
+   FIELDS TERMINATED BY '|'
+   LINES TERMINATED BY '';
+    该语句假定数据文件中的列使用表的相同顺序。 如果您需要设置不同的顺序，您可以加载文件如下 - 
+mysql> LOAD DATA LOCAL INFILE 'products_copy.txt' INTO TABLE empty_tbl (c, b, a);
+
+2. 使用MYSQLIMPORT
+mysqlimport工具用作LOAD DATA包装器，允许从命令行进行相同的操作。
+
+加载数据如下 -
+$ mysqlimport -u root -p --local database_name source_file.txt
+指定格式如下 -
+$ mysqlimport -u root -p --local --fields-terminated-by="|" 
+   --lines-terminated-by="
+" database_name source_file.txt
+
+3. 使用--columns选项指定列顺序 -
+$ mysqlimport -u root -p --local --columns=c,b,a 
+   database_name source_file.txt
+
+4. 使用MYSQLDUMP
+使用mysqldump还原需要这个简单的语句将转储文件加载回主机 -
+shell> mysql database_name < source_file.sql
+
+5. 特殊字符和报价
+在LOAD DATA语句中，引号和特殊字符可能无法正确解释。 
+语句采用不带引号的值，并将反斜线视为转义字符。 
+使用FIELDS子句指定格式。 
+指向带有“ENCLOSED BY BY”的引号，这将导致从数据值中去除引号。 
+使用“ESCAPED BY”更改转义。 
+
+====================================================================================================
+====================================================================================================
+二十三、MariaDB 备份加载方法
