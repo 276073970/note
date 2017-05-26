@@ -201,6 +201,22 @@ vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
 119 DocumentRoot "/home/wwwroot"  //找到大约在119行附近的DocumentRoot参数以及大约在123行附近的，修改后记得保存
 120
 121 #
+
+修改Apache的配置文件，默认在 /etc/httpd/conf/httpd.conf
+注意编辑完配置文件后保存退出，并重启Apache：systemctl restart httpd
+
+1. 修改默认根目录
+找到 DocumentRoot 修改为你的新路径：
+Document Root "/var/www/html"
+
+2. 设置首页运行index.html index.php的顺序
+找到 DirectoryIndex 在后面加一个index.php：
+<IfModule dir_module>
+    DirectoryIndex index.html index.php
+</IfModule>
+
+注：如果上述设置后仍无法按顺序运行首页，那么还得修改一下php相关配置文件php.conf
+/etc/httpd/conf.d/php.conf文件中设置：DirectoryIndex index.php
 ====================================================================================================
 安装 MariaDB 数据库
 # yum install mariadb mariadb-server	//安装
