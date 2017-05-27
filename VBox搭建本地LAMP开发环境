@@ -102,3 +102,22 @@
 或者http://localhost:80/phpinfo.php
 
 9. 配置git环境
+1) 安装Git服务程序：
+# yum install -y git
+2) 配置个人信息及默认编辑器
+# git config --global user.name "Chen Hao"
+# git config --global user.email "276073970@qq.com"
+# git config --global core.editor vi
+3) 查看刚刚配置的Git工作环境信息
+# git config --list
+4) 本地创建版本库
+创建本地的工作目录：
+# mkdir linuxprobe
+# cd linuxprobe/
+将该目录初始化转成Git的工作目录：
+[root@linuxprobe linuxprobe]# git init
+
+将该目录初始化转成Git的工作目录：
+[root@linuxprobe linuxprobe]# git init
+
+[root@linuxprobe ~]# ssh-keygen 
