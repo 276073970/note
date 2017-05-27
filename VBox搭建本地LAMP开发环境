@@ -14,7 +14,17 @@
 1) 软件选择：最小安装
 2) 安装位置：自动分区（有其他特殊需求可自行规划分区）
 3) 网络和主机名：开启enp0s3、enp0s8两块网卡
-4) 关机备份：# shutdown -h now
+4) 配置enp0s8网卡：
+(1) # vi /etc/sysconfig/network-scripts/
+(2) BOOTPROTO=static
+    IPADDR=192.168.56.100
+    NETMASK=255.255.255.0
+    ONBOOT=yes
+(3) # systemctl restart network
+5) 主机测试：# ping 192.168.56.100
+6) 注意：enp0s8的IP需与其主机虚拟网络界面的网关IP在同一网段：
+   VBox管理器 => 管理 => 全局设定 => 网络 => 仅主机(Host-Only)网络 => 编辑
+7) 关机备份：# shutdown -h now
 
 4. 首次登陆
 1) 登陆后首先执行：# yum -y update && yum -y upgrade
