@@ -1,10 +1,37 @@
 VBox搭建本地LAMP开发环境
-1. 需求分析：
-(1) GNU/Linux系的OS十分适合开发工作（尤其Web应用开发与调试），但娱乐性较差（如音、视频等功能）
-(2) GNU/Linux注定应该应用在服务器端，因而终端的字符界面才是其正宗的使用方式，而不应过分追求其图形化界面（如GNOME、KDE等）
-(3) 平时难免有娱乐休闲等需求，可选择以图形化界面为主的OS，如Windows、Mac_OS等
-(4) 综合考虑工作、娱乐两相宜的需求，在主机中通过VBox搭建本地LAMP开发环境，不失为一个可行且高效的解决方案
-(5) 通过在VBox中配置enp0s3(NAT)、enp0s8(Host-Only)双网卡，可实现:虚拟机可访问外网，且主机可在断网情况下访问虚拟机的Web Server服务
+1) GNU/Linux系的OS十分适合开发工作（尤其Web应用开发与调试），但娱乐性较差（如音、视频等功能）
+2) GNU/Linux注定应该应用在服务器端，因而终端的字符界面才是其正宗的使用方式，而不应过分追求其图形化界面（如GNOME、KDE等）
+3) 平时难免有娱乐休闲等需求，可选择以图形化界面为主的OS，如Windows、Mac_OS等
+4) 综合考虑工作、娱乐两相宜的需求，在主机中通过VBox搭建本地LAMP开发环境，不失为一个可行且高效的解决方案
+5) 通过在VBox中配置enp0s3(NAT)、enp0s8(Host-Only)双网卡，可实现:虚拟机可访问外网，且主机可在断网情况下访问虚拟机的Web Server服务
+6) 仅主机(Host-Only)网络
+这种方式使用VirtualBox虚拟出来的一张网卡（网络连接中就能看到），虚拟机需要配置静态IP才能实现和主机的互相访问，这种方式默认情况是无法访问外网的，
+但是可以通过主机的Internet连接共享来实现访问外网
+Host-Only方式如何完美实现4通访问：
+(1) VirtualBox配置，修改网络配置为：仅主机(Host-Only)网络，选择VirtualBox虚拟出来的网卡
+(2) 启动CentOS虚拟机，默认情况下无法上网，无法访问主机
+(3) 修改虚拟机网络配置，Linux的网络配置都在/etc/sysconfig/network-scripts这个目录下，cd过去然后使用ls命令查看
+(4) ifcfg-xx即为网络配置文件，后面的eth0表示网卡设备名称，每张网卡一个配置文件，使用vi ifcfg-eth0命令修改配置
+(5) 增加/修改配置如下：
+    IPADDR=192.168.56.2
+    NETMASK=255.255.255.0
+    GATEWAY=192.168.56.1
+    DNS1=192.168.1.1
+    BOOTPROTO=static
+(6) 说明：
+    IPADDR为IP地址，
+    NETMASK为子网掩码，
+    GATEWAY为网关，
+    DNS1为首选DNS，
+    BOOTPROTO=static表示使用静态IP
+    IP地址的设置要跟VirtualBox虚拟网卡的IP在一个网段，网关设置为虚拟网卡的IP
+(7) 设置完之后:wq保存并退出，然后使用service network restart重启网络服务
+(8) 此时已经可以ping通主机了
+(9) 但是还不能访问外网，此时我们可以使用Internet连接共享来使VirtualBox的虚拟网卡可以访问外网
+(10) 此时VirtualBox虚拟网卡的IP会被改变为192.168.137.1，我们手动修改回192.168.56.1
+(11) 回到虚拟机，curl www.baidu.com，此时已经可以访问外网
+
+
 
 1. 新建虚拟机
 1) 注意选择专家模式
