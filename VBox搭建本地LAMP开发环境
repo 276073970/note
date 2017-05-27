@@ -54,6 +54,7 @@
 # systemctl enable httpd.service  //自动启动（添加 Apache 服务到系统层使其随系统自动启动）
 # firewall-cmd --add-service=http  //允许 http 服务通过防火墙(永久)
 # firewall-cmd --permanent --add-port=80/tcp  //允许 80 号端口通过防火墙(永久)
+                                              //若未加参数--permanent，则重启后端口失效
 # firewall-cmd --reload  //重新加载防火墙
 # systemctl restart httpd.service  //重启 Apache HTTP 服务器，然后新的端口号才能生效
 2) 更改默认端口号（80）
