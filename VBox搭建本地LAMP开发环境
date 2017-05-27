@@ -110,6 +110,12 @@
 # git config --global core.editor vi
 3) 查看刚刚配置的Git工作环境信息
 # git config --list
+4) git服务器配置SSH密钥
+(1) # ssh-keygen  //git客户机生成SSH密钥
+(2) 点击进入Github的帐户配置页面[Settings]
+(3) 点击左侧[SSH and GPG keys]标签，再点击右侧[New SSH key]添加SSH公钥
+(4) 将本机中的ssh公钥(/root/.ssh/id_rsa.pub)复制到页面中
+(5) 填写ssh公钥信息[Title]，确认添加密钥[Add SSH key]
 4) 本地创建版本库
 # mkdir local_repo_name/  //创建本地的工作目录
 # cd local_repo_name/  ////切换到本地的工作目录
@@ -120,11 +126,16 @@
 # git push -u origin master  //第一次向远端库提交
 错误提示：fatal: remote origin already exists.
 解决办法：$ git remote rm origin
+5）克隆远端版本库
+git clone git@github.com:user_name/repo_name.git  
 
 
 
+将客户机的公钥传递给Git服务器：
+[root@linuxprobe ~]# ssh-copy-id 192.168.10.10
 
-
-
-
+/root/.ssh/id_rsa.pub.
 [root@linuxprobe ~]# ssh-keygen 
+点击进入Github的帐户配置页面：
+点击添加SSH公钥：
+将本机中的ssh公钥(.ssh/id_rsa.pub)复制到页面中，填写ssh公钥信息：
