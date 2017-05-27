@@ -128,14 +128,3 @@
 解决办法：$ git remote rm origin
 5）克隆远端版本库
 git clone git@github.com:user_name/repo_name.git  
-
-
-
-将客户机的公钥传递给Git服务器：
-[root@linuxprobe ~]# ssh-copy-id 192.168.10.10
-
-/root/.ssh/id_rsa.pub.
-[root@linuxprobe ~]# ssh-keygen 
-点击进入Github的帐户配置页面：
-点击添加SSH公钥：
-将本机中的ssh公钥(.ssh/id_rsa.pub)复制到页面中，填写ssh公钥信息：
