@@ -101,7 +101,7 @@
 或者# links http://127.0.0.1/phpinfo.php
 或者http://localhost:80/phpinfo.php
 
-9. 配置git环境
+9. 配置git环境（repository）
 1) 安装Git服务程序：
 # yum install -y git
 2) 配置个人信息及默认编辑器
@@ -111,13 +111,20 @@
 3) 查看刚刚配置的Git工作环境信息
 # git config --list
 4) 本地创建版本库
-创建本地的工作目录：
-# mkdir linuxprobe
-# cd linuxprobe/
-将该目录初始化转成Git的工作目录：
-[root@linuxprobe linuxprobe]# git init
+# mkdir local_repo_name/  //创建本地的工作目录
+# cd local_repo_name/  ////切换到本地的工作目录
+# git init  //本地生成版本库（即目录初的始化，转换成git的工作目录）
+# git add .  //本地追踪文件（git add --all、git add -A）
+# git commit -m "first commit"  //本地提交文件
+# git remote add origin git@github.com:user_name/repo_name.git  //将本地仓库与远端仓库关联
+# git push -u origin master  //第一次向远端库提交
+错误提示：fatal: remote origin already exists.
+解决办法：$ git remote rm origin
 
-将该目录初始化转成Git的工作目录：
-[root@linuxprobe linuxprobe]# git init
+
+
+
+
+
 
 [root@linuxprobe ~]# ssh-keygen 
