@@ -38,6 +38,7 @@
 (8)关机备份 & 重启虚拟机
 
 6. 配置 Apache HTTP 服务器（Apache配置文件，默认在 /etc/httpd/conf/httpd.conf）
+1）安装
 # yum install -y httpd  //安装
 # systemctl start httpd.service  //启动
 # systemctl enable httpd.service  //自动启动（添加 Apache 服务到系统层使其随系统自动启动）
@@ -45,19 +46,19 @@
 # firewall-cmd --permanent --add-port=80/tcp  //允许 80 号端口通过防火墙(永久)
 # firewall-cmd --reload  //重新加载防火墙
 # systemctl restart httpd.service  //重启 Apache HTTP 服务器，然后新的端口号才能生效
-1）更改默认端口号（80）
+2）更改默认端口号（80）
 （1）编辑配置文件：# vi /etc/httpd/conf/httpd.conf
 （2）查找：LISTEN 80
 （3）注释本行并复制到下一行：#LISTEN 80
 （4）把端口号 80 改为其它任何端口（例如 3221）
 （5）保存并退出
-2）修改默认根目录（DocumentRoot）
+3）修改默认根目录（DocumentRoot）
 （1）编辑配置文件：# vi /etc/httpd/conf/httpd.conf
 （2）查找：DocumentRoot "/var/www/html"
 （3）注释本行并复制到下一行：#DocumentRoot "/var/www/html"
 （4）将"/var/www/html"修改为新路径
 （5）保存并退出
-3）设置首页运行的顺序（index.html index.php）
+4）设置首页运行的顺序（index.html index.php）
 （1）编辑配置文件：# vi /etc/httpd/conf/httpd.conf
 （2）查找：DirectoryIndex index.html
 （3）注释本行并复制到下一行：#DirectoryIndex index.html
@@ -67,13 +68,28 @@
      并设置DirectoryIndex index.php
 
 7. 配置 MariaDB 数据库
+1）安装
 # yum install -y mariadb mariadb-server  //安装
 # systemctl start mariadb.service  //启动
 # systemctl enable mariadb.service  //自动启动
-注意：
-1）# firewall-cmd --add-service=mysql  //允许 MariaDB 服务通过防火墙
-2）如果该 MariaDB 只用在本机，则务必不要设置防火墙允许通过，使用 UNIX Socket 连接该数据库
-3）如果需要在别的服务器上连接数据库，则尽量使用内部网络，而不要将数据库服务暴露在公开的互联网上
+2）数据库程序初始化
+# mysql_secure_installation
+（1）Enter current password for root (enter for none):  //当前数据库密码为空，直接敲击回车
+     root user without the proper authorisation.
+（2）Set root password? [Y/n] y  //是否设置当前用户数据库密码
+     New password:  //输入要为root用户设置的数据库密码
+     Re-enter new password:  //重复输入一次密码
+（3）Remove anonymous users? [Y/n] y  //是否删除匿名帐号
+（4）Disallow root login remotely? [Y/n] y  //是否禁止root用户从远程登录
+（5）Remove test database and access to it? [Y/n] y  //是否删除test数据库并取消对其的访问权限
+（6）Reload privilege tables now? [Y/n] y  //是否刷新授权表，让初始化后的设定立即生效
+3）注意
+（1）很多生产环境中需要使用站库分离的技术，因此如果需要让root管理员帐户能够用远程访问数据库时
+（2）可在刚刚初始化过程中设置允许root管理员帐户从远程访问的策略，然后再设置防火墙允许对本机mysql服务程序的访问请求即可
+     # firewall-cmd --permanent --add-service=mysql
+     # firewall-cmd --reload
+（3）如果该 MariaDB 只用在本机，则务必不要设置防火墙允许通过，使用 UNIX Socket 连接该数据库
+（4）如果需要在别的服务器上连接数据库，则尽量使用内部网络，而不要将数据库服务暴露在公开的互联网上
 
 8. 安装 PHP
 # yum install -y php  //安装
