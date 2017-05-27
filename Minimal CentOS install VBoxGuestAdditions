@@ -1,0 +1,16 @@
+1. 安装依赖包
+#yum install kernel-headers
+#yum install kernel-devel
+#yum install make
+#yum install gcc* 
+#yum install bzip2
+
+2. 安装VBoxGuestAdditions
+(1)先关闭虚拟机：  shutdown -h now
+(2)VBox管理器中，挂载镜像： C:\Program Files\Oracle\VirtualBox\VBoxGuestAdditions.iso
+(3)启动虚拟机
+(4)在/media/目录下新建cdrom/： mkdir /media/cdrom/
+(5)挂载虚拟光驱：  mount /dev/cdrom/ /media/cdrom/
+(6)在/media/cdrom/目录下运行安装程序： ./VBoxLinuxAdditions.run
+(7)设置共享文件夹： 虚拟机界面菜单栏 => 设备 => 共享文件夹 => 固定分配 => 共享文件夹路径&名称 => 自动挂载&固定分配
+(8)重启虚拟机
