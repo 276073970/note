@@ -48,7 +48,7 @@ Host-Only方式如何完美实现4通访问：
 (9) 但是还不能访问外网，此时我们可以使用Internet连接共享来使VirtualBox的虚拟网卡可以访问外网
 (10) 此时VirtualBox虚拟网卡的IP会被改变为192.168.137.1，我们手动修改回192.168.56.1
 (11) 回到虚拟机，curl www.baidu.com，此时已经可以访问外网
-12) 当虚拟机选用桥接模式时, 配置静态 IP 地址
+11) 当虚拟机选用桥接模式时, 配置静态 IP 地址
 (1) # ip addr [show]  //显示当前网络配置情况
     或
     # yum install net-tools  //提供 ifconfig 工具
