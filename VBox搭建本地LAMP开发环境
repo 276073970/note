@@ -64,11 +64,6 @@ Host-Only方式如何完美实现4通访问：
 3) VBox管理器 => 设置 => 网络 => 网卡1（网络地址转换(NAT)）=> 网卡2（仅主机(Host-Only)网络）
 4) 备份：系统快照
 
-3. 设置共享文件夹
-1) 主机和虚拟机可实现文件共享, 并将虚拟机的Web Server根目录定位到该共享目录
-2) 在主机中使用图形化的编辑器编辑源代码, 再通过访问虚拟机的Web Server进行应用的检测和调试
-3) VBox管理器 => 设置 => 共享文件夹 => 添加共享文件夹 => 网卡2（仅主机(Host-Only)网络）
-
 3. 安装虚拟机
 1) 软件选择：最小安装
 2) 安装位置：自动分区（有其他特殊需求可自行规划分区）
@@ -86,8 +81,29 @@ Host-Only方式如何完美实现4通访问：
 7) 关机备份：# shutdown -h now
 
 4. 首次登陆
-1) 登陆后首先执行：# yum -y update && yum -y upgrade
-2) 关机备份：# shutdown -h now
+1) 设置服务器的主机名
+(1) # echo $HOSTNAME  //显示当前主机名
+    或
+    # hostname
+(2) # vi /etc/hostname  //编辑新的主机名并保存退出
+2) 配置静态 IP 地址(当虚拟机选用桥接模式时)
+(1) # ip addr [show]  //显示当前网络配置情况
+    或
+    # yum install net-tools  //提供 ifconfig 工具
+    # ifconfig
+(2) # vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+    BOOTPROTO = "static"
+    IPADDR = "静态IP"
+    NETMASK = "子网掩码"
+    GATEWAY = "默认网关"
+    DNS1 = "首选DNS"
+    DNS2 = "备选DNS"
+    ONBOOT = "yes"
+(3) # systemctl restart network
+    或
+    # service network restart
+3) # yum -y update && yum -y upgrade  //更新依赖关系并升级
+4) 关机备份：# shutdown -h now
 
 5. 安装VBox增强功能 VBoxGuestAdditions.iso => ./VBoxLinuxAdditions.run
 1) 安装依赖包
@@ -104,7 +120,7 @@ Host-Only方式如何完美实现4通访问：
 (5) 挂载虚拟光驱：# mount /dev/cdrom/ /media/cdrom/
 (6) 在/media/cdrom/目录下运行安装程序：# ./VBoxLinuxAdditions.run
 (7) 设置共享文件夹：虚拟机界面菜单栏 => 设备 => 共享文件夹 => 共享文件夹路径 & 名称 => 固定分配(勿选自动挂载)
-(8) 关机备份 & 重启虚拟机
+(8) 关机备份：# shutdown -h now
 
 6. 配置 Apache HTTP 服务器（Apache配置文件，默认在 /etc/httpd/conf/httpd.conf）
 1) 安装
