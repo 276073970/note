@@ -2,9 +2,22 @@
 
 第10章 使用Apache服务部署静态网站。第10章 使用Apache服务部署静态网站。
 
-SELinux全称为Security-Enhanced Linux是美国国家安全局在Linux开源社区帮助下开发的一个MAC强制访问控制的安全子系统，在红帽RHEL7系统中启用SELinux技术的目的是为了让各个服务进程都受到约束，仅能获取到服务本应获取到的资源。例如您在自己的电脑上下载了一个美图软件，正在全神贯注得把自己P瘦点的时候，这款软件却在后台默默监听着浏览器中输入的密码信息，这显然不应该是这款美图软件本应做的事情（即便是访问电脑中的图片资源都情有可原），SELinux安全系统就是为了杜绝此类情况而设计的，它能够从多方面进行违法行为监控，首先是对服务进程进行功能限制，SELinux域限制技术让服务程序做不了出格的事情，其次还能够对文件进行资源限制，SELinux安全上下文让文件只能被所属于的服务程序所获取到。
+SELinux全称为Security-Enhanced Linux是美国国家安全局在Linux开源社区帮助下开发的一个MAC强制访问控制的安全子系统，
+在红帽RHEL7系统中启用SELinux技术的目的是为了让各个服务进程都受到约束，仅能获取到服务本应获取到的资源。
+例如您在自己的电脑上下载了一个美图软件，正在全神贯注得把自己P瘦点的时候，这款软件却在后台默默监听着浏览器中输入的密码信息，这显然不应该是这款美图软件本应做的事情（即便是访问电脑中的图片资源都情有可原），
+SELinux安全系统就是为了杜绝此类情况而设计的，它能够从多方面进行违法行为监控，
+首先是对服务进程进行功能限制，SELinux域限制技术让服务程序做不了出格的事情，
+其次还能够对文件进行资源限制，SELinux安全上下文让文件只能被所属于的服务程序所获取到。
 
-刘遄老师经常会把SELinux域和SELinux安全上下文比喻成双管齐下，系统内的服务程序只能规规矩矩的拿到自己所应该获取的资源，这样即便黑客入侵了咱们的系统也毫无办法，但非常可惜的是由于SELinux服务比较复杂，配置起来的难度也较高，加之很多运维人员对这项技术理解不深，导致SELinux服务在很多服务器部署系统后就被直接禁用了，但这绝对不是明智的选择。SELinux服务有三种模式分别为：enforcing - 安全策略强制启用模式，将会拦截服务的不合法请求，permissive - 遇到服务越权访问只会发出警告而不强制拦截，disabled - 对于越权的行为不警告，也不拦截。在您手中这本《Linux就该这么学》一书中的所有实验都是在SELinux服务强制启用模式下进行的，虽然关闭了SELinux服务后确实能够减少服务报错几率，但这在生产环境中极其的不安全，同学们可以手工检查下SELinux服务主配置文件中定义的默认状态是什么，如果发现是permissive或disabled的话就赶紧改过来吧：
+刘遄老师经常会把SELinux域和SELinux安全上下文比喻成双管齐下，
+系统内的服务程序只能规规矩矩的拿到自己所应该获取的资源，这样即便黑客入侵了咱们的系统也毫无办法，
+但非常可惜的是由于SELinux服务比较复杂，配置起来的难度也较高，加之很多运维人员对这项技术理解不深，导致SELinux服务在很多服务器部署系统后就被直接禁用了，但这绝对不是明智的选择。
+SELinux服务有三种模式分别为：
+enforcing - 安全策略强制启用模式，将会拦截服务的不合法请求，
+permissive - 遇到服务越权访问只会发出警告而不强制拦截，
+disabled - 对于越权的行为不警告，也不拦截。
+在您手中这本《Linux就该这么学》一书中的所有实验都是在SELinux服务强制启用模式下进行的，虽然关闭了SELinux服务后确实能够减少服务报错几率，但这在生产环境中极其的不安全，
+同学们可以手工检查下SELinux服务主配置文件中定义的默认状态是什么，如果发现是permissive或disabled的话就赶紧改过来吧：
 
 [root@linuxprobe ~]# vim /etc/selinux/config
 # This file controls the state of SELinux on the system.
@@ -18,48 +31,70 @@ SELINUX=enforcing
 # minimum - Modification of targeted policy. Only selected processes are protected. 
 # mls - Multi Level Security protection.
 SELINUXTYPE=targeted
-SELinux服务的主配置文件定义的是默认运行状态，您也可以理解成是系统重启后的状态，并不是当前立即生效的，要想获得当前SELinux服务的运行模式可以使用getenforce命令：
+
+SELinux服务的主配置文件定义的是默认运行状态，您也可以理解成是系统重启后的状态，并不是当前立即生效的，
+要想获得当前SELinux服务的运行模式可以使用getenforce命令：
 
 [root@linuxprobe ~]# getenforce 
 Enforcing
-哦~~原来如此，为了确认是这个讨厌的SELinux服务在“捣乱”，咱们可以用setenforce [0|1]命令来修改下当前服务的运行模式（0为禁用，1为启用），但这种修改只是临时的，重启后就会失效：
+
+哦~~原来如此，为了确认是这个讨厌的SELinux服务在“捣乱”，咱们可以用setenforce [0|1]命令来修改下当前服务的运行模式（0为禁用，1为启用），
+但这种修改只是临时的，重启后就会失效：
 
 [root@linuxprobe ~]# setenforce 0
 [root@linuxprobe ~]# getenforce
 Permissive
+
 这样再刷新网页后就会看到正常的网页内容了，果然问题是出在了SELinux服务上面，如图10-7所示：
 
 [root@linuxprobe wwwroot]# firefox
-第10章 使用Apache服务部署静态网站。第10章 使用Apache服务部署静态网站。
-
 图10-7 正常看到网页内容
 
-那么回忆下刚刚的操作中到底哪里做错了呢？httpd服务程序的功能就是让用户能够访问到网站内容，因此让SELinux对网页访问功能肯定是默认允许的，但刚刚把保存网站数据的默认路径修改为了/home/wwwroot目录，这似乎就产生问题了，因为前面在第6章6.1小节中学习过/home目录是用来存放普通用户家目录数据的地方，也就是说现在httpd提供的网站服务却要去获取普通用户家目录中的数据了，这个行为触犯SELinux服务的监管项目。既然已经找出问题所在了，就先把SELinux服务恢复到强制启用模式吧，然后分别查看下原始网站数据目录与当前网站数据目录在SELinux安全上下文值上是否有不同呢：
+那么回忆下刚刚的操作中到底哪里做错了呢？
+httpd服务程序的功能就是让用户能够访问到网站内容，因此让SELinux对网页访问功能肯定是默认允许的，
+但刚刚把保存网站数据的默认路径修改为了/home/wwwroot目录，这似乎就产生问题了，
+因为前面在第6章6.1小节中学习过/home目录是用来存放普通用户家目录数据的地方，也就是说现在httpd提供的网站服务却要去获取普通用户家目录中的数据了，这个行为触犯SELinux服务的监管项目。
+既然已经找出问题所在了，就先把SELinux服务恢复到强制启用模式吧，然后分别查看下原始网站数据目录与当前网站数据目录在SELinux安全上下文值上是否有不同呢：
 
 [root@linuxprobe ~]# setenforce 1
 [root@linuxprobe ~]# ls -Zd /var/www/html
 drwxr-xr-x. root root system_u:object_r:httpd_sys_content_t:s0 /var/www/html
 [root@linuxprobe ~]# ls -Zd /home/wwwroot
 drwxrwxrwx. root root unconfined_u:object_r:home_root_t:s0 /home/wwwroot
-在文件上面设置的SELinux安全上下文是由用户段、角色段以及类型段等等多个信息项目共同组成的，用户段中system_u代表系统进程身份，角色段object_r代表文件目录角色，类型段httpd_sys_content_t代表是网站服务系统文件。由于SELinux服务实在过于复杂，因此现在您只需要简单熟悉SELinux服务的作用就可以，刘遄老师会在进阶篇书籍中单独拿出一个章节来仔细讲解SELinux服务的。现在这种情况的解决办法就是把当前网站目录/home/wwwroot的SELinux安全上下文修改为跟原始网站目录的一样就可以啦~
+
+在文件上面设置的SELinux安全上下文是由用户段、角色段以及类型段等等多个信息项目共同组成的，
+用户段中system_u代表系统进程身份，
+角色段object_r代表文件目录角色，
+类型段httpd_sys_content_t代表是网站服务系统文件。
+由于SELinux服务实在过于复杂，因此现在您只需要简单熟悉SELinux服务的作用就可以，刘遄老师会在进阶篇书籍中单独拿出一个章节来仔细讲解SELinux服务的。
+现在这种情况的解决办法就是把当前网站目录/home/wwwroot的SELinux安全上下文修改为跟原始网站目录的一样就可以啦~
 
 semanage命令用于查询与修改SELinux的安全上下文，格式为：“semanage [选项] [文件]”。
 
-SELinux服务极大的增强了Linux系统的安全性，将用户权限牢牢地锁在笼子里，semanage命令不仅能够像传统chcon命令一样对文件、目录进行策略设置，而且还能够对网络端口、消息接口等等进行管理，这些新特性咱们会在本章中慢慢感受。在使用semanage命令的时候有几个比较常用的参数，-l参数用于查询、-a参数用于添加、-m参数用于修改、-d参数用于删除等等，例如可以向新的网站数据目录中新增加一条SELinux安全上下文，让这个目录以及里面的所有文件能够被httpd服务程序所获取到：
+SELinux服务极大的增强了Linux系统的安全性，将用户权限牢牢地锁在笼子里，
+semanage命令不仅能够像传统chcon命令一样对文件、目录进行策略设置，而且还能够对网络端口、消息接口等等进行管理，这些新特性咱们会在本章中慢慢感受。
+在使用semanage命令的时候有几个比较常用的参数，
+-l参数用于查询、
+-a参数用于添加、
+-m参数用于修改、
+-d参数用于删除等等，
+例如可以向新的网站数据目录中新增加一条SELinux安全上下文，让这个目录以及里面的所有文件能够被httpd服务程序所获取到：
 
 [root@linuxprobe ~]# semanage fcontext -a -t httpd_sys_content_t /home/wwwroot
 [root@linuxprobe ~]# semanage fcontext -a -t httpd_sys_content_t /home/wwwroot/*
-不过仅仅是这样设置完还不能让网站立即恢复访问，还需要使用restorecon命令来让刚刚设置的SELinux安全上下文立即生效，可以加上-Rv参数指定进行对目录的递归操作以及显示SELinux安全上下文的修改过程，最后再来刷新一下页面就能正常看到网页内容了，如图10-8所示。
+
+不过仅仅是这样设置完还不能让网站立即恢复访问，还需要使用restorecon命令来让刚刚设置的SELinux安全上下文立即生效，可以加上-Rv参数指定进行对目录的递归操作以及显示SELinux安全上下文的修改过程，
+最后再来刷新一下页面就能正常看到网页内容了，如图10-8所示。
 
 [root@linuxprobe ~]# restorecon -Rv /home/wwwroot/
 restorecon reset /home/wwwroot context unconfined_u:object_r:home_root_t:s0->unconfined_u:object_r:httpd_sys_content_t:s0
 restorecon reset /home/wwwroot/index.html context unconfined_u:object_r:home_root_t:s0->unconfined_u:object_r:httpd_sys_content_t:s0
 [root@linuxprobe ~]# firefox
-第10章 使用Apache服务部署静态网站。第10章 使用Apache服务部署静态网站。
 
 图10-8 正常看到网页内容
 
-真可谓是一波三折，原本认为只要把httpd服务程序配置妥当就可以大功告成，结果却反复遭受到了SELinux安全上下文的限制，看来真是要细心才行，而且SELinux服务并没有大家想象中的那么难吧~
+真可谓是一波三折，原本认为只要把httpd服务程序配置妥当就可以大功告成，结果却反复遭受到了SELinux安全上下文的限制，看来真是要细心才行，
+而且SELinux服务并没有大家想象中的那么难吧~
 
 因为在红帽RHCSA、RHCE或RHCA考试后都要重启您的实验机再执行判分脚本。
 
