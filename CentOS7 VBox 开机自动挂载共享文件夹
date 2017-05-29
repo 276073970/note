@@ -1,0 +1,46 @@
+问题:
+主机操作系统 Windows 7 ， 虚拟机 CentOS 7
+用 mount -t vboxsf web /web/wwwroot 挂载是正常的，而我希望能开机自动挂载
+按网上的教程做法，在 /etc/fstab 最后加上了 
+web /web/wwwroot vboxsf defaults 0 0 
+或者 
+web /web/wwwroot vboxsf rw,gid=100,uid=1000,auto 0 0 
+然后重启的时候报错
+
+回答:
+按题主的意思是, web是自建的共享条目, 可能对应主机的share_path_host目录, 目标是自动挂载到虚拟机的/web/wwwroot目录.
+
+就我目前所知, 做不到. 但可以有所变通, 近似做到这一点.
+
+1, 如果你不在乎会挂载到虚拟机的哪个目录, 可在设置->共享文件夹下, 如果有共享条目, 则双击勾选自动挂载, 没有则新建条目, 勾选自动挂载. 在默认情况下, 对于虚拟机为Linux的, 挂载目录为/media/sf_xxxx, 其中, xxxx是你认定的共享条目名称. 注意, 此名称与主机的共享文件夹名称没有关系.
+
+2, 如果因为某种需求, 一定要挂载到/web/wwwroot目录, 请把之前名为web的共享条目删除, 新建条目名为wwwroot, 指定主机路径, 勾选自动挂载. 执行以下命令:
+
+vboxmanage guestproperty set vmname /VirtualBox/GuestAdd/SharedFolders/MountPrefix ""
+# 将共享目录的前缀设置为空串, 默认为'sf_'
+vboxmanage guestproperty set vmname /VirtualBox/GuestAdd/SharedFolders/MountDir /web
+# 将共享目录设置为'/web', 默认为'/media'
+说明:
+
+vmname为虚拟机名称, 即在GUI管理界面看到的名称, 或vboxmanage list vms列出的名称
+如果提示找不到vboxmanage可执行程序, 请设定正确的%path%路径, 或在程序所在目录执行命令
+Windows命令行不区分大小写, 且可省略后缀, 实际程序为VBoxManage.exe
+依据虚拟机的共享目录挂载点的名称规则, 此处应为/web/wwwroot. 算是近似实现. 至于有没有直接设置挂载点的属性, 官方手册以及官网的搜索中, 都未能找到更多关于共享目录的属性, 实属遗憾.
+
+深度探究
+这个问题比我想像的要复杂, 涉及到非常多的方面, 现在我也不敢说能完全说明白.
+
+1, 虚拟机的自动挂载机制是由VirtualBox Guest Additions提供的, 不安装增强包是不能实现文件共享的. 之所以不能通过/etc/fstab实现自动挂载(物理机的通用做法), 初步猜测是, 在Linux的启动过程中, 挂载文件是在VirtualBoxGuestAdditions之前执行, 因此它无法认识vboxsf类型的设备, 自然也不认识web的共享条目.
+
+2, 为了确认这一点, 我在设置中勾选自动挂载后开机, dmesg | less研究了下启动信息, 搜索VBoxGuestAdditions, 应该能在倒数10行左右找到Executable: /opt/VBoxGuestAdditions-5.0.10/sbin/VBoxService, 也就是说, 它在系统启动的最后才加载模块. 再搜索automount, 在上述信息之后, 有automount vbsvcAutoMountWorker: Shared folder 'share' was mounted to '/media/sf_share', 即自带的自动挂载功能是在VBoxService启动后挂载的.
+
+3, 事实上我做了多组对照实验, ubuntu_16.04_x64, ubuntu_14.04_x64, centos7分别通过vbox自带的自动挂载和/etc/fstab实现的自动挂载, 第二种方式全部失败. 之所以要两个版本的ubuntu, 因为其16.04和centos7都使用的是systemd启动进程, 而14.04使用的是init.
+
+4, 继续考虑到/etc/fstab是属于init的旧的自动挂载配置文件, systemd使用.mount文件, 还特意写了个web-wwwroot.mount的新式的配置文件, 依旧失败.
+
+5, 到目前为止, 无论你怎么想, 我准备接受这个答案
+
+因为模块在系统启动中的执行顺序不同, 无法通过虚拟机本身设置与主机的文件共享
+但我无法保证这完全正确. 而更耐人寻味的是, vbox的官方手册说/etc/fstab可以实现自动挂载. 截图如下:
+
+WTF, 我真不知道答案是什么了, 除非我能完全懂systemd和virtualbox, 从源码上.
