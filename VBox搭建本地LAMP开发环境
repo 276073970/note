@@ -22,6 +22,9 @@ sudo mount -t vboxsf host_share /mnt/guest_share
 (5) 注意事项:
 共享文件夹的名称千万不要和挂载点的名称相同, 否则报错
 9) VBox共享文件夹的自动挂载功能, 默认将其挂载到/media/folder_name, 权限750且无法更改
+# usermod -aG vboxsf user_name
+或
+# adduser user_name vboxsf 
 10) 仅主机(Host-Only)网络完美实现4通访问
 这种方式使用VirtualBox虚拟出来的一张网卡（网络连接中就能看到），虚拟机需要配置静态IP才能实现和主机的互相访问，这种方式默认情况是无法访问外网的，
 但是可以通过主机的Internet连接共享来实现访问外网
@@ -64,6 +67,20 @@ Host-Only方式如何完美实现4通访问：
 (3) # systemctl restart network
     或
     # service network restart
+12) VBox开机自动挂载共享文件夹
+(1) 实测有效的方法:
+# vi /etc/rc.d/rc.local
+mount -t vboxsf host_share /mnt/guest_share  //文件尾追加内容
+# chmod +x /etc/rc.d/rc.local
+其中:
+/etc/rc.d/rc.local原权限为7, 若未附加其x权限, 仍无法实现开机自动挂载
+/etc/rc.local只不过是/etc/rc.d/rc.local的一个链接文件, 能否实现自动挂载仍取决于后者
+(2) 无效的方法:
+# vi /etc/fstab
+host_share /mnt/guest_share vboxsf rw,gid=username,uid=username,auto 0 0
+host_share /mnt/guest_share vboxsf rw,gid=100,uid=1000,auto 0 0
+host_share /mnt/guest_share vboxsf defaults 0 0
+系统调用fstab的时候，Virtualbox的共享目录的模块还没有加载，所以每次加载都会失败
 
 ====================================================================================================
 ==============================[具体步骤如下]=========================================================
