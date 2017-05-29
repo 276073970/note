@@ -1,10 +1,11 @@
 VBox搭建本地LAMP开发环境
+
 1) GNU/Linux系的OS十分适合开发工作（尤其Web应用开发与调试），但娱乐性较差（如音、视频等功能）
 2) GNU/Linux注定应该应用在服务器端，因而终端的字符界面才是其正宗的使用方式，而不应过分追求其图形化界面（如GNOME、KDE等）
 3) 平时难免有娱乐休闲等需求，可选择以图形化界面为主的OS，如Windows、Mac_OS等
 4) 综合考虑工作、娱乐两相宜的需求，在主机中通过VBox搭建本地LAMP开发环境，不失为一个可行且高效的解决方案
 5) 通过在VBox中配置enp0s3(NAT)、enp0s8(Host-Only)双网卡，可实现:虚拟机可访问外网，且主机可在断网情况下访问虚拟机的Web Server服务
-6) 主机要通过虚拟机的Apache Server访问某目录文件，需赋予该目录文件XX1权限，通常为：chmod 755 file_name
+6) 主机要通过虚拟机的Apache Server访问某目录文件，至少要赋予该目录文件others列x权限，通常为：chmod -R 755 /folder_name
 7) Linux系统中可更改目录权限的文件系统类型: ext1、2、3、4、xfs等可改, 而NTFS、exFAT等不可改
 8) VBox虚拟机中, Linux系统手动挂载共享文件夹(已在VBox管理器界面设置固定分配共享文件夹): 
 (1) 挂载命令:
@@ -21,9 +22,7 @@ sudo mount -t vboxsf host_share /mnt/guest_share
 (5) 注意事项:
 共享文件夹的名称千万不要和挂载点的名称相同, 否则报错
 9) VBox共享文件夹的自动挂载功能, 默认将其挂载到/media/folder_name, 权限750且无法更改
-
-
-6) 仅主机(Host-Only)网络
+10) 仅主机(Host-Only)网络完美实现4通访问
 这种方式使用VirtualBox虚拟出来的一张网卡（网络连接中就能看到），虚拟机需要配置静态IP才能实现和主机的互相访问，这种方式默认情况是无法访问外网的，
 但是可以通过主机的Internet连接共享来实现访问外网
 Host-Only方式如何完美实现4通访问：
@@ -49,8 +48,26 @@ Host-Only方式如何完美实现4通访问：
 (9) 但是还不能访问外网，此时我们可以使用Internet连接共享来使VirtualBox的虚拟网卡可以访问外网
 (10) 此时VirtualBox虚拟网卡的IP会被改变为192.168.137.1，我们手动修改回192.168.56.1
 (11) 回到虚拟机，curl www.baidu.com，此时已经可以访问外网
+12) 当虚拟机选用桥接模式时, 配置静态 IP 地址
+(1) # ip addr [show]  //显示当前网络配置情况
+    或
+    # yum install net-tools  //提供 ifconfig 工具
+    # ifconfig
+(2) # vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+    BOOTPROTO = "static"
+    IPADDR = "静态IP"
+    NETMASK = "子网掩码"
+    GATEWAY = "默认网关"
+    DNS1 = "首选DNS"
+    DNS2 = "备选DNS"
+    ONBOOT = "yes"
+(3) # systemctl restart network
+    或
+    # service network restart
 
-
+====================================================================================================
+==============================[具体步骤如下]=========================================================
+====================================================================================================
 
 1. 新建虚拟机
 1) 注意选择专家模式
@@ -76,32 +93,16 @@ Host-Only方式如何完美实现4通访问：
     ONBOOT=yes
 (3) # systemctl restart network
 5) 主机测试：# ping 192.168.56.100
-6) 注意：enp0s8的IP需与其主机虚拟网络界面的网关IP在同一网段：
+6) 注意：enp0s8的IP需与其主机虚拟网络界面的网关IP在同一网段, 可查看:
    VBox管理器 => 管理 => 全局设定 => 网络 => 仅主机(Host-Only)网络 => 编辑
 7) 关机备份：# shutdown -h now
 
 4. 首次登陆
-1) 设置服务器的主机名
+1) 更改服务器的主机名
 (1) # echo $HOSTNAME  //显示当前主机名
     或
     # hostname
 (2) # vi /etc/hostname  //编辑新的主机名并保存退出
-2) 配置静态 IP 地址(当虚拟机选用桥接模式时)
-(1) # ip addr [show]  //显示当前网络配置情况
-    或
-    # yum install net-tools  //提供 ifconfig 工具
-    # ifconfig
-(2) # vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
-    BOOTPROTO = "static"
-    IPADDR = "静态IP"
-    NETMASK = "子网掩码"
-    GATEWAY = "默认网关"
-    DNS1 = "首选DNS"
-    DNS2 = "备选DNS"
-    ONBOOT = "yes"
-(3) # systemctl restart network
-    或
-    # service network restart
 3) # yum -y update && yum -y upgrade  //更新依赖关系并升级
 4) 关机备份：# shutdown -h now
 
@@ -127,7 +128,7 @@ Host-Only方式如何完美实现4通访问：
 mount -t vboxsf host_share /mnt/guest_share  //文件尾增添一行
 (9) 关机备份：# shutdown -h now
 
-6. 配置 Apache HTTP 服务器（Apache配置文件，默认在 /etc/httpd/conf/httpd.conf）
+6. 配置 Apache HTTP 服务器(配置文件默认在 /etc/httpd/conf/httpd.conf)
 1) 安装
 # yum install -y httpd  //安装
 # systemctl start httpd.service  //启动
@@ -141,26 +142,12 @@ mount -t vboxsf host_share /mnt/guest_share  //文件尾增添一行
 # vi /etc/selinux/config  //修改SELinux服务主配置文件中定义的默认状态(开机自启动, 重启生效)
 SELINUX=enforcing => SELINUX=permissive
 # systemctl restart httpd.service  //重启 Apache HTTP 服务器，然后新的端口号才能生效
-2) 更改默认端口号（80）
-(1) 编辑配置文件：# vi /etc/httpd/conf/httpd.conf
-(2) 查找：LISTEN 80
-(3) 注释本行并复制到下一行：#LISTEN 80
-(4) 把端口号 80 改为其它任何端口（例如 3221）
+2) 编辑配置文件(注释本行并复制到下一行进行修改)
+(1) # vi /etc/httpd/conf/httpd.conf
+(2) LISTEN 80  //更改默认端口号(如 3221)
+(3) DocumentRoot "/var/www/html"  //修改默认根目录(如 /mnt/sf_d/www/)
+(4) DirectoryIndex index.html  //设置首页运行的顺序（如 index.html index.php）
 (5) 保存并退出
-3) 修改默认根目录（DocumentRoot）
-(1) 编辑配置文件：# vi /etc/httpd/conf/httpd.conf
-(2) 查找：DocumentRoot "/var/www/html"
-(3) 注释本行并复制到下一行：#DocumentRoot "/var/www/html"
-(4) 将"/var/www/html"修改为新路径
-(5) 保存并退出
-4) 设置首页运行的顺序（index.html index.php）
-(1) 编辑配置文件：# vi /etc/httpd/conf/httpd.conf
-(2) 查找：DirectoryIndex index.html
-(3) 注释本行并复制到下一行：#DirectoryIndex index.html
-(4) 在index.html后追加其他首页引导文件，并以空格间隔：DirectoryIndex index.html index.php
-(5) 保存并退出
-(6) 如果上述设置后仍无法按顺序运行首页，那么还需修改php相关的配置文件php.conf（/etc/httpd/conf.d/php.conf），
-    并设置DirectoryIndex index.php
 
 7. 配置 MariaDB 数据库
 1) 安装
@@ -196,7 +183,7 @@ SELINUX=enforcing => SELINUX=permissive
 或者# links http://127.0.0.1/phpinfo.php
 或者http://localhost:80/phpinfo.php
 
-9. 配置git环境（repository）
+9. 配置git环境(repository)
 1) 安装Git服务程序：
 # yum install -y git
 2) 配置个人信息及默认编辑器
