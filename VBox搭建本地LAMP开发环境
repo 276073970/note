@@ -120,7 +120,12 @@ Host-Only方式如何完美实现4通访问：
 (5) 挂载虚拟光驱：# mount /dev/cdrom/ /media/cdrom/
 (6) 在/media/cdrom/目录下运行安装程序：# ./VBoxLinuxAdditions.run
 (7) 设置共享文件夹：虚拟机界面菜单栏 => 设备 => 共享文件夹 => 共享文件夹路径 & 名称 => 固定分配(勿选自动挂载)
-(8) 关机备份：# shutdown -h now
+(8) 手动挂载共享文件夹
+# mkdir /mnt/guest_share  //新建虚拟机共享目录
+# mount -t vboxsf host_share /mnt/guest_share  //将主机共享文件夹挂载到虚拟机共享目录
+# vi /etc/rc.local  //配置开机自动挂载
+mount -t vboxsf host_share /mnt/guest_share
+(9) 关机备份：# shutdown -h now
 
 6. 配置 Apache HTTP 服务器（Apache配置文件，默认在 /etc/httpd/conf/httpd.conf）
 1) 安装
