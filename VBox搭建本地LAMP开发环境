@@ -73,7 +73,7 @@ Host-Only方式如何完美实现4通访问：
 mount -t vboxsf host_share /mnt/guest_share  //文件尾追加内容
 # chmod +x /etc/rc.d/rc.local
 其中:
-/etc/rc.d/rc.local原权限为7, 若未附加其x权限, 仍无法实现开机自动挂载
+/etc/rc.d/rc.local原权限为644, 若未附加其x权限, 仍无法实现开机自动挂载
 /etc/rc.local只不过是/etc/rc.d/rc.local的一个链接文件, 能否实现自动挂载仍取决于后者
 (2) 无效的方法:
 # vi /etc/fstab
@@ -140,8 +140,9 @@ host_share /mnt/guest_share vboxsf defaults 0 0
 (7) 手动挂载共享文件夹
 # mkdir /mnt/guest_share  //新建虚拟机共享目录
 # mount -t vboxsf host_share /mnt/guest_share  //将主机共享文件夹挂载到虚拟机共享目录(可跳过该步)
-# vi /etc/rc.local  //配置开机自动挂载
-mount -t vboxsf host_share /mnt/guest_share  //文件尾增添一行
+# vi /etc/rc.d/rc.local  ////配置开机自动挂载
+mount -t vboxsf host_share /mnt/guest_share  //文件尾追加内容
+# chmod +x /etc/rc.d/rc.local
 (8) 关机备份：# shutdown -h now
 
 6. 配置 Apache HTTP 服务器(配置文件默认在 /etc/httpd/conf/httpd.conf)
