@@ -7,8 +7,8 @@ VBox搭建本地LAMP开发环境
 6) 主机要通过虚拟机的Apache Server访问某目录文件，需赋予该目录文件XX1权限，通常为：chmod 755 file_name
 7) Linux系统中更改目录权限: ext1、2、3、4、xfs等可改, 而NTFS、exFAT等不可改
 8) VBox虚拟机中, Linux系统手动挂载共享文件夹: 
-(1) 
-挂载名利:
+(1)
+挂载命令:
 # mkdir /mnt/shared
 # mount -t vboxsf share /mnt/shared
 其中"share"是之前创建的共享文件夹的名字
@@ -17,6 +17,31 @@ VBox搭建本地LAMP开发环境
 share /mnt/shared vboxsf rw,gid=100,uid=1000,auto 0 0
 卸载命令:
 sudo umount -f /mnt/shared
+1.若想删除挂载，可执行命令 
+
+umount -f /mnt/share
+
+ 
+2.若想开机自动挂载，可以在 /etc/fstab 文件末添加一项    
+ 
+
+sharing /mnt/share vboxsf defaults 0 0
+ 或
+sharing /mnt/share vboxsf rw,gid=100,uid=1000,auto 0 0
+
+
+ 3.为了方便，可以在桌面上新建一个文件，内容为：
+
+ 
+
+#!/bin/sh 
+sudo mount -t vboxsf sharing /mnt/share
+(2)
+在 /etc/fstab 文件中追加VirtualBox虚拟机文件夹共享挂载命令 “ sharing /mnt/share vboxsf defaults 0 0 ”，其实是错误的，
+因为系统调用fstab的时候，Virtualbox的共享目录的模块还没有加载，所以每次加载都会失败，
+最终的解决方案如下：
+在文件 /etc/rc.local 中（用root用户）追加如下命令:
+mount -t vboxsf sharing /mnt/share
 
 注意：
 共享文件夹的名称千万不要和挂载点的名称相同。
