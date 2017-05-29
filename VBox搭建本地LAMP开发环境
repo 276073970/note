@@ -151,8 +151,7 @@ mount -t vboxsf host_share /mnt/guest_share  //文件尾追加内容
 # systemctl start httpd.service  //启动
 # systemctl enable httpd.service  //自动启动（添加 Apache 服务到系统层使其随系统自动启动）
 # firewall-cmd --add-service=http  //允许 http 服务通过防火墙(永久)
-# firewall-cmd --permanent --add-port=80/tcp  //允许 80 号端口通过防火墙(永久)
-                                              //若未加参数--permanent，则重启后端口失效
+# firewall-cmd --permanent --add-port=80/tcp  //允许 80 号端口通过防火墙(永久), 若未加参数--permanent，则重启后端口失效
 # firewall-cmd --reload  //重新加载防火墙
 # getenforce  //获得当前SELinux服务的运行模式
 # setenforce 0  //修改当前SELinux服务的运行模式(0为禁用, 1为启用)
