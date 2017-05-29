@@ -7,30 +7,19 @@ VBox搭建本地LAMP开发环境
 6) 主机要通过虚拟机的Apache Server访问某目录文件，需赋予该目录文件XX1权限，通常为：chmod 755 file_name
 7) Linux系统中更改目录权限: ext1、2、3、4、xfs等可改, 而NTFS、exFAT等不可改
 8) VBox虚拟机中, Linux系统手动挂载共享文件夹(已在VBox管理器界面设置固定分配共享文件夹): 
-方法一:
 (1) 挂载命令:
-# mkdir /mnt/local_share
-# mount -t vboxsf share /mnt/local_share
-其中"share"是之前创建的共享文件夹的名字
+# mkdir /mnt/guest_share
+# mount -t vboxsf host_share /mnt/guest_share
 (2) 自动挂载:
-# vi /etc/fstab
-share /mnt/local_share vboxsf defaults 0 0
-或share /mnt/local_share vboxsf rw,gid=100,uid=1000,auto 0 0
-方法二:
-(1) 在 /etc/fstab 文件中追加VirtualBox虚拟机文件夹共享挂载命令 “ shared /mnt/local_share vboxsf defaults 0 0 ”，其实是错误的
-(2) 因为系统调用fstab的时候，Virtualbox的共享目录的模块还没有加载，所以每次加载都会失败
-(3) 最终的解决方案如下:
 # vi /etc/rc.local
-mount -t vboxsf share /mnt/local_share
-注意事项:
-(1) 共享文件夹的名称千万不要和挂载点的名称相同
-否则挂载的时候就会出现如下的错误信息: /sbin/mount.vboxsf: mounting failed with the error: Protocol error
-(2) 卸载命令:
-# umount -f /mnt/local_share
-(4) 自启动shell脚本内容:
+mount -t vboxsf host_share /mnt/guest_share
+(3) 卸载命令:
+# umount -f /mnt/guest_share
+(4) 编写自启动shell脚本内容:
 #!/bin/sh 
-sudo mount -t vboxsf share /mnt/local_share
-
+sudo mount -t vboxsf host_share /mnt/guest_share
+(5) 注意事项:
+共享文件夹的名称千万不要和挂载点的名称相同, 否则报错
 
 
 6) 仅主机(Host-Only)网络
