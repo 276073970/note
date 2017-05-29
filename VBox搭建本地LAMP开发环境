@@ -5,7 +5,7 @@ VBox搭建本地LAMP开发环境
 4) 综合考虑工作、娱乐两相宜的需求，在主机中通过VBox搭建本地LAMP开发环境，不失为一个可行且高效的解决方案
 5) 通过在VBox中配置enp0s3(NAT)、enp0s8(Host-Only)双网卡，可实现:虚拟机可访问外网，且主机可在断网情况下访问虚拟机的Web Server服务
 6) 主机要通过虚拟机的Apache Server访问某目录文件，需赋予该目录文件XX1权限，通常为：chmod 755 file_name
-7) 
+7) Linux系统中更改目录权限: ext1、2、3、4、xfs等可改, 而NTFS、exFAT等不可改
 
 
 
