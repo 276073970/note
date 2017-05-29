@@ -86,7 +86,7 @@ Host-Only方式如何完美实现4通访问：
 2) 安装位置：自动分区（有其他特殊需求可自行规划分区）
 3) 网络和主机名：开启enp0s3、enp0s8两块网卡
 4) 配置enp0s8网卡：
-(1) # vi /etc/sysconfig/network-scripts/
+(1) # vi /etc/sysconfig/network-scripts/ifcfg-enp0s8
 (2) BOOTPROTO=static
     IPADDR=192.168.56.100
     NETMASK=255.255.255.0
