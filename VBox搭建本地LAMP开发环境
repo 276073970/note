@@ -176,7 +176,7 @@ echo phpinfo();
 (4) DirectoryIndex index.html  //设置首页运行的顺序（如 index.html index.php）
 (5) 保存并退出
 (6) # systemctl restart httpd.service  //重启 Apache HTTP 服务器，然后配置文件修改内容才能生效
-(7) 主机浏览器测试输出phpinfo()
+(7) 主机浏览器测试(应输出phpinfo()信息)
 
 7. 配置 MariaDB 数据库
 1) 安装
