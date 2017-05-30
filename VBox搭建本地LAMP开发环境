@@ -137,7 +137,7 @@ host_share /mnt/guest_share vboxsf defaults 0 0
 (4) 挂载虚拟光驱：# mount /dev/cdrom/ /media/cdrom/
 (5) 在/media/cdrom/目录下运行安装程序：# ./VBoxLinuxAdditions.run
 (6) 设置共享文件夹: 虚拟机界面菜单栏 => 设备 => 共享文件夹 => 固定分配 => 添加 => 共享文件夹路径 & 名称 => 固定分配(勿选自动挂载)
-(7) 手动挂载共享文件夹
+(7) 手动挂载共享文件夹(所有文件或目录均为777权限)
 # mkdir /mnt/guest_share  //新建虚拟机共享目录
 # mount -t vboxsf host_share /mnt/guest_share  //将主机共享文件夹挂载到虚拟机共享目录(可跳过该步)
 # vi /etc/rc.d/rc.local  ////配置开机自动挂载
@@ -158,13 +158,25 @@ mount -t vboxsf host_share /mnt/guest_share  //文件尾追加内容
 # vi /etc/selinux/config  //修改SELinux服务主配置文件中定义的默认状态(开机自启动, 重启生效)
 SELINUX=enforcing => SELINUX=permissive
 # systemctl restart httpd.service  //重启 Apache HTTP 服务器，然后新的端口号才能生效
+3) 新建工作目录(重定向Server根目录)
+# cp -r /var/www /mnt/sf_d  //直接复制原Server根目录www
+# vi index.php  //新建测试文件index.php
+<?php
+echo phpinfo();
+?>
 2) 编辑配置文件(注释本行并复制到下一行进行修改)
 (1) # vi /etc/httpd/conf/httpd.conf
 (2) LISTEN 80  //更改默认端口号(如 3221)
-(3) DocumentRoot "/var/www/html"  //修改默认根目录(如 /mnt/sf_d/www/)
+(3) DocumentRoot "/var/www/html"  //增添修改默认根目录(如 /mnt/sf_d/www/)
+    <Directory "/mnt/sf_d/www">  //增添允许访问目录(复制<Directory "/var/www">并修改)
+        AllowOverride None
+        # Allow open access:
+        Require all granted
+    </Directory>
 (4) DirectoryIndex index.html  //设置首页运行的顺序（如 index.html index.php）
 (5) 保存并退出
 (6) # systemctl restart httpd.service  //重启 Apache HTTP 服务器，然后配置文件修改内容才能生效
+(7) 主机浏览器测试输出phpinfo()
 
 7. 配置 MariaDB 数据库
 1) 安装
