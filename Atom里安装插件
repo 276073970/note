@@ -1,0 +1,39 @@
+Atom里安装插件非常方便，菜单->Edit->Preference->Install，直接输入插件名称进行搜索和安装，以下是一些必要的插件：
+
+
+基础插件：
+vim-mode: 提供Vim编辑模式，支持Normal模式和Insert模式。
+ex-mode: 提供Vim的Command-line编辑模式。
+script: Ctrl+Shift+B运行代码。
+symbols-tree-view: 提供类似Vim tagbar的类和函数浏览，但不如Vim的tagbar好用。
+split-diff: 文件比较。不如Vim的文件比较功能。
+minimap: 提供代码右侧的minimap。
+
+
+Python相关插件:
+
+python-tools: 跳转到定义，查看使用，重构等。
+python-debuger: 代码调试。
+autocomplete-python: 包、变量、方法和函数参数补齐。
+linter-python-pep8: 代码检查。
+
+
+PHP相关插件:
+linter-php: 使用php -l进行语法检查。
+atom-autocomplete-php: PHP自动补齐、Alt-clicking跳转、函数提示Tooltips。
+php-debug: 使用XDebug进行PHP代码调试。
+
+
+Javascrpt相关包：
+linter-jshint：Javascript代码检查。 
+
+插件装好后就可以正常使用了，不需要特殊配置。
+不过我觉得Atom的左侧目录树和上面的文件tab的字体有点小，费眼神，调整方法为：
+编辑~/.atom/style.less文件，内容如下：
+@font-size: 12px;
+.tree-view { font-size: @font-size; }
+.tab-bar .tab { font-size: @font-size; }
+ 
+也可鼠标点击：
+Menu => Edit => Stylesheet
+即可打开该style.less配置文件
