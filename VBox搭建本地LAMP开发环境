@@ -21,10 +21,13 @@ mount -t vboxsf host_share /mnt/guest_share
 sudo mount -t vboxsf host_share /mnt/guest_share
 (5) 注意事项:
 共享文件夹的名称千万不要和挂载点的名称相同, 否则报错
-9) VBox共享文件夹的自动挂载功能, 默认将其挂载到/media/folder_name, 权限750且无法更改
-# usermod -aG vboxsf user_name
-或
-# adduser user_name vboxsf 
+9) VBox共享文件夹挂载方式区别
+(1) 自动挂载: 默认挂载点为/media/folder_name, 默认权限750且无法更改, 共享目录所有者为root, 所属组为vboxsf
+(2) 手动挂载: 挂载点可自设, 默认权限777且可更改, 共享目录所有者为\所属组均为root
+(3) 自动挂载时当前用户无访问权限时的解决方案:
+    # usermod -aG vboxsf user_name  //将当前用户添加到vboxsf用户组
+    或
+    # adduser user_name vboxsf 
 10) 仅主机(Host-Only)网络完美实现4通访问
 这种方式使用VirtualBox虚拟出来的一张网卡（网络连接中就能看到），虚拟机需要配置静态IP才能实现和主机的互相访问，这种方式默认情况是无法访问外网的，
 但是可以通过主机的Internet连接共享来实现访问外网
@@ -137,7 +140,7 @@ host_share /mnt/guest_share vboxsf defaults 0 0
 (4) 挂载虚拟光驱：# mount /dev/cdrom/ /media/cdrom/
 (5) 在/media/cdrom/目录下运行安装程序：# ./VBoxLinuxAdditions.run
 (6) 设置共享文件夹: 虚拟机界面菜单栏 => 设备 => 共享文件夹 => 固定分配 => 添加 => 共享文件夹路径 & 名称 => 固定分配(勿选自动挂载)
-(7) 手动挂载共享文件夹(所有文件或目录均为777权限)
+(7) 手动挂载共享文件夹(默认权限777)
 # mkdir /mnt/guest_share  //新建虚拟机共享目录
 # mount -t vboxsf host_share /mnt/guest_share  //将主机共享文件夹挂载到虚拟机共享目录(可跳过该步)
 # vi /etc/rc.d/rc.local  //配置开机自动挂载
