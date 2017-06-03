@@ -1,0 +1,36 @@
+告诉你Hadoop是什么
+
+Hadoop是什么？
+Hadoop是一个开发和运行处理大规模数据的软件平台,是Appach的一个用java语言实现开源软件框架，实现在大量计算机组成的集群中对海量数据进行分布式计算.
+
+Hadoop框架中最核心设计就是：HDFS和MapReduce.
+HDFS提供了海量数据的存储,MapReduce提供了对数据的计算.
+
+数据在Hadoop中处理的流程可以简单的按照下图来理解:数据通过Haddop的集群处理后得到结果.
+
+HDFS:Hadoop Distributed File System,Hadoop的分布式文件系统.
+
+大文件被分成默认64M一块的数据块分布存储在集群机器中.
+如下图中的文件 data1被分成3块,这3块以冗余镜像的方式分布在不同的机器中.
+
+MapReduce:
+Hadoop为每一个input split创建一个task调用Map计算，
+在此task中依次处理此split中的一个个记录(record),
+map会将结果以key--value的形式输出,
+hadoop负责按key值将map的输出整理后作为Reduce的输入,
+Reduce Task的输出为整个job的输出，保存在HDFS上.
+
+Hadoop的集群主要由
+NameNode,
+DataNode,
+Secondary NameNode,
+JobTracker,
+TaskTracker
+组成.
+
+NameNode中记录了文件是如何被拆分成block以及这些block都存储到了那些DateNode节点.
+NameNode同时保存了文件系统运行的状态信息.
+DataNode中存储的是被拆分的blocks.
+Secondary NameNode帮助NameNode收集文件系统运行的状态信息.
+JobTracker当有任务提交到Hadoop集群的时候负责Job的运行,负责调度多个TaskTracker.
+TaskTracker负责某一个map或者reduce任务.
