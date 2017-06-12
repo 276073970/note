@@ -1,0 +1,24 @@
+Q1:
+laravel5.2的项目，遇到了return back()->withErrors($validator)前台无法接收到值这个问题
+artisan版本是5.2.31，但是我想知道这个为什么？如我我继续用web中间件分组，那么如何在其他地方修改代码？
+A1:
+php artisan --version看一下版本，如果是5.2.26以上的，在路由处删除web中间件分组，还有问题再反馈
+web中间件从5.2.27版本以后默认全局加载，不需要自己手动载入，如果自己手动重复载入，会导致session无法 ...
+
+Q2:
+在后盾网中的视频
+return back()->with('errors','原密码错误！');
+这种返回方式
+@if(count($errors)>0)
+    <div class="mark">
+        @foreach($errors->all() as $error)
+            <p>{{$error}}</p>
+        @endforeach
+    </div>
+@endif
+在模板中，找不到 ->all() 这个方法
+A2:
+不知道是不是版本问题
+改成这种就可以了
+$errors = '原密码不正确！';
+return back()->withErrors(compact('errors'));
