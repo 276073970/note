@@ -1,0 +1,31 @@
+1.SQLite管理操作
+1.1.进入sqlite3交互模式
+解析：
+①　sqlite3.exe [dbname]　打开sqlite3的交互模式，[并创建数据库]。
+②　.open dbname若未创建数据，可以创建数据库，若己创建则打开。
+③　.databases显示当前打开的数据库文件
+④　.exit 退出交互模式。
+⑤　.help,列出命令的提示信息，可供于查阅。
+1.2.创建销毁表
+解析：
+①　.open mydb 打开要创建表的那个数据库。
+②　create  table  <table_name>  (field1  type1, field2  type2,…);　建表语句。
+③　.tables 查看当前数据库下所有的表。
+④　.schema [tbname] 查看表结构(主要看列信息)。
+⑤　drop table <table_name>; 销毁表的语句。
+1.3.插入与查询
+解析：
+①　.tables 插入数据之前先确定，所要插入表的存在。
+②　insert  into  <table_name>  values (value1, value2,…);向表中添加新记录
+③　select  filed1,field2···  from  <table_name>;查询表中某些字段的记录。
+④　select  *  from  <table_name>;查询表中所有字段的记录。
+⑤　.header on 显示字段名称。
+⑥　.mode column 以列模式显示字段的记录。默认是list模式
+1.4.排序
+解析：
+①　order by field desc|asc 此子句，可以用于表达排序，desc 表示降序，asc表示升序。
+1.5.修改与删除记录
+解析：
+①　update　<table_name>  set  <field1=value1>,<fied2=value2>··where  <expression>;  
+　　　　更新表中记录。若没有where子句，则会全部修改。
+②　delete  from  <table_name>  where  <expression>;  若没有where子句，则会删全表内容，但不同于drop。
