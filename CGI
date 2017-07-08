@@ -1,1 +1,11 @@
 1. 若通过C代码实现CGI, 则在不同系统或服务器环境下, 甚至cgi目录路径还剩变化后, 都需重新编译源代码, 生成以.cgi结尾的cgi文件. 
+2. Apache下配置CGI目录:
+ScriptAlias /cgi-bin/ "/mnt/sf_www/cgi-bin/"
+<Directory "/mnt/sf_www/cgi-bin">
+    AllowOverride None
+    # Options None
+    Options ExecCGI
+    Require all granted
+    #
+    AddHandler default-handler .css
+</Directory>
