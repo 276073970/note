@@ -1,0 +1,41 @@
+应用场景：
+在cgi-bin下保存有perl的脚本文件，生成html代码用于显示网页，而在html中应用了css来控制页面布局，所以我将css文件保存在了cgi-bin的文件夹下，但是在相应的网页显示上，css文件定义的样式却无法生效，查看源代码，点击引用的css文件链接，也无法显示，而是出现如下所示的错误提示：
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>500 Internal Server Error</title>
+</head><body>
+<h1>Internal Server Error</h1>
+<p>The server encountered an internal error or
+misconfiguration and was unable to complete
+your request.</p>
+<p>Please contact the server administrator,
+ root@localhost and inform them of the time the error occurred,
+and anything you might have done that may have
+caused the error.</p>
+<p>More information about this error may be available
+in the server error log.</p>
+<hr>
+<address>Apache/2.2.15 (Red Hat) Server at localhost Port 80</address>
+</body></html>
+ 
+查看log，看到如下的error：
+(8)Exec format error: exec of '/cgi-bin/wits/cgi-bin.css' failed
+Premature end of script headers: cgi-bin.css
+ 
+经过各种搜索，终于找到了问题的所在以及解决的方法，原因是在默认情况下，位于cgi-bin文件夹下的文件
+都被当作了角本被执行，而我们的.css文件并不符合script文件的格式，实际上我们的.css文件并不需要这样的操作，所以只要给.css文件配置上适合的处理方式就行了。
+解决办法：
+1、找到Apache的httpd.conf文件，搜索cgi-bin文件夹的参数配置，在参数配置中添加红色显示的一行参数，
+如下：
+<Directory "/usr/local/cgi-bin/">
+...
+ AddHandler default-handler .css
+...
+</Directory>
+ 
+2、重新启动Apache：
+apachectl -k restart
+ 
+刷新网页，就能发现，css中配置的样式已经可以生效了。
+ 
+参考链接：linuxquesions
