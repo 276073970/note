@@ -6,6 +6,16 @@ ScriptAlias /cgi-bin/ "/mnt/sf_www/cgi-bin/"
     # Options None
     Options ExecCGI
     Require all granted
-    #
+    # 执行css层叠样式表文件
     AddHandler default-handler .css
 </Directory>
+3. 嵌入式Web服务器根目录下目录结构
+[www]
+|--[app_name]
+   |--[style]
+|--[cgi-bin]
+   |--[style]
+注: 
+(1) 样式文件目录style应同时复制一份放在cgi-bin目录下
+(2) 因为每次是通过(.c源文件)编译后的.cgi文件读取.html文件后, 逐条输出显示的html页面
+(3) 经显示后的html页面, 此时其路径的起始目录为cgi-bin目录了, 因而应在cgi-bin目录下也放置一份样式文件目录style
