@@ -143,7 +143,7 @@ host_share /mnt/guest_share vboxsf defaults 0 0
 (7) 手动挂载共享文件夹(默认权限777)
 # mkdir /mnt/guest_share  //新建虚拟机共享目录(如:sf_name)
 # mount -t vboxsf host_share /mnt/guest_share  //将主机共享文件夹挂载到虚拟机共享目录(可跳过该步)
-# vi /etc/rc.d/rc.local  //配置开机自动挂载
+# vi /etc/rc.d/rc.local  //配置开机自动挂载(其中/etc/rc.local为其软链接文件, 也能对rc.local内容进行修改)
 mount -t vboxsf host_share /mnt/guest_share  //文件尾追加内容
 # chmod +x /etc/rc.d/rc.local  //为rc.local附加x权限
 (8) 关机备份：# shutdown -h now
