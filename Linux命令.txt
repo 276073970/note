@@ -182,6 +182,7 @@ vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
      DNS2=8.8.4.4
 （3）ONBOOT=no  改为  ONBOOT=yes
 
+设置完之后:wq保存并退出，然后使用service network restart重启网络服务
 注: CentOS_7_1611 GNOME环境下重启生效
 
 ====================================================================================================
