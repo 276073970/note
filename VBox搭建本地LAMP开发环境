@@ -185,10 +185,11 @@ ScriptAlias /cgi-bin/ "/mnt/sf_www/cgi-bin/"
 <Directory "/mnt/sf_www/cgi-bin">
     AllowOverride None
     # Options None
-    Options ExecCGI
+    Options ExecCGI  //修改部分
     Require all granted
     # 执行css层叠样式表文件
-    AddHandler default-handler .css
+    AddHandler default-handler .css  //添加部分
+</Directory>
 
 7. 配置 MariaDB 数据库
 1) 安装
