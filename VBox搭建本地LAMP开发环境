@@ -180,6 +180,15 @@ SELINUX=enforcing => SELINUX=permissive
     </Directory>
 (4) DirectoryIndex index.html  //设置首页运行的顺序（如 index.html index.php）
 (5) # systemctl restart httpd.service  //重启 Apache HTTP 服务器，然后配置文件修改内容才能生效
+(6) 配置CGI相关项(嵌入式中有应用, 可选)
+ScriptAlias /cgi-bin/ "/mnt/sf_www/cgi-bin/"
+<Directory "/mnt/sf_www/cgi-bin">
+    AllowOverride None
+    # Options None
+    Options ExecCGI
+    Require all granted
+    # 执行css层叠样式表文件
+    AddHandler default-handler .css
 
 7. 配置 MariaDB 数据库
 1) 安装
