@@ -41,3 +41,16 @@ sudo apt-get install libsqlite3-dev
 ①　update　<table_name>  set  <field1=value1>,<fied2=value2>··where  <expression>;  
 　　　　更新表中记录。若没有where子句，则会全部修改。
 ②　delete  from  <table_name>  where  <expression>;  若没有where子句，则会删全表内容，但不同于drop。
+
+sqlite3_exec()函数的使用
+sqlite3数据库是一个小型的关系型的数据库,以文件的方式存在,打开文件即是打开数据库,它小巧且功能强大,在嵌入式领域内使用很广.现在就介绍一下其中一个重要函数的使用:
+int sqlite3_exec(sqlite3 *db, const char *sql, sqlite3_callback callback, void *,char **errmsg);
+功能:执行sql语句
+参数:
+db:数据库句柄
+sql:sql语句
+callback:回调函数,每成功执行一次sql语句就执行一次callback函数
+void *:给回调函数传的参数
+errmsg:错误信息
+回调函数的定义:
+typedef int(*sqlite3_callback)(void *, int, char **, char **);
