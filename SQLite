@@ -1,3 +1,13 @@
+注意事项:
+1. 当需调用SQLite3的API时, 需在相应的CGI文件(C语言实现)中引入其头文件sqlite3.h
+2. 编译sqlite3数据库C语言程序时出现fatal error: sqlite3.h: No such file or directory，找不到头文件的问题。
+3. 原来是系统没有安装函数库。执行下面语句解决：
+sudo apt-get install libsqlite3-dev
+或 sudo yum installl libsqlite3-dev
+4. 当用交叉编译器编译的时候，也会出现找不到sqlite3.h头文件的情况，解决方法是把sqlite3.h这个头文件放到交叉编译工具目录的include目录下。
+5. 在C源文件(CGI源文件)中引入时应写作: #include "sqlite3.h"
+
+
 1.SQLite管理操作
 1.1.进入sqlite3交互模式
 解析：
