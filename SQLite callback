@@ -1,0 +1,85 @@
+在sqlite3的api函数中有一个sqlite3_exec，用来执行sql语句：
+函数原型： 
+int sqlite3_exec 
+( 
+sqlite3* ppDb,                           /* An open database */ 
+const char sql,                          /* SQL to be evaluated */ 
+int (callback)(void,int,char**,char**),  /* Callback function */ 
+void,                                    /* 1st argument to callback */ 
+char *errmsg                             /* Error msg written here */ 
+); 
+第1个参数不再说了，是sqlite3_open函数得到的指针。 
+第2个参数constchar*sql是一条sql 语句，以\0结尾。 
+第3个参数sqlite3_callback 是回调，sqlite3每查询到一条结果，都会去调用你提供的这个函数。 
+第4个参数void*是你所提供的指针，你可以传递任何一个指针参数到这里，这个参数最终会传到回调函数里面，如果不需要传递指针给回调函数，可以填NULL。 
+第5个参数char** errmsg 是错误信息。注意是指针的指针。sqlite3里面有很多固定的错误信息。执行sqlite3_exec 之后，执行失败时可以查阅这个指针。 
+
+回调函数的格式：
+int sqlite_callback( 
+void* pvoid,  /* 由 sqlite3_exec() 的第四个参数传递而来 */ 
+int argc,     /* 表的列数 */ 
+char** argv,  /* 指向查询结果的指针数组, 可以由 sqlite3_column_text() 得到 */ 
+char** col    /* 指向表头名的指针数组, 可以由 sqlite3_column_name() 得到 */ 
+); 
+在所有的回掉函数中，都要加上return 0；否则失去其回调函数的意义。
+
+
+
+
+Sqlite3是一个小巧的轻量级数据库，而且提供了C接口。
+如果我们想使用SQL进行本地数据存储，SQlite无疑是一个非常好的工具。
+下面是www.sqlite.org上的一个quick start实例。
+
+=====================================================
+#include <stdio.h>
+#include <sqlite3.h>
+
+static int callback(void *NotUsed, int argc, char **argv, char **azColName){
+  int i;
+  for(i=0; i<argc; i++){
+    printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+  }
+  printf("\n");
+  return 0;
+}
+
+int main(int argc, char **argv){
+  sqlite3 *db;
+  char *zErrMsg = 0;
+  int rc;
+
+  if( argc!=3 ){
+    fprintf(stderr, "Usage: %s DATABASE SQL-STATEMENT\n", argv[0]);
+    exit(1);
+  }
+  rc = sqlite3_open(argv[1], &db);
+  if( rc ){
+    fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+    sqlite3_close(db);
+    exit(1);
+  }
+  rc = sqlite3_exec(db, argv[2], callback, 0, &zErrMsg);
+  if( rc!=SQLITE_OK ){
+    fprintf(stderr, "SQL error: %s\n", zErrMsg);
+  }
+  sqlite3_close(db);
+  return 0;
+}
+    
+============================================================
+可以看到，SQL访问数据库的非常方便。只需要简单的三个函数。
+ 
+sqlite3_open(char* szDbFileName, sqlite3 ** db) 
+sqlite3_exec(sqlite3 *db, char* szSqlCMD, callback, 0, char **zErrMsg)
+sqlite3_close(sqlite3 *db)
+static int callback(void *NotUsed, int argc, char **argv, char **azColName)
+注意有些行参是两个星。
+ 
+需要解释的关键是
+sqlite3_exec(sqlite3 *db, char* szSqlCMD, callback, void *NotUsed, char **zErrMsg)
+执行一条SQL语句，并且，每返回一个结果，就执行一次 callback 函数，方便我们对查询到的数据进行处理。
+看一下回调函数callback。必须是static的，可以是类的成员函数。
+其中的形参argc, argv, azColName是sqlite_exec帮我们填写的。
+argc是查询语句返回的字段数目
+argv是查询到的一条记录的各个字段
+zaColName是每一列的域名
