@@ -8,7 +8,8 @@ sudo apt-get install libsqlite3-dev
 5. 在C源文件(CGI源文件)中引入时应写作: #include "sqlite3.h"(#include <sqlite3.h>会报错)
 6. 编译包含sqlite3的C代码时报错: undefined reference to 'sqlite3_open'. 
    这不是sqlite3安装的问题，而是在gcc编译的时候找不到对应的库或者头文件。
-   解决办法: gcc test.c -o test.cgi -lsqlite3
+   解决办法: gcc test.c -o test.cgi -l sqlite3
+            或gcc test.c -l sqlite3 -o test.cgi
 
 1.SQLite管理操作
 1.1.进入sqlite3交互模式
