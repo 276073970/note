@@ -25,11 +25,13 @@ linux-headers-3.2.0-4-all - All header files for Linux 3.2 (meta-package)
 linux-headers-3.2.0-4-all-amd64 - All header files for Linux 3.2 (meta-package)
 linux-headers-3.2.0-4-amd64 - Header files for Linux 3.2.0-4-amd64
 So I can install any one of these three.
-3. 
-
-
 i found the solution. i just typed apt-get -f install after that i tried again with apt-get install linux-headers-3.2.0-4-all voila it worked! 
-
+3. 用apt-get命令安装一些软件包时，总报错：E：could not get lock /var/lib/dpkg/lock -open等
+出现这个问题的原因可能是有另外一个程序正在运行，导致资源被锁不可用。而导致资源被锁的原因，可能是上次安装时没正常完成，而导致出现此状况。
+解决方法：输入以下命令
+sudo rm /var/cache/apt/archives/lock
+sudo rm /var/lib/dpkg/lock
+之后再安装想装的包，即可解决。
 
 
 安装 Kali Linux 后需要做的 20 件事
