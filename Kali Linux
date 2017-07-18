@@ -12,6 +12,24 @@ Kali Linux预装了许多渗透测试软件，包括nmap (端口扫描器)、Wir
 1. Kali“系统安装”步骤失败，无法继续安装
 安装Kali  Linux至少需要10G以上的硬盘空间
 VirtualBox默认磁盘大小为8G，会导致“系统安装”步骤失败，新建虚拟机时调整硬盘大小为10G以上即可（推荐20G左右为佳）
+2. Install linux-headers on debian unable to locate package
+sudo apt-get update # This will update the repositories list
+sudo apt-get upgrade # This will update all the necessary packages on your system
+sudo apt-get dist-upgrade # This will add/remove any needed packages
+reboot # You may need this since sometimes after a upgrade/dist-upgrade, there are some left over entries that get fixed after a reboot
+sudo apt-get linux-headers-$(uname -r) # This should work now
+You could search first, then choose the closest one.
+For example, on my system:
+$ apt-cache search linux-headers
+linux-headers-3.2.0-4-all - All header files for Linux 3.2 (meta-package)
+linux-headers-3.2.0-4-all-amd64 - All header files for Linux 3.2 (meta-package)
+linux-headers-3.2.0-4-amd64 - Header files for Linux 3.2.0-4-amd64
+So I can install any one of these three.
+3. 
+
+
+i found the solution. i just typed apt-get -f install after that i tried again with apt-get install linux-headers-3.2.0-4-all voila it worked! 
+
 
 
 安装 Kali Linux 后需要做的 20 件事
