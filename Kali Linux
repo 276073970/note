@@ -61,9 +61,12 @@ $ vi /etc/network/interfaces
 5) See man interfaces for more options.
 
 安装 Kali Linux 后需要做的 20 件事
-（1）apt-get clean && apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y 
-（2）apt-get install linux-headers-$(uname -r) 
-（3）chmod +x VBoxLinuxAdditions.run  ->  ./VBoxLinuxAdditions.run 
+（1）apt-get clean && apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y
+（2）apt-get install linux-headers-$(uname -r)
+（3）VBox菜单栏"设备" -> "安装增强功能" (也可在VBox管理器界面中, 手动添加)
+（4）此时右键桌面上的"VBOXADDITIONS_XXX_XXX" -> "open" -> 将"VBoxLinuxAdditions.run"复制到桌面
+（5）打开终端并切换到桌面, 执行: chmod +x VBoxLinuxAdditions.run  ->  ./VBoxLinuxAdditions.run
+
 本文含有我觉得有用的每一件事情。本文分为三大部分：
 专门针对Kali用户
 Kali Linux是来自Debian的一个特殊版本，Kali Linux同样存在Debian Linux的许多问题。这部分为读者介绍如何解决那些问题。它们并不是Kali Linux特有的问题，你可以不用理它们；不过我看到错误，强迫症就会发作，非解决错误不可。
