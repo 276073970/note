@@ -1,0 +1,222 @@
+Kali Linux简介:
+Kali Linux是基于Debian的Linux发行版，设计用于数字取证和渗透测试。而Kali Linux发行版今年迎来了其诞生十周年。
+作为极具人气的开源项目，由Offensive Security负责维护的Kali Linux日前宣布将在2017年的美国黑帽大会上发布全新Kali Linux认证专家（简称KLCP）。
+KLCP是目前Kali Linux发行版建立的首项亦是惟一一项官方认证计划，旨在验证申请者的相关技能水平。
+KLCP属于一项基础性资质认证，主要面向信息安全领域的新人以及具备部分特定领域从业经验的专家。
+Kali Linux资质围绕Kali Linux发行版进行制定，其内容包括如何构建自定义软件包、主机库、管理与协调多项实例以及建立自定义ISO等等。
+Kali Linux前身是 BackTrack，是一个基于 Debian 的 Linux 发行版，包含很多安全和取证方面的相关工具。
+Kali Linux预装了许多渗透测试软件，包括nmap (端口扫描器)、Wireshark (数据包分析器)、John the Ripper (密码破解器),以及Aircrack-ng (一套用于对无线局域网进行渗透测试的软件). 用户可通过硬盘、live CD或live USB运行Kali Linux。Metasploit的Metasploit Framework支持Kali Linux，Metasploit一套针对远程主机进行开发和执行Exploit代码的工具。
+
+
+遇到问题:
+1. Kali“系统安装”步骤失败，无法继续安装
+安装Kali  Linux至少需要10G以上的硬盘空间
+VirtualBox默认磁盘大小为8G，会导致“系统安装”步骤失败，新建虚拟机时调整硬盘大小为10G以上即可（推荐20G左右为佳）
+
+
+安装 Kali Linux 后需要做的 20 件事
+（1）apt-get clean && apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y 
+（2）apt-get install linux-headers-$(uname -r) 
+（3）chmod +x VBoxLinuxAdditions.run  ->  ./VBoxLinuxAdditions.run 
+本文含有我觉得有用的每一件事情。本文分为三大部分：
+专门针对Kali用户
+Kali Linux是来自Debian的一个特殊版本，Kali Linux同样存在Debian Linux的许多问题。这部分为读者介绍如何解决那些问题。它们并不是Kali Linux特有的问题，你可以不用理它们；不过我看到错误，强迫症就会发作，非解决错误不可。
+实用工具和软件
+这部分汇集了我觉得有用的一批实用工具和软件。这些是大多数其他Linux发行版里面也有的日常软件，或者至少我认为它们应作为默认安装系统的一部分而出现。
+改进和辅助功能
+Kali Linux天生具有启动速度快、占用资源少的特点。但如果你有一些CPU和GPU能力可用，不妨试着让Kali Linix的外观更靓丽一些。
+专门针对Kali用户
+1. 解决有线网络的"设备无法托管"错误
+如果你希望NetworkManager（网络管理器）处理在/etc/network/interfaces中启用的接口，只要在/etc/NetworkManager/NetworkManager.conf中设置managed=true。所以，该文件看起来就像：
+[main] 
+plugins=ifupdown,keyfile 
+[ifupdown] 
+managed=true
+2. 修复默认的软件库
+最简单的办法就是，编辑/etc/apt/sources.list，去掉每一行或在开头用#注释每一行，并添加下面这几行：
+leafpad /etc/apt/sources.list 
+用下面几行，注释或去掉现有的配置：
+## Regular repositories 
+deb http://http.kali.org/kali kali main non-free contrib ;
+deb http://security.kali.org/kali-security kali/updates main contrib non-free ;
+## Source repositories 
+deb-src http://http.kali.org/kali kali main non-free contrib ;
+deb-src http://security.kali.org/kali-security kali/updates main contrib non-free
+3. 更新、升级和发行版升级
+对你安装的Kali进行清洁、更新、升级和发行版升级等处理。
+apt-get clean && apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y 
+4. 解决PulseAudio警告问题
+我的Kali经常弹出这个警告信息：
+[warn] PulseAudio configured for per-user sessions ... (warning). 
+Debian变种版本也会在启动过程中弹出类似的警告信息。为了解决这个问题，键入下面这个命令：
+leafpad /etc/default/pulseaudio 
+找到这一行：
+PULSEAUDIO_SYSTEM_START=0 
+把0换成1：
+PULSEAUDIO_SYSTEM_START=1 
+其中，0表示系统模式下不启动PulseAudio，1表示系统模式下启动PulseAudio。
+reboot
+想了解相关细节和介绍，请参阅《解决Kali Linux中的PulseAudio configured for per-user sessions ...（warning）》一文。
+5. 确保启动时发出声音
+遵照下列步骤，即可解决Kali Linux中启动时没有声音的问题。
+apt-get install alsa-utils -y 
+在GNOME桌面（默认是Kali桌面）中：
+鼠标右击小小的音量图标，选择Sound Preferences（声音首选项）。
+此外，你还可以依次进入到Applications（应用程序）> System Tools（系统工具）> Preferences（首选项）> System Settings（系统设置）> Sound（声音），即可调出同样的选项。
+将Output volume（输出音量）滑块切换到ON（打开），类似下面的屏幕截图。这就是你要做的。关闭Sound（声音）窗口。
+实用工具和软件
+6. 安装Java
+进入到下面这个链接，下载jdk7。截至本文截稿时，jdk版本是jdk-7u45-linux-x64。注意：我使用的是x64，即64位版本。32位版本用户应选择相应的版本。这其实不难！
+下面是我使用的方法。截至本文截稿时，可用版本是jdk-7u45-linux-x64.tar.gz。下载该文件，并保存在/root目录中。
+tar -xzvf /root/jdk-7u45-linux-x64.tar.gz 
+mv jdk1.7.0_45 /opt 
+cd /opt/jdk1.7.0_45 
+这一步将已下载的Java版本登记为替代版本，将其改成作为默认版本来使用：
+update-alternatives --install /usr/bin/java java /opt/jdk1.7.0_45/bin/java 1 
+update-alternatives --install /usr/bin/javac javac /opt/jdk1.7.0_45/bin/javac 1 
+update-alternatives --install /usr/lib/mozilla/plugins/libjavaplugin.so mozilla-javaplugin.s 
+/opt/jdk1.7.0_45/jre/lib/amd64/libnpjp2.so 1 
+update-alternatives --set java /opt/jdk1.7.0_45/bin/java 
+update-alternatives --set javac /opt/jdk1.7.0_45/bin/javac 
+update-alternatives --set mozilla-javaplugin.so /opt/jdk1.7.0_45/jre/lib/amd64/libnpjp2.so 
+参阅《在Kali Linux中安装Java JDK》一文，即可详细了解逐步操作和测试选项。
+7. 安装Flash
+这件事情相当简单、容易，对大多数人来说应该没有问题：在终端中，键入这个命令：
+apt-get install flashplugin-nonfree 
+然后键入：
+update-flashplugin-nonfree - -install 
+就是这样。你的flash现在应该能够正常工作了。
+8. 安装File Roller（归档管理器）
+Kali Linux缺少一个真正的GUI归档管理器。使用下面这个命令来安装归档管理器（File Roller）：
+apt-get install unrar unace rar unrar p7zip zip unzip p7zip-full p7zip-rar file-roller -y 
+现在你可以在Applications（应用程序）> Accessories（附件）> Archive Manager（归档管理器）中找到归档管理器。
+9. 添加标准用户
+默认情况下，Kali Linux只有root用户。虽然大多数应用程序需要root访问权，但添加第二个用户总归是个好主意。打开终端，键入下面这个命令，即可创建新用户（把user1换成你想要的用户名称）。
+useradd -m user1 
+（注意：-m意味着创建通常是/home/username的主目录）
+现在为该用户设置密码：
+passwd user1 
+将所需密码输入两次。添加用户到sudo群组（允许用户进行安装软件、允许打印、使用特权模式等操作）。
+usermod -a -G sudo user1 
+（注意：-a意味着附加或添加，-G意味着指定一个群组/多个群组）。将之前创建的用户的默认外壳改成bash：
+chsh -s /bin/bash user1 
+想了解更多内容，请参阅这篇详细而深入的文章：《如何在Kali Linux中添加/删除用户（标准用户/非root用户）》，参阅http://www.blackmoreops.com/2013/11/27/how-to-add-remove-user-standard-user-non-root-in-kali-linux/。该文解释了了如何添加用户，而所有的用户目录也已经到位（因而避免了"无法更新.ICEauthority var/lib/gdm3/.ICEauthority"或含有.ICEauthority或一般权限的任何错误。）
+10. 添加add-apt-repository
+Debian让用户可以通过一个名为add-apt-repository的应用程序，添加和使用PPA软件库，不过Kali Linux在其默认的程序包列表中并不含有该应用程序。就Kali而言，由于这是个特殊用途的应用程序，已进行了某些改动，以便让它适用于最擅长的地方（渗透测试）。想通过add-apt-repository应用程序启用PPA软件库，遵照下面几个步骤。
+首先安装Python软件属性程序包。
+apt-get install python-software-properties 
+接下来安装apt-file。
+apt-get install apt-file 
+更新apt-file。
+apt-file update 
+这需要一点时间，所以万一你的apt-file更新起来很慢，可能想试试一并解决这个问题。（注意：我的/etc/apt/sources.list文件中有repo.kali.org，而不是http.kali.org。）一旦apt-file更新完毕，你应该能够搜索它了。
+apt-file search add-apt-repository 
+你的输出结果应该看起来类似这样：
+python-software-properties: /usr/bin/add-apt-repository 
+python-software-properties: /usr/share/man/man1/add-apt-repository.1.gz 
+位于/usr/bin/add-apt-repository的默认add-apt-repository应用程序适用于Debian。所以，如果你使用Kali，它很可能无法工作。我在本文末尾处添加了一个巧妙的解决办法，如果你喜欢的话，可以在VirtualBox上一下。但我发现，我们完全可以模仿Ubuntu Oneiric，让add-apt-repository正常工作。
+cd /usr/sbin 
+vi add-apt-repository 
+添加下列代码，并保存文件。
+#!/bin/bash 
+if [ $# -eq 1 ] 
+NM=`uname -a && date` 
+NAME=`echo $NM | md5sum | cut -f1 -d" "` 
+then 
+ppa_name=`echo "$1" | cut -d":" -f2 -s` 
+if [ -z "$ppa_name" ] 
+then 
+echo "PPA name not found" 
+echo "Utility to add PPA repositories in your debian machine" 
+echo "$0 ppa:user/ppa-name" 
+else 
+echo "$ppa_name" 
+echo "deb http://ppa.launchpad.net/$ppa_name/ubuntu oneiric main" >> /etc/apt/sources.list 
+apt-get update >> /dev/null 2> /tmp/${NAME}_apt_add_key.txt 
+key=`cat /tmp/${NAME}_apt_add_key.txt | cut -d":" -f6 | cut -d" " -f3` 
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $key 
+rm -rf /tmp/${NAME}_apt_add_key.txt 
+fi 
+else 
+echo "Utility to add PPA repositories in your debian machine" 
+echo "$0 ppa:user/ppa-name" 
+fi 
+注意：在echo "deb http://ppa.launchpad.net/$ppa_name/ubuntu oneiric main" >> /etc/apt/sources.list这一行中，我使用了Oneiric。你可以根据自己的选择，试着使用Lucid、Raring或Saucy。现在，使用chmod和chown这两个命令，对文件进行相应的操作。
+chmod +x /usr/sbin/add-apt-repository 
+chown root:root /usr/sbin/add-apt-repository 
+由于我们已添加了正确的代码，我们就可以使用add-apt-repository，添加PPA软件库。我试着输入下面这两个命令，在Kali Linux中添加主题和自定义图标。
+/usr/sbin/add-apt-repository ppa:noobslab/themes 
+/usr/sbin/add-apt-repository ppa:alecive/antigone 
+11. 安装Tor
+Tor是自由软件，也是一种开放网络，可以帮助你防御流量分析。流量分析是一种网络监视行为，会危及个人自由和隐私、机密性的商业活动和关系以及国家安全。该指南为你详细介绍了在Kali Linux中安装Tor的步骤。Tor保护你的方法是，通过由全球广大志愿者运营的一个分布式中转网络，传递你的通信内容：它可以防止有人监视你的互联网连接、进而了解你访问哪些网站，它还可以防止你访问的网站了解你的实际位址。
+Tor在Kali软件库中就用；想直接从软件库安装它，只要打开终端，键入这个命令：
+apt-get install tor 
+从命令行启用Tor服务：
+service tor start 
+使用proxychains命令和Tor，实现安全浏览：
+proxychains iceweasel 
+为了在本文中确保行文简单，我只显示了使用Tor的一方面。你可以在《在Kali Linux中安装Tor》一文中详细阅读完整细节，详见http://www.blackmoreops.com/2013/12/16/installing-tor-kali-linux/。
+12. 安装Filezilla FTP客户端
+要是缺少功能完备的FTP客户端，任何Linux安装都谈不上是完整的。Filezilla是最好的FTP客户端，所以使用下面这个命令，安装Filezilla：
+apt-get install filezilla filezilla-common -y 
+13. 安装HTOP和NetHogs
+HTOP是个特别的工具，显示了运行中的进程和所使用的内存，包括更多的详细信息。（你也可以使用top命令，但HTOP完全有用得多。）NetHogs也很有用，它按接口显示了应用程序所用的流量。使用下面这个命令，安装这两个工具：
+apt-get install htop nethogs -y 
+你现在可以使用下面几个命令来运行它们了：
+htop 
+nethogs eth0 
+nethogs wlan0 
+你会喜欢使用这些小巧工具的，这点我几乎可以肯定。
+14. 为显卡安装专有的驱动程序
+你可能需要安装专有的驱动程序，以发掘更多的功能特性，这取决于你使用哪种显卡（ADM还是英伟达）。我写过一篇详细的文章，介绍了如何在Kali Linux中安装AMD ATI专有驱动程序（fglrx）。
+英伟达用户完全可以遵照安装英伟达驱动程序的官方说明文档。 
+15. 安装Recordmydesktop和Reminna远程桌面客户端
+Recordmydesktop让你能够录制在Kali Linux中的活动，并制作视频。Remmina类似Windows远程桌面客户端。两者都非常实用。可以使用下面这个命令安装它们：
+apt-get install gtk-recordmydesktop recordmydesktop remmina -y 
+16. 安装GDebi程序包管理器
+dpkg是一个功能强大的工具，但它并不自动安装依赖项。为此，我们需要某种程序包安装工具，以便在安装.deb程序包的同时，可以去获取所有必要的依赖项。眼下最出色的程序包安装工具非gdebi莫属。使用下面这个命令来安装它：
+apt-get install gdebi -y
+17. 安装主题
+安装主题、美化桌面是个好主意。Kali的默认桌面单调而乏味。你可以使用两种不同的方法来更改主题。
+手动安装主题
+通过PPA软件库安装主题 
+18. 安装一种新的桌面环境（我青睐XFCE）
+我青睐XFCE桌面，但你可以试着在Kali Linux中安装/删除不同的桌面环境或窗口管理器。根据你的需要，选择下列链接：
+1.《如何在Kali Linux中安装/删除XFCE桌面环境？》，参阅http://www.blackmoreops.com/2013/10/29/how-to-install-remove-xfce-desktop-environment-in-kali-linux/。
+2. 《如何在Kali Linux中安装/删除不同的KDE桌面环境？》，参阅http://www.blackmoreops.com/2013/10/29/how-to-install-remove-different-kde-desktop-environments-in-kali-linux/。
+3. 《如何在Kali Linux中安装/删除LXDE桌面环境？》，参阅http://www.blackmoreops.com/2013/10/29/how-to-install-remove-lxde-desktop-environment-in-kali-linux/。
+4. 《如何在Kali Linux中安装/删除GNOME桌面环境？》，参阅http://www.blackmoreops.com/2013/10/29/how-to-install-remove-gnome-desktop-environment-on-kali-linux/。
+5. 《如何在Kali Linux中安装/删除Cinnamon桌面环境？》，参阅http://www.blackmoreops.com/2013/10/29/how-to-install-remove-cinnamon-desktop-environment-in-kali-linux/。
+6. 《如何在Kali Linux中安装/删除MATE桌面环境？》，参阅http://www.blackmoreops.com/2013/10/29/how-to-install-remove-mate-desktop-environment-in-kali-linux/。
+最后，遵照这些操作步骤，永久性地更换桌面环境（也就是启动进入到XFCE，而不是GNOME）。
+19. 启用自动登录用户
+这是个简单的变更。只要打开并编辑名为/etc/gdm3/daemon.conf的文件，假设你在使用GNOME显示管理器（gmd3）作为主要的显示管理器。你可能想要另外也能试一下其他桌面。下面这个链接介绍了《如何在Kali Linux中添加/删除不同的桌面管理器》，详见http://www.blackmoreops.com/2013/10/11/how-to-installremove-different-desktop-environment-or-window-manager-in-kali-linux-1-x/。
+root@kali:~# leafpad /etc/gdm3/daemon.conf 
+在daemon即守护程序部分，将用于自动登录的那两行代码取消注释。它最后应该看起来像这样：
+[daemon] 
+# Enabling automatic login 
+AutomaticLoginEnable = true 
+AutomaticLogin = root 
+就是这样，容易得很。要是你想知道如何使用不同于root用户的用户，方法如下：
+[daemon] 
+# Enabling automatic login 
+AutomaticLoginEnable = true 
+AutomaticLogin = myanotheruser 
+最后但并非最不重要的是，重启系统，核实一下是否管用。（这会管用，因为它是Linux，Kali很出色。）
+reboot 
+你可能想要采取进一步行动，或者如果你是KDE用户，那么这里的操作步骤介绍了如何在Kali Linux中，系统启动时，让root用户自动登录（GNOME和KDE），详见http://www.blackmoreops.com/2013/12/19/auto-login-root-user-system-start-kali-linux-gnome-kde/。该文还介绍了如何让不同的非root用户实现自动登录，相当方便。
+下面这部分解释了如何更充分地发挥你系统的功能，尤其是发挥显卡的功能。
+20. 发掘GPU处理的能力
+最后但并非最不重要的是，在你试图破解密码时，GPU处理速度要快得多。你可以选择下面介绍的几种方法，具体取决于所使用的显卡：
+a. AMD显卡
+《在Kali Linux 1.x中安装AMD ATI驱动程序（fglrx）》，参阅：http://www.blackmoreops.com/2013/10/22/install-amd-ati-driver-fglrx-in-kali-linux-1-x/。
+然后参阅其余指南文章：
+《如何在Kali Linux中安装AMD APP SDK？》
+《如何在Kali Linux中安装Pyrit？》
+《如何在Kali Linux中安装CAL++？》
+b. 英伟达显卡
+英伟达显卡用户完全可以参阅安装英伟达驱动程序的官方说明文档。如果官方说明文档不管用或者你已无计可施，不妨参阅我写过的另一篇文章，介绍如何手动安装英伟达显卡二进制驱动程序。
+《如何在Kali Linux中安装英伟达内核模块Cuda和Pyrit？》，参阅http://www.blackmoreops.com/2013/10/20/how-to-install-nvidia-kernel-module-cuda-and-pyrit/。
+结束语
+希望你觉得这些事情很有用。你可能没必要做所有这些事情，但有些事情绝对值得一做。谢谢阅读！欢迎分享！
+原文链接：http://www.blackmoreops.com/2014/03/03/20-things-installing-kali-linux/
