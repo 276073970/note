@@ -1,0 +1,139 @@
+apt-get upgarde和dist-upgrade的差别
+apt-get update - 在你更改了/etc/apt/sources.list 或 /etc/apt/preferences 后，需要运行这个命令以令改动生效。同时也要定期运行该命令，以确保你的源列表是最新的。该命令等价于新立得软件包管理器中的“刷新”，或者是 Windows和OS X 下的 Adept 软件包管理器的 “check for updates”。
+apt-get upgrade - 更新所有已安装的软件包。类似一条命令完成了新立得软件包管理器中的“标记所有软件包以便升级”并且“应用”。
+apt-get dist-upgrade - 更新整个系统到最新的发行版。等价于在新立得软件包管理器中“标记所有更新”，并在首选项里选择“智能升级” -- 这是告诉APT更新到最新包，甚至会删除其他包（注：不建议使用这种方式更新到新的发行版）。
+ 
+################################################################################
+
+
+apt-get upgarde和dist-upgrade的差别
+ 
+Debian/Ubuntu Linux都使用apt,升级时都是: 
+apt-get update 
+apt-get upgrade 
+apt-get dist-upgrade 
+ 
+但是常常有人会问, 
+upgrade和dist-upgrade有何不同,仔细查查,似乎大家对upgrade和dist-upgrade的解释
+都有点不同,在此也纪录自己的看法. 
+ 
+我认为apt-get 
+upgrade和dist-upgrade的差别: 
+ 
+upgrade:系统将现有的Package升级,如果有相依性的问题,而此相依性需要安装其它新的
+Package或影响到其它Package的相依性时,此Package就不会被升级,会保留下来. 
+ 
+dist-upgrade:可以聪明的解决相依性的问题,如果有相依性问题,需要安装/移除新的Package,
+就会试着去安装/移除它. 
+(所以通常这个会被认为是有点风险的升级) 
+ 
+apt-get upgrade 和 apt-get dist-upgrade 本质上是没有什么不同的。
+ 
+只不过，dist-upgrade 
+会识别出当依赖关系改变的情形并作出处理，而upgrade对此情形不处理。
+ 
+例如软件包 a 原先依赖 b c d，但是在源里面可能已经升级了，现在是 a 依赖 b c 
+e。这种情况下，dist-upgrade 会删除 d 安装 e，并把 a 软件包升级，而 upgrade 会认为
+依赖关系改变而拒绝升级 a 
+软件包。  www.2cto.com  
+ 
+man apt-get的解释: 
+ 
+upgrade: upgrade is 
+used to install the newest versions of all packages currently installed on the 
+system from the sources enumerated in /etc/apt/sources.list. Packages currently 
+installed with new versions available are retrieved and upgraded; under no 
+circumstances are currently installed packages removed, or packages not already 
+installed retrieved and installed. New versions of currently installed packages 
+that cannot be upgraded without changing the install status of another package 
+will be left at their current version. An update must be performed first so that 
+apt-get knows that new versions of packages are available. 
+dist-upgrade: dist-upgrade in addition to performing 
+the function of upgrade, also intelligently handles changing dependencies with 
+new versions of packages; apt-get has a "smart" conflict resolution system, and 
+it will attempt to upgrade the most important packages at the expense of 
+less
+ 
+That which didn't kill me makes me stronger
+
+##########################################################################
+安装或升级系统分下面几个步骤。
+
+第一步，获得最近的软件包的列表；列表中包含一些包的信息，比如这个包是否更新过。
+
+第二步，如果这个包没有发布更新，就不管它；
+
+            如果发布了更新，就把包下载到电脑上，并安装。
+
+apt-get update对应的就是第一步。
+
+apt-get upgrade 与apt-get dist-upgrade对应的是第二步。
+
+由于包与包之间存在各种依赖关系。upgrade只是简单的更新包，不管这些依赖，它不和添加包，或是删除包。而dist-upgrade可以根据依赖关系的变化，添加包，删除包。
+
+一般在运行upgrade或dist-upgrade之前，要运行update.
+
+
+########################################################################## 
+
+#sudo apt-get update 获得最近的软件包的列表；列表中包含一些包的信息，比如这个包是否更新过
+#sudo apt-get dist-upgrade 如果这个包没有发布更新，就不管它；如果发布了更新，就把包下载到电脑上，并安装。
+
+apt-get update 指令会同步使用者端和APT 伺服器的RPM 索引清单（package list），APT 伺服器的RPM 索引清单置于base 资料夹内，使用者端电脑取得base 资料夹内的bz2 RPM 索引清单压缩档后，会将其解压置放于/var/state/apt/lists/，而使用者使用apt-get install 或apt-get dist-upgrade 指令的时候，就会将这个资料夹内的资料和使用者端电脑内的RPM 资料库比对，如此一来就可以知道那些RPM 已安装、未安装、或是可以升级的。
+
+这里提一下apt-get upgrade 与apt-get dist-upgrade的关系
+由于包与包之间存在各种依赖关系。upgrade只是简单的更新包，不管这些依赖，它不和添加包，或是删除包。而dist-upgrade可以根据依赖关系的变化，添加包，删除包。
+
+一般在运行upgrade或dist-upgrade之前，要运行update.
+
+
+但是常常有人会问, upgrade和dist-upgrade有何不同,仔细查查,似乎大家对upgrade和dist-upgrade的解释都有点不同,在此也纪录自己的看法. 
+
+我认为apt-get upgrade和dist-upgrade的差别: 
+
+upgrade:系统将现有的Package升级,如果有相依性的问题,而此相依性需要安装其它新的Package或影响到其它Package的相依性时,此Package就不会被升级,会保留下来. 
+
+dist-upgrade:可以聪明的解决相依性的问题,如果有相依性问题,需要安装/移除新的Package,就会试着去安装/移除它. (所以通常这个会被认为是有点风险的升级) 
+
+apt-get upgrade 和 apt-get dist-upgrade 本质上是没有什么不同的。
+
+只不过，dist-upgrade 会识别出当依赖关系改变的情形并作出处理，而upgrade对此情形不处理。
+
+例如软件包 a 原先依赖 b c d，但是在源里面可能已经升级了，现在是 a 依赖 b c e。这种情况下，dist-upgrade 会删除 d 安装 e，并把 a 软件包升级，而 upgrade 会认为依赖关系改变而拒绝升级 a 软件包。
+
+
+########################################################################## 
+ upgrade:系统将现有的Package升级,如果有相依性的问题,而此相依性需要安装其它新的Package或影响到其它Package的相依性时,此Package就不会被升级,会保留下来. 
+
+dist-upgrade:可以聪明的解决相依性的问题,如果有相依性问题,需要安装/移除新的Package,就会试着去安装/移除它. (所以通常这个会被认为是有点风险的升级) 
+
+man apt-get的解释: 
+
+upgrade: upgrade is used to install the newest versions of all packages currently installed on the system from the sources enumerated in /etc/apt/sources.list. Packages currently installed with new versions available are retrieved and upgraded; under no circumstances are currently installed packages removed, or packages not already installed retrieved and installed. New versions of currently installed packages that cannot be upgraded without changing the install status of another package will be left at their current version. An update must be performed first so that apt-get knows that new versions of packages are available. 
+
+dist-upgrade: dist-upgrade in addition to performing the function of upgrade, also intelligently handles changing dependencies with new versions of packages; apt-get has a "smart" conflict resolution system, and it will attempt to upgrade the most important packages at the expense of less 
+
+*******************************************************************
+apt-get upgrade 
+
+即从 /etc/apt/sources.list 提供的源同步软件版本索引，并将本地软件版本升级到最新。
+
+但并不总是如此。
+
+有时您在升级系统时会发现某些软件并没有更新到最新版本，而是被"kept-back"了.
+
+哪里出现了问题呢？
+这是因为 当本地软件包的最新版本的依赖关系发生了变化， 引入新的软件包时， apt-get upgrade 并不能将此软件包升级到最新，而是提示软件包被"kept-back".
+
+要解决这类问题您需要运行如下命令：
+
+apt-get dist-upgrade
+
+这样就会将软件包升级到最新版本， 并安装新引入的依赖包。
+
+在apt-get manpage 的 dist-upgrade 部分做如下解释：
+
+dist-upgrade 除了提供upgrade 的全部功能外，并智能处理新版本的依赖关系问题。 apt-get提供一个“智能”的系统冲突解决方案，必要时可能以牺牲某些非重要软件包为代价来升级某些非常重要的软件包。 
+
+所以 您在使用apt-get dist-upgrade 应当小心， 明白您自己在做什么， 否则 后果自负噢！ ：）
+
