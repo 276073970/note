@@ -35,6 +35,8 @@ sudo rm /var/lib/dpkg/lock
 4. 配置静态IP(同Debian)
 1) To find the names of your interfaces you will want to look here: 
 $ ls /sys/class/net/ 
+OR 无线网卡: # iwconfig
+OR 有线网卡: # ifconfig
 2) The majority of network setup can be done via the interfaces configuration file at:
 $ vi /etc/network/interfaces
 3) Using DHCP to automatically configure the interface
@@ -58,7 +60,11 @@ $ vi /etc/network/interfaces
         address 2001:db8::c0ca:1eaf
         netmask 64
         gateway 2001:db8::1ead:ed:beef
-5) See man interfaces for more options.
+5) restart network
+service networking restart
+OR /etc/init.d/networking restart
+OR systemctl restart networking.service
+6) See man interfaces for more options.
 
 安装 Kali Linux 后需要做的 20 件事
 （1）apt-get clean && apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y
