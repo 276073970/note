@@ -1,0 +1,9 @@
+1. 菜单栏 => "查看" => "文件扩展名"&"隐藏的项目"
+2. C盘 => "用户"(User)文件夹 => "用户名"(ahao)文件夹
+3. "AppData" => "Local" => "Packages"
+4. "Microsoft.Windows.ContentDeliveryManager_xxxxxxxxxxxxx" => "LocalState" => "Assets"
+5. 进入Windows聚焦下载壁纸的文夹以后, 这些文件不是直接的图片格式, 需要给它重命名一下, 如: xxx.jpg
+
+备注:
+1. 设置为Windows聚焦才会自动从微软的服务器上去下载壁纸, 且都是随机下载的。
+2. "Microsoft.Windows.ContentDeliveryManager_xxxxxxxxxxxxx"这个文件夹是随机的。但前面Microsoft.Windows.ContentDeliveryManager这一段是不会变的。
