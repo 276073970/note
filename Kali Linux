@@ -71,7 +71,7 @@ OR systemctl restart networking.service
 （2）apt-get install linux-headers-$(uname -r)  //执行此步前需重启系统
 （3）VBox菜单栏"设备" -> "安装增强功能" (也可在VBox管理器界面中, 手动添加)
 （4）此时右键桌面上的"VBOXADDITIONS_XXX_XXX" -> "open" -> 将"VBoxLinuxAdditions.run"复制到桌面
-（5）打开终端并切换到桌面, 执行: chmod +x VBoxLinuxAdditions.run  ->  ./VBoxLinuxAdditions.run
+（5）打开终端并切换到桌面, 执行: chmod +x VBoxLinuxAdditions.run  ->  ./VBoxLinuxAdditions.run  //增强功能重启生效
 
 本文含有我觉得有用的每一件事情。本文分为三大部分：
 专门针对Kali用户
