@@ -67,8 +67,8 @@ OR systemctl restart networking.service
 6) See man interfaces for more options.
 
 安装 Kali Linux 后需要做的 20 件事
-（1）apt-get clean && apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y
-（2）apt-get install linux-headers-$(uname -r)
+（1）apt-get clean && apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y  //应先完成系统电源, 主题, 终端等的设置
+（2）apt-get install linux-headers-$(uname -r)  //执行此步前需重启系统
 （3）VBox菜单栏"设备" -> "安装增强功能" (也可在VBox管理器界面中, 手动添加)
 （4）此时右键桌面上的"VBOXADDITIONS_XXX_XXX" -> "open" -> 将"VBoxLinuxAdditions.run"复制到桌面
 （5）打开终端并切换到桌面, 执行: chmod +x VBoxLinuxAdditions.run  ->  ./VBoxLinuxAdditions.run
