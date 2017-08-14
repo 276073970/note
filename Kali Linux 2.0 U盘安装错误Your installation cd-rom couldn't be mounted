@@ -1,0 +1,18 @@
+1.kali 2.0前天(2015.08.11)发布了。果断下载下来换掉本机的1.0版本。
+Kali Linux 2.0 发布下载，基于 Debian 的 Linux 发行版  http://www.linuxidc.com/Linux/2015-08/121549.htm
+
+2.用U盘安装的过程中，出现cd-rom无法挂载。提示错误Your installation CD-ROM couldn't be mounted。
+
+3.在谷歌搜索后，参考国外的方法。
+
+4.经过一番摸索。得到解决方案，本机测试成功。如下:
+安装kali2.0过程中，安装界面(就是选择语言，设置用户名密码，分区等引导的界面)倒数第二个会有个execute a shell选项。
+选择execute a shell后，会有执行shell的窗口。
+第一步:df -m
+此时会看到挂载信息，最下面的是/dev/xyz  /media
+这个是U盘设备挂载到了/media，导致cd-rom不能被挂载。
+第二步:umount  /media
+上面那个国外的解决方案还要继续mount  /dev/xyz  /cd-rom
+但本机测试不用自己挂载，安装程序会自己挂载。自己挂载反而会引起后面出现GRUB安装失败。
+第三步：exit
+退出命令窗口后，继续安装。
