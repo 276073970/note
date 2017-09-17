@@ -1,0 +1,43 @@
+
+vim格式化代码实际上就是 "缩进代码", 命令是等号=
+
+vim格式化代码实际上就是 "缩进代码", 命令是等号=
+
+格式化就是 vim 根据 文件的类型, 自动的对代码进行 缩进
+
+缩进的类型有多种, 都是用等号命令: =
+
+    全部格式化 : gg=G
+    对当前行格式化(缩进): ==
+    对以下多行格式化(倍数操作): [count] ==
+    选择多行后, 执行 等号命令 =
+
+vim的插件管理有 pathogen['p2s2dg2n], (病原体, 微生物)和vundle. 而pathogen的主要作用是 将 一个插件所包含的所有内容位置 统一的放在一个目录中, 而不至于再删除的时候, 到处去寻找跟插件相关的内容. 但是 pathogen 没有自动查找搜索插件的功能. 而现在, 实际上, vundle也具有 集中放置插件的功能了. 所以, 基本上都不用pathogen而用vundle了.
+
+shift和unshift:
+shift是 队列数组 移位移出, 从数组中去除该元素, 同时返回该元素的值.
+而unshift则是 在数组的 开头插入元素.
+关于vim中的tab宽度
+
+shiftwidth shift是移位, 代码移位, 代码缩进, (是上面的代码向左移位, 因此下面的代码向右缩进),
+参考:http://blog.csdn.net/langxianwenye/article/details/17223807 和 http://blog.csdn.net/shell_picker/article/details/6033023 和 http://blog.csdn.net/feiyangyangfei/article/details/17630619
+
+tabstop是指tab键表示的空格的长度. 默认 的是8. set ts=4. (ts: tabstop) 只是显示的效果问题, 跟程序的编辑和显示问题 其实是 没有关系的!
+真正会对程序中的内容, 缩进格式等产生影响的是: softtabstop, 和 shiftwidth:
+softtabstop: 软tab站, 是指在软件编辑的过程中(如插入tab, 删除一个tab 的时候)所经过的长度.
+而shiftwidth 则是控制 换行时的缩进 距离和长度, (即每一级的缩进长度), 这个shiftwidth 是控制 "格式化"命令时, 每一行缩进的长度.
+
+而smarttab则是 "会忽略前面的设置", 而自己根据上文的缩进来决定 该行的 缩进距离和长度.???
+所以, 为了省心, 可以把上面的三者设置成一样的, 通常都设置为4.
+
+expandtab是将tab扩展为空格.(因为在某些编程中, 为了编程风格的一致性, 要求不使用tab, 只使用空格)
+noexpandtab 则是相反的.
+
+set %retab! %是范围, 表示全部, retab: reply tab(或者 重新tab一次), !表示对所有非空白字符后的tab都retab一次, 如果不加！，则只处理行首的TAB. 这个对set expandtab/ noexpandtab都有效!
+
+vim中的映射命令,有的有冒号, 有的没有冒号?
+如: **要设置NerdTree的显示/关闭切换的映射命令是 nmap <F4> :NERDTreeToggle<CR> , 这里要不要冒号, 是根据你 的映射命令的操作模式来决定的, 如果你要映射的是在 命令行模式下执行的 就要加冒号. 最后的cr是在命令行模式下必须加的, 你不回车就不会执行.
+
+rove和rave的区别?
+rave是 "怒吼, 咆哮, 大喊大叫, 狂欢" == rant. do not rant and rave or throw tea cups.
+rove是: 倘佯, 游荡,闲逛的意思, 也是 "land rove" 罗孚--陆虎的牌子.
