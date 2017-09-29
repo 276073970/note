@@ -1,0 +1,6 @@
+1. download vim insteller for win or zip from offical site or github homepage
+2. install or unpackage it in your partical folder, including vim and gvim
+3. set the installing path as one of your system surrounding variable which named path in your system
+4. now, we can input conmande vim in our windows' console to run vim
+5. by the way, we also can edit our own profile for vim in User's home folder or $VIM/_vimrc
+6. vim's font size will be consistant with the console's
