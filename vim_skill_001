@@ -8,10 +8,17 @@
 (5) 自动换行是每行超过 n 个字的时候 vim 自动加上换行符用
 类似 :set textwidth=70 来设置 n
 这里可以将70换成比较大的值，防止换行。
+将textwidth设为0，:set textwidth=0，这样就不会自动换行了
 (6) 自动折行 是把长的一行用多行显示 , 不在文件里加换行符用 
 :set wrap 设置自动折行
 :set nowrap 设置不自动折行
 这里只是只是为了显示方便，折行显示，部增加新的行。
+
+
+
+
+set autoindent 
+set smartindent
 
 set softtabstop=4
 set shiftwidth=4
