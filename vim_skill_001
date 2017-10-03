@@ -24,7 +24,7 @@ set softtabstop=4
 set shiftwidth=4
 set tabstop=4
 
-/usr/share/vim/vimrc
+/usr/share/vim/vimrc -> /etc/vim/vimrc (Debian)
 $VIM/vimrc
 $HOME/.vimrc
 ==========
