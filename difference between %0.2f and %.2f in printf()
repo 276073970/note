@@ -1,0 +1,16 @@
+the function of printf() or scanf() in C language
+
+%0.2f and %.2f are the same output
+
+but the former have a stronger aim
+
+we all know that in %*.*f, the former * means the width of output, and the latter * means the precision.
+
+If we use %0.2f, it means the percision is 2, and explicitly aim that we want the width to be the output number's width
+Because in C language, if the output number's width longer than the limit width, it will display as the practical number's width, 
+and what's the important is that the width of the output number no more short than 0.
+So in the way, it has a stronger and explicit meaning that we want the output's width be the same as the practical number's width.
+
+On the other side, if we use %.2f, it seams that we just means the percision is 2, but not explicitly say what the width of output is.
+Although in C language, the default width of the output is the same as the practical number's width, so %0.2f and %.2f have the same display,
+but I do think the former form is better.
