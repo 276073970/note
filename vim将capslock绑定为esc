@@ -1,0 +1,58 @@
+一直不明白，大家有很多机会用ESC吗？
+为什么不用ctrl+c呢？
+Ctrl+[ 和 ESC 具有完全相同的ASCII码值（0x1b)，所以这两个键完全一样, 而 Ctrl+C 是0x3。
+Ctrl+C 在 vim 正在执行的时候会中断当前的命令，其它情况下会回到Normal mode。
+
+比如打开一个大的文本文件并进行syntax分析(syntax enable)时，使用 Ctrl+C 会打断当前的分析并给出一个没有高亮的显示。
+(使用大文件是为了让你能有时间键入Ctrl+C）
+
+平时使用中 Ctrl+C 主要会影响缩写(:help 24.7)。
+比如 使用缩写 :iabbrev ad advertisement，在输入模式下键入 ad 后按 ESC 会扩展为 advertisement ，但如果按 Ctrl+C 的话，不会有任何扩展。
+
+对于我而言，没有习惯使用缩写，Bram使用缩写来插入大段注释像
+/*************************************
+kdjfksjdkfjskdf
+ ************************************/
+而我则是使用map。
+ 
+建议不要使用capslock替代为ESC键。
+养成习惯后，偶然要用别人的vim时，你会很烦。因为这个键的使用频率实在是太高了。
+而且你没有一个简单的方法来改造别人的环境使之符合自己的习惯。
+建议练习直接使用 Ctrl+[ 这个应该是最标准的做法了。
+
+我是因为使用Ctrl+C已经很久，习惯了，想改很难啊。
+应该尽量使用程序默认的快捷键。
+没有的可以扩展，但尽量不要去改变。
+特别是使用外部程序进行改变，不然换台机器你就晕了。
+
+
+
+这两个作用是不同的。
+CTRL-C		退出插入模式，回到普通模式。不检查缩写。不激活 |InsertLeave| 自动命令事件。
+ctrl+c 就直接打断当前命令序列回到普通模式吧，拿这个当 esc 是个很不好的习惯
+ctrl+[ 很赞
+Bill Joy 当年的键盘上，esc 就在现在 tab 键的位置
+
+
+
+
+键盘上的Control和Shift键其实有两种功能：
+
+当和其它key一起组合使用时，它们改变其它key的行为。
+当它们独自被按下时，什么也不做。
+
+这就意味着，我们可以做点事情。
+
+我们可以在保留Control键功能的基础上，再『绑定』上另一功能『Esc』。
+但在Mac下Control键并不是那么好按（PC下再好按，也没有Home Row上的Capslock好按），使用频率又相当高，修改下它。
+
+首先将CapsLock键映射成Control键，这个功能可以通过系统的system preference实现：
+
+好了，现在Capslock键已经被映射成Control键了。
+接着，使用KeyRemap4MacBook，修改Control键的功能。
+
+现在，当单独按下Capslock键时，因为它被映射成了Control，Control又被修改成单独按下时『send Escape』，所以系统发出的是『Escape』键。这点是系统级的修改，不仅仅是在Vim中。
+
+当按下Capslock的同时，再去按其它键，它表现的就像个正常Control键一样。
+
+对于这个Timeout的时间长短，也可以在KR4MB中的Key Repeat标签下修改。
