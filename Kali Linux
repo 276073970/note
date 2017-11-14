@@ -1,4 +1,5 @@
 Kali Linux简介:
+
 Kali Linux是基于Debian的Linux发行版，设计用于数字取证和渗透测试。而Kali Linux发行版今年迎来了其诞生十周年。
 作为极具人气的开源项目，由Offensive Security负责维护的Kali Linux日前宣布将在2017年的美国黑帽大会上发布全新Kali Linux认证专家（简称KLCP）。
 KLCP是目前Kali Linux发行版建立的首项亦是惟一一项官方认证计划，旨在验证申请者的相关技能水平。
@@ -8,10 +9,13 @@ Kali Linux前身是 BackTrack，是一个基于 Debian 的 Linux 发行版，包
 Kali Linux预装了许多渗透测试软件，包括nmap (端口扫描器)、Wireshark (数据包分析器)、John the Ripper (密码破解器),以及Aircrack-ng (一套用于对无线局域网进行渗透测试的软件). 用户可通过硬盘、live CD或live USB运行Kali Linux。Metasploit的Metasploit Framework支持Kali Linux，Metasploit一套针对远程主机进行开发和执行Exploit代码的工具。
 
 
+
 遇到问题:
+
 1. Kali“系统安装”步骤失败，无法继续安装
 安装Kali  Linux至少需要10G以上的硬盘空间
 VirtualBox默认磁盘大小为8G，会导致“系统安装”步骤失败，新建虚拟机时调整硬盘大小为10G以上即可（推荐20G左右为佳）
+
 2. Install linux-headers on debian unable to locate package
 sudo apt-get update # This will update the repositories list
 sudo apt-get upgrade # This will update all the necessary packages on your system
@@ -26,12 +30,14 @@ linux-headers-3.2.0-4-all-amd64 - All header files for Linux 3.2 (meta-package)
 linux-headers-3.2.0-4-amd64 - Header files for Linux 3.2.0-4-amd64
 So I can install any one of these three.
 i found the solution. i just typed apt-get -f install after that i tried again with apt-get install linux-headers-3.2.0-4-all voila it worked! 
+
 3. 用apt-get命令安装一些软件包时，总报错：E：could not get lock /var/lib/dpkg/lock -open等
 出现这个问题的原因可能是有另外一个程序正在运行，导致资源被锁不可用。而导致资源被锁的原因，可能是上次安装时没正常完成，而导致出现此状况。
 解决方法：输入以下命令
 sudo rm /var/cache/apt/archives/lock
 sudo rm /var/lib/dpkg/lock
 之后再安装想装的包，即可解决。
+
 4. 配置静态IP(同Debian)
 1) To find the names of your interfaces you will want to look here: 
 $ ls /sys/class/net/ 
@@ -66,12 +72,16 @@ OR /etc/init.d/networking restart
 OR systemctl restart networking.service
 6) See man interfaces for more options.
 
+
+
 安装 Kali Linux 后需要做的 20 件事
 （1）apt-get clean && apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y  //应先完成系统电源, 主题, 终端等的设置
 （2）apt-get install linux-headers-$(uname -r)  //执行此步前需重启系统
 （3）VBox菜单栏"设备" -> "安装增强功能" (也可在VBox管理器界面中, 手动添加)
 （4）此时右键桌面上的"VBOXADDITIONS_XXX_XXX" -> "open" -> 将"VBoxLinuxAdditions.run"复制到桌面
 （5）打开终端并切换到桌面, 执行: chmod +x VBoxLinuxAdditions.run  ->  ./VBoxLinuxAdditions.run  //增强功能重启生效, 同时可挂载共享目录
+
+
 
 本文含有我觉得有用的每一件事情。本文分为三大部分：
 专门针对Kali用户
