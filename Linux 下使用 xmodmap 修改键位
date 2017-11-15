@@ -1,17 +1,18 @@
 很多时候, 我们需要DIY一下自己的键盘, 来使得自己的键盘用的更顺手.
-windows 下面可以使用 修改注册表中 ScanCode的方法来修改键位.
-在linux系统中,如果我们需要修改键位, 可以使用xmodmap 这个工具,
+windows 下面可以使用修改注册表中 ScanCode 的方法来修改键位.
+在linux系统中, 如果我们需要修改键位, 可以使用 xmodmap 这个工具.
 
-下面就用自己调整自己键位的过程.来说明一下这个工具怎么用.
+下面就用自己调整自己键位的过程, 来说明一下这个工具怎么用.
 要做的改动有下面三条:
-1. 把 Esc键和 ~ 键(重音符 grave)调换一个位置
-2. 把CapsLock 调到 左下角的Control ,空出来的Capslock 改成backspace
-3. 把左边的Control 调到空格左边,现在这个位置是 左win键
+1. 把 Esc键 和 ~键(重音符 grave) 调换一个位置
+2. 把 CapsLock 调到 左下角的Control , 空出来的 Capslock 改成 backspace
+3. 把 左边的Control 调到空格左边,现在这个位置是 左win键
 
 首先了解一下xmodmap,这个主要的命令, 功能可以参考这个网址:http://www.cbi.pku.edu.cn/chinese/documents/csdoc/cman/xmodmap.html
 也可以在终端下输入 "man xmodmap"获得完整的帮助.
 直接输入 xmodmap, 不带参数, 输出结果是你当前键盘的一些修饰键的信息
 比如我的机器上的输出是这样的:
+
 xmodmap:  up to 4 keys per modifier, (keycodes in parentheses):
 
 shift       Shift_L (0x32),  Shift_R (0x3e)
@@ -24,13 +25,13 @@ mod4        Super_L (0x85),  Super_R (0x86),  Super_L (0xce),  Hyper_L (0xcf)
 mod5        ISO_Level3_Shift (0x5c),  Mode_switch (0xcb)
 
 为了明白这个结果, 可以这么理解linux如何处理一个键盘按键:
-X桌面系统把键码(keycode) 事件 转换为 keysym.这是第一层
-然后 再参考 修饰 映射 modifier,来确定按下ctrl shift 之类按键后的反应
-所以以上表第二行的内容为例.它表示的是大小写切换键Capslock
+X桌面系统 把 键码(keycode) 事件转换为 keysym , 这是第一层.
+然后再参考 修饰映射modifier , 来确定按下ctrl、shift之类按键后的反应.
+所以以上表第二行的内容为例, 它表示的是大小写切换键Capslock
 lock        Caps_Lock (0x42)
-括号里的0x42 从十六进制转换到 十进制 就是 66 , 也就是 CapsLock 这个按键对应keycode 66
-按下Capslock 后, 系统接受到 keycode 66 , 系统转换为 Caps_Lock 这个keysym.
-然后按照 modifier 映射表 把 Caps_Lock 转换为 lock 功能, 就是大小写转换.
+括号里的 0x42 从十六进制转换到十进制就是 66 , 也就是 CapsLock 这个按键对应 keycode 66
+按下 Capslock 后, 系统接受到 keycode 66 , 系统转换为 Caps_Lock 这个 keysym.
+然后按照 modifier映射表 把 Caps_Lock 转换为 lock 功能, 就是大小写转换.
 layer1             layer2        layer3
 keycode            keysym        modifier
 keycode 66 -----> Caps_Lock -----> lock
@@ -93,7 +94,7 @@ mod5        ISO_Level3_Shift (0x5c),  Mode_switch (0xcb)
 
 你看.
 lock        BackSpace (0x42)
- 这个 keycode 66 的按键虽然keysym 已经改写成 backspace 了, 但是它依然表示一个大小写切换的功能.
+这个 keycode 66 的按键虽然keysym 已经改写成 backspace 了, 但是它依然表示一个大小写切换的功能.
 所以先把CapsLock 从 lock 中移除, 然后再修改keysym
 
 remove lock = Caps_Lock
