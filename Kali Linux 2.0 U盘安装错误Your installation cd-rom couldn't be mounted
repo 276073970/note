@@ -25,8 +25,8 @@ kali-linux-2017.2-amd64
 1. 用U盘安装的过程中，出现cd-rom无法挂载。
 
 1) 错误提示: 
-Your installation CD-ROM couldn't be mounted. 
-This probably means that the CD-ROM was not in the drive. 
+Your installation CD-ROM couldn't be mounted.
+This probably means that the CD-ROM was not in the drive.
 If so you can insert it and try again.
 //
 Retry mounting the CD-ROM?
@@ -42,10 +42,10 @@ No / Yes
 (5) # exit(返回主安装界面)
 (6) 选"Detect and mount CD-ROM"选项(之前出现错误且被中断的地方), 再选"Continue"
 
-2. 网络硬件(Detect network hardware)
+2. 网络硬件错误(Detect network hardware)
 
 1) 错误提示：
-Some of your hardware needs non-free firmware files to operate. 
+Some of your hardware needs non-free firmware files to operate.
 The firmware can be loaded from removable media, such as a USB stick or floppy.
 //
 The missing firmware files are: iwlwifi-xxxx-xx.ucode iwlwifi-xxxx-xx.ucode
@@ -60,3 +60,21 @@ No / Yes
 (1) 选"No"选项, 再选"Continue", 会跳转至下一个错误界面
 (2) The missing firmware files are: rtl_nic/xxxx-xx.fw
 (3) 选"No"选项, 再选"Continue"
+
+3. 网络配置错误(Configure the network)
+
+1) 错误提示：
+Network autoconfiguration failed
+//
+Your network is probably not using the DHCP protocol.
+Alternatively, the DHCP server may be slow or some network hardware is not working properly.
+
+2) 解决步骤:
+(1) 选"Continue", 跳转到方式选择界面:
+From here you can choose to retry DHCP network autoconfiguration (which may succeed if your DHCP server takes a long time to respond)
+or to configure the network manually. 
+Some DHCP servers require a DHCP hostname to be sent by the client, so you can also choose to retry DHCP network autoconfiguration
+with a hostname that you provide.
+//
+Network configuration method:
+(2) 选"Do not configure the network at this time"选项(最后一项), 再选"Continue"
