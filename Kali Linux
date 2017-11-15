@@ -10,6 +10,15 @@ Kali Linux预装了许多渗透测试软件，包括nmap (端口扫描器)、Wir
 
 
 
+安装 Kali Linux 后需要做的 20 件事
+（1）apt-get clean && apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y  //应先完成系统电源, 主题, 终端等的设置
+（2）apt-get install linux-headers-$(uname -r)  //执行此步前需重启系统
+（3）VBox菜单栏"设备" -> "安装增强功能" (也可在VBox管理器界面中, 手动添加)
+（4）此时右键桌面上的"VBOXADDITIONS_XXX_XXX" -> "open" -> 将"VBoxLinuxAdditions.run"复制到桌面
+（5）打开终端并切换到桌面, 执行: chmod +x VBoxLinuxAdditions.run  ->  ./VBoxLinuxAdditions.run  //增强功能重启生效, 同时可挂载共享目录
+
+
+
 遇到问题:
 
 1. Kali“系统安装”步骤失败，无法继续安装
@@ -72,14 +81,40 @@ OR /etc/init.d/networking restart
 OR systemctl restart networking.service
 6) See man interfaces for more options.
 
+5. Ctrl 与 Capslock 与3键交换 [linux]
+可以在任何 desktop environment ，所以可以通用在 GNOME 和 KDE 其他平台。
+1) Ctrl与Capslock交换：
+(1) # vim ~/.xmodmap
+(2) 把如下复制进去：
+remove Lock = Caps_Lock
+remove Control = Control_L
+keysym Control_L = Caps_Lock
+keysym Caps_Lock = Control_L
+add Lock = Caps_Lock
+add Control = Control_L
+(3) 立即生效终端输入：（或者你想重启用户也行。）
+# xmodmap ~/.xmodmap
+2) 三键盘交换： 
+esc ——> 大小写 
+caps ——> ctl 
+ctl ——> esc
+同上：
+remove Lock = Caps_Lock
+remove Control = Control_L
+keycode 9 = Caps_Lock NoSymbol Caps_Lock
+keycode 66 = Control_L NoSymbol Control_L
+keycode  37 = Escape NoSymbol Escape
+add Lock = Caps_Lock
+add Control = Control_L
+3)  xmodmap语法是：keycode <actual key number> = <target key> 
+命令能查看键盘现在每个键的功能：# xmodmap
+例如：
+keycode 23 = Tab ISO_Left_Tab Tab ISO_Left_Tab，
+键盘代码为23就是 tab，如果你想改成 tab 改成字母 Q，可以 keycode 23 = q Q q Q 。
+想 CAPS 和 Control 键还要先 remove 原来的功能，最后再加上功能。
 
 
-安装 Kali Linux 后需要做的 20 件事
-（1）apt-get clean && apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y  //应先完成系统电源, 主题, 终端等的设置
-（2）apt-get install linux-headers-$(uname -r)  //执行此步前需重启系统
-（3）VBox菜单栏"设备" -> "安装增强功能" (也可在VBox管理器界面中, 手动添加)
-（4）此时右键桌面上的"VBOXADDITIONS_XXX_XXX" -> "open" -> 将"VBoxLinuxAdditions.run"复制到桌面
-（5）打开终端并切换到桌面, 执行: chmod +x VBoxLinuxAdditions.run  ->  ./VBoxLinuxAdditions.run  //增强功能重启生效, 同时可挂载共享目录
+
 
 
 
