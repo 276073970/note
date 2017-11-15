@@ -32,8 +32,10 @@ Retry mounting the CD-ROM?
 No / Yes
 
 (1) 选"No"选项, 再选"Continue", 跳转至主安装界面(Debian installer main menu)
-(2) 选倒数第二个"Execute a shell"选项, 再选"Continue"
+(2) 选"Execute a shell"选项(倒数第二个), 再选"Continue", 跳转至终端界面
 (3) # df -m
 此时会看到挂载信息, 最下面的是: /dev/xyz  /media (这个是U盘设备挂载到了/media，导致cd-rom不能被挂载)
 (4) # umount /media
-(5) # exit
+(5) # exit(返回主安装界面)
+(6) 选"Detect and mount CD-ROM"选项(之前出现错误且被中断的地方), 再选"Continue"
+
