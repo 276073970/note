@@ -21,16 +21,19 @@ Kali Linux 2.0 发布下载，基于 Debian 的 Linux 发行版  http://www.linu
 ==================================================
 
 kali-linux-2017.2-amd64
-用U盘安装的过程中，出现cd-rom无法挂载。
 
-提示错误: 
+1. 用U盘安装的过程中，出现cd-rom无法挂载。
+
+1) 错误提示: 
 Your installation CD-ROM couldn't be mounted. 
 This probably means that the CD-ROM was not in the drive. 
 If so you can insert it and try again.
-
+//
 Retry mounting the CD-ROM?
+//
 No / Yes
 
+2) 解决步骤:
 (1) 选"No"选项, 再选"Continue", 跳转至主安装界面(Debian installer main menu)
 (2) 选"Execute a shell"选项(倒数第二个), 再选"Continue", 跳转至终端界面
 (3) # df -m
@@ -39,3 +42,21 @@ No / Yes
 (5) # exit(返回主安装界面)
 (6) 选"Detect and mount CD-ROM"选项(之前出现错误且被中断的地方), 再选"Continue"
 
+2. 网络硬件(Detect network hardware)
+
+1) 错误提示：
+Some of your hardware needs non-free firmware files to operate. 
+The firmware can be loaded from removable media, such as a USB stick or floppy.
+//
+The missing firmware files are: iwlwifi-xxxx-xx.ucode iwlwifi-xxxx-xx.ucode
+//
+If you have such meida available now, insert it, and continue.
+//
+Load missing firmware from removable media?
+//
+No / Yes
+
+2) 解决步骤:
+(1) 选"No"选项, 再选"Continue", 会跳转至下一个错误界面
+(2) The missing firmware files are: rtl_nic/xxxx-xx.fw
+(3) 选"No"选项, 再选"Continue"
