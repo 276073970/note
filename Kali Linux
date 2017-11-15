@@ -108,6 +108,7 @@ add Lock = Caps_Lock
 add Control = Control_L
 3)  xmodmap语法是：keycode <actual key number> = <target key> 
 命令能查看键盘现在每个键的功能：# xmodmap
+具体脚本的用法可以man xmodmap
 例如：
 keycode 23 = Tab ISO_Left_Tab Tab ISO_Left_Tab，
 键盘代码为23就是 tab，如果你想改成 tab 改成字母 Q，可以 keycode 23 = q Q q Q 。
