@@ -78,3 +78,19 @@ with a hostname that you provide.
 //
 Network configuration method:
 (2) 选"Do not configure the network at this time"选项(最后一项), 再选"Continue"
+
+4. 包管理配置错误(Configure the package manager)
+
+1) 错误提示：
+A network mirror can be used to supplement the software that is included on the CD-ROM.
+This may also make newer versions of software available.
+//
+Use a network mirror?
+//
+No / Yes
+
+2) 解决步骤:
+(1) 选"No"选项, 再选"Continue"
+网络镜像一般是选择否.
+因为如果连的是wifi或者没连网络就一定要选择否, 如果是宽带就可以设置选择是. 
+但是选择是后会下载更新得非常慢(个人表示不建议，因为可以在安装完成后换源就可以了).
