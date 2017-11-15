@@ -27,21 +27,21 @@ mod5        ISO_Level3_Shift (0x5c),  Mode_switch (0xcb)
 为了明白这个结果, 可以这么理解linux如何处理一个键盘按键:
 X桌面系统 把 键码(keycode) 事件转换为 keysym , 这是第一层.
 然后再参考 修饰映射modifier , 来确定按下ctrl、shift之类按键后的反应.
-所以以上表第二行的内容为例, 它表示的是大小写切换键Capslock
+所以以上表第二行的内容为例, 它表示的是大小写切换键CapsLock
 lock        Caps_Lock (0x42)
 括号里的 0x42 从十六进制转换到十进制就是 66 , 也就是 CapsLock 这个按键对应 keycode 66
-按下 Capslock 后, 系统接受到 keycode 66 , 系统转换为 Caps_Lock 这个 keysym.
+按下 CapsLock 后, 系统接受到 keycode 66 , 系统转换为 Caps_Lock 这个 keysym.
 然后按照 modifier映射表 把 Caps_Lock 转换为 lock 功能, 就是大小写转换.
 layer1             layer2        layer3
 keycode            keysym        modifier
 keycode 66 -----> Caps_Lock -----> lock
 
-所以,要修改键位, 就要把这两层映射关系都要改掉. 但是修改之前,要知道被修改按键现有的对应关系.
-可以使用 "xmodmap -pke " 来输出现在所有keycode -> keysym 的映射.
+所以, 要修改键位, 就要把这两层映射关系都要改掉. 但是修改之前,要知道被修改按键现有的对应关系.
+可以使用 "xmodmap -pke " 来输出现在所有 keycode -> keysym 的映射.
 比如 终端中输入 "xmodmap -pke | grep Caps_Lock"
 获得:
-keycode  66 = Caps_Lock NoSymbol Caps_Lock
-这个记录里,keycode 66 就是CaspLock键的keycode  , 等号右面的keysym 分别表示了 直接按下capslock 键 ,以及按下shift 之类的修饰按键后表示的keysym
+keycode 66 = Caps_Lock NoSymbol Caps_Lock
+这个记录里, keycode 66 就是 CaspLock键 的 keycode , 等号右面的 keysym 分别表示了直接按下 capslock键 , 以及按下 shift 之类的修饰按键后表示的 keysym
 你也可以 把这个映射表记录到一个文件里仔细查阅.
 
 或者你也可以使用xev命令,在终端运行xev后会跳出一个窗口, 并输出你在这个窗口里的键盘和鼠标动作.
