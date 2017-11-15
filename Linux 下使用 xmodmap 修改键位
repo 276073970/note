@@ -1,16 +1,16 @@
 很多时候, 我们需要DIY一下自己的键盘, 来使得自己的键盘用的更顺手.
-windows 下面可以使用修改注册表中 ScanCode 的方法来修改键位.
-在linux系统中, 如果我们需要修改键位, 可以使用 xmodmap 这个工具.
+Windows下面可以使用修改注册表中ScanCode的方法来修改键位.
+在Linux系统中, 如果我们需要修改键位, 可以使用xmodmap这个工具.
 
 下面就用自己调整自己键位的过程, 来说明一下这个工具怎么用.
 要做的改动有下面三条:
-1. 把 Esc键 和 ~键(重音符 grave) 调换一个位置
-2. 把 CapsLock 调到 左下角的Control , 空出来的 Capslock 改成 backspace
-3. 把 左边的Control 调到空格左边,现在这个位置是 左win键
+1. 把Esc键和~键(重音符 grave)调换一个位置.
+2. 把CapsLock调到左下角的Control, 空出来的CapsLock改成Backspace.
+3. 把左边的Control调到空格左边,现在这个位置是左Win键.
 
-首先了解一下xmodmap,这个主要的命令, 功能可以参考这个网址:http://www.cbi.pku.edu.cn/chinese/documents/csdoc/cman/xmodmap.html
-也可以在终端下输入 "man xmodmap"获得完整的帮助.
-直接输入 xmodmap, 不带参数, 输出结果是你当前键盘的一些修饰键的信息
+首先了解一下xmodmap这个主要的命令, 功能可以参考这个网址:http://www.cbi.pku.edu.cn/chinese/documents/csdoc/cman/xmodmap.html.
+也可以在终端下输入"man xmodmap"获得完整的帮助.
+直接输入xmodmap(不带参数), 输出结果是你当前键盘的一些修饰键的信息.
 比如我的机器上的输出是这样的:
 
 xmodmap:  up to 4 keys per modifier, (keycodes in parentheses):
@@ -25,24 +25,26 @@ mod4        Super_L (0x85),  Super_R (0x86),  Super_L (0xce),  Hyper_L (0xcf)
 mod5        ISO_Level3_Shift (0x5c),  Mode_switch (0xcb)
 
 为了明白这个结果, 可以这么理解linux如何处理一个键盘按键:
-X桌面系统 把 键码(keycode) 事件转换为 keysym , 这是第一层.
-然后再参考 修饰映射modifier , 来确定按下ctrl、shift之类按键后的反应.
-所以以上表第二行的内容为例, 它表示的是大小写切换键CapsLock
+X桌面系统把键码(keycode)事件转换为keysym, 这是第一层;
+然后再参考修饰映射modifier, 来确定按下ctrl、shift之类按键后的反应.
+所以以上表第二行的内容为例, 它表示的是大小写切换键CapsLock:
 lock        Caps_Lock (0x42)
-括号里的 0x42 从十六进制转换到十进制就是 66 , 也就是 CapsLock 这个按键对应 keycode 66
-按下 CapsLock 后, 系统接受到 keycode 66 , 系统转换为 Caps_Lock 这个 keysym.
-然后按照 modifier映射表 把 Caps_Lock 转换为 lock 功能, 就是大小写转换.
+括号里的0x42从十六进制转换到十进制就是66, 也就是CapsLock这个按键对应keycode 66
+按下CapsLock后, 系统接受到keycode 66, 系统转换为Caps_Lock这个keysym.
+然后按照modifier映射表把Caps_Lock转换为lock功能, 就是大小写转换.
 layer1             layer2        layer3
 keycode            keysym        modifier
 keycode 66 -----> Caps_Lock -----> lock
 
-所以, 要修改键位, 就要把这两层映射关系都要改掉. 但是修改之前,要知道被修改按键现有的对应关系.
-可以使用 "xmodmap -pke " 来输出现在所有 keycode -> keysym 的映射.
-比如 终端中输入 "xmodmap -pke | grep Caps_Lock"
+所以, 要修改键位, 就要把这两层映射关系都要改掉. 但是修改之前, 要知道被修改按键现有的对应关系.
+可以使用"xmodmap -pke"来输出现在所有keycode -> keysym的映射.
+比如:
+终端中输入 "xmodmap -pke | grep Caps_Lock"
 获得:
 keycode 66 = Caps_Lock NoSymbol Caps_Lock
-这个记录里, keycode 66 就是 CaspLock键 的 keycode , 等号右面的 keysym 分别表示了直接按下 capslock键 , 以及按下 shift 之类的修饰按键后表示的 keysym
-你也可以 把这个映射表记录到一个文件里仔细查阅.
+这个记录里, keycode 66就是CaspLock键的keycode , 
+等号右面的keysym分别表示了直接按下CapsLock键, 以及按下shift之类的修饰按键后表示的keysym.
+你也可以把这个映射表记录到一个文件里仔细查阅.
 
 或者你也可以使用xev命令,在终端运行xev后会跳出一个窗口, 并输出你在这个窗口里的键盘和鼠标动作.
 比如你按下键盘上的 "x"键.终端里会得到这样的信息:
@@ -52,20 +54,20 @@ keycode 66 = Caps_Lock NoSymbol Caps_Lock
     XLookupString gives 1 bytes: (78) "x"
     XFilterEvent returns: False
 "
-这里面出现的 keycode 53, 也表明了x键对应的keycode 数值 .
+这里面出现的keycode 53, 也表明了x键对应的keycode数值.
 (注: xev 无法获得 Fn 键的数值)
 
 到这里, 我们已经可以获知现有的键位的映射情况了. 下面就是修改这两层映射了.
 可以直接在 终端里输入 "xmodmap -e "xxxxxxx"" 来直接运行一个语句.但也可以把这些语句写成一个配置文件,
-配置文件里的语法和  "xmodmap -e "xxxxxxx"" 里的xxxxx 一样
-然后 "xmodmap 配置文件" 来运行, 一般建议是 写成  ~/.Xmodmap 或者~/.Xmodmaprc  ,
-(但是似乎安装了fcitx后,fcitx 会自己重置xmodmap的映射, 所以,要手动的运行)
+配置文件里的语法和 "xmodmap -e "xxxxxxx"" 里的xxxxx一样
+然后 "xmodmap配置文件" 来运行, 一般建议是写成 ~/.Xmodmap 或者 ~/.Xmodmaprc
+(但是似乎安装了fcitx后, fcitx会自己重置xmodmap的映射, 所以要手动的运行)
 
 首先从修改 keycod -> keysym 入手.
-比如 我的需求1:调换esc 和 ~
-这两个键都不在modifier 里面, 所以直接调换一下这两个按键的keycode 和keysym 就可以了,
-在你的.Xmodmap 文件里面写入
+比如: 我的需求1: 调换esc和~
+这两个键都不在modifier里面, 所以直接调换一下这两个按键的keycode和keysym就可以了.
 
+在你的 .xmodmap 文件里面写入:
 ! first , exchange  (1) esc (2) grave ,"~",
 ! keycode   9 = Escape NoSymbol Escape
 ! keycode  49 = grave asciitilde grave asciitilde
@@ -74,10 +76,10 @@ keycode 66 = Caps_Lock NoSymbol Caps_Lock
 keycode  49 = Escape NoSymbol Escape
 keycode  9 = grave asciitilde grave asciitilde
 
-注: 感叹号! 在配置文件中是被当成注释,不运行的.
+注: 感叹号!在配置文件中是被当成注释, 不运行的.
 
-涉及到modifier的按键修改就麻烦一点了, 要用  add remove 来修改 modifier 映射
-比如把 casplock 改成 delete. 我们要做的事情就要分成两步.
+涉及到modifier的按键修改就麻烦一点了, 要用add、remove来修改modifier映射.
+比如把 casplock 改成 delete, 我们要做的事情就要分成两步.
 既要把 capslock 的keysym 改成 delete 的keysym , 又要把capslock 从 modifier中的lock 组里移除.
 否则你直接运行
 "xmodmap -e "keycode 66 = BackSpace BackSpace BackSpace BackSpace ""
