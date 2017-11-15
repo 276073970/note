@@ -1,0 +1,180 @@
+很多时候, 我们需要DIY一下自己的键盘, 来使得自己的键盘用的更顺手.
+windows 下面可以使用 修改注册表中 ScanCode的方法来修改键位.
+在linux系统中,如果我们需要修改键位, 可以使用xmodmap 这个工具,
+
+下面就用自己调整自己键位的过程.来说明一下这个工具怎么用.
+要做的改动有下面三条:
+1. 把 Esc键和 ~ 键(重音符 grave)调换一个位置
+2. 把CapsLock 调到 左下角的Control ,空出来的Capslock 改成backspace
+3. 把左边的Control 调到空格左边,现在这个位置是 左win键
+
+首先了解一下xmodmap,这个主要的命令, 功能可以参考这个网址:http://www.cbi.pku.edu.cn/chinese/documents/csdoc/cman/xmodmap.html
+也可以在终端下输入 "man xmodmap"获得完整的帮助.
+直接输入 xmodmap, 不带参数, 输出结果是你当前键盘的一些修饰键的信息
+比如我的机器上的输出是这样的:
+xmodmap:  up to 4 keys per modifier, (keycodes in parentheses):
+
+shift       Shift_L (0x32),  Shift_R (0x3e)
+lock        Caps_Lock (0x42)
+control     Control_L (0x25),  Control_R (0x69)
+mod1        Alt_L (0x40),  Alt_R (0x6c),  Meta_L (0xcd)
+mod2        Num_Lock (0x4d)
+mod3      
+mod4        Super_L (0x85),  Super_R (0x86),  Super_L (0xce),  Hyper_L (0xcf)
+mod5        ISO_Level3_Shift (0x5c),  Mode_switch (0xcb)
+
+为了明白这个结果, 可以这么理解linux如何处理一个键盘按键:
+X桌面系统把键码(keycode) 事件 转换为 keysym.这是第一层
+然后 再参考 修饰 映射 modifier,来确定按下ctrl shift 之类按键后的反应
+所以以上表第二行的内容为例.它表示的是大小写切换键Capslock
+lock        Caps_Lock (0x42)
+括号里的0x42 从十六进制转换到 十进制 就是 66 , 也就是 CapsLock 这个按键对应keycode 66
+按下Capslock 后, 系统接受到 keycode 66 , 系统转换为 Caps_Lock 这个keysym.
+然后按照 modifier 映射表 把 Caps_Lock 转换为 lock 功能, 就是大小写转换.
+layer1             layer2        layer3
+keycode            keysym        modifier
+keycode 66 -----> Caps_Lock -----> lock
+
+所以,要修改键位, 就要把这两层映射关系都要改掉. 但是修改之前,要知道被修改按键现有的对应关系.
+可以使用 "xmodmap -pke " 来输出现在所有keycode -> keysym 的映射.
+比如 终端中输入 "xmodmap -pke | grep Caps_Lock"
+获得:
+keycode  66 = Caps_Lock NoSymbol Caps_Lock
+这个记录里,keycode 66 就是CaspLock键的keycode  , 等号右面的keysym 分别表示了 直接按下capslock 键 ,以及按下shift 之类的修饰按键后表示的keysym
+你也可以 把这个映射表记录到一个文件里仔细查阅.
+
+或者你也可以使用xev命令,在终端运行xev后会跳出一个窗口, 并输出你在这个窗口里的键盘和鼠标动作.
+比如你按下键盘上的 "x"键.终端里会得到这样的信息:
+"KeyRelease event, serial 33, synthetic NO, window 0x1000001,
+    root 0x260, subw 0x0, time 8098664, (22,-12), root:(1186,386),
+    state 0x0, keycode 53 (keysym 0x78, x), same_screen YES,
+    XLookupString gives 1 bytes: (78) "x"
+    XFilterEvent returns: False
+"
+这里面出现的 keycode 53, 也表明了x键对应的keycode 数值 .
+(注: xev 无法获得 Fn 键的数值)
+
+到这里, 我们已经可以获知现有的键位的映射情况了. 下面就是修改这两层映射了.
+可以直接在 终端里输入 "xmodmap -e "xxxxxxx"" 来直接运行一个语句.但也可以把这些语句写成一个配置文件,
+配置文件里的语法和  "xmodmap -e "xxxxxxx"" 里的xxxxx 一样
+然后 "xmodmap 配置文件" 来运行, 一般建议是 写成  ~/.Xmodmap 或者~/.Xmodmaprc  ,
+(但是似乎安装了fcitx后,fcitx 会自己重置xmodmap的映射, 所以,要手动的运行)
+
+首先从修改 keycod -> keysym 入手.
+比如 我的需求1:调换esc 和 ~
+这两个键都不在modifier 里面, 所以直接调换一下这两个按键的keycode 和keysym 就可以了,
+在你的.Xmodmap 文件里面写入
+
+! first , exchange  (1) esc (2) grave ,"~",
+! keycode   9 = Escape NoSymbol Escape
+! keycode  49 = grave asciitilde grave asciitilde
+
+
+keycode  49 = Escape NoSymbol Escape
+keycode  9 = grave asciitilde grave asciitilde
+
+注: 感叹号! 在配置文件中是被当成注释,不运行的.
+
+涉及到modifier的按键修改就麻烦一点了, 要用  add remove 来修改 modifier 映射
+比如把 casplock 改成 delete. 我们要做的事情就要分成两步.
+既要把 capslock 的keysym 改成 delete 的keysym , 又要把capslock 从 modifier中的lock 组里移除.
+否则你直接运行
+"xmodmap -e "keycode 66 = BackSpace BackSpace BackSpace BackSpace ""
+你会发现, capslock 键已经可以当backspace 来删除之前的字符了.但同时, 它还起着 原来的Capslock的大小写切换功能,
+再用"xmodmap"查看一下
+shift       Shift_L (0x32),  Shift_R (0x3e)
+lock        BackSpace (0x42)
+control     Control_L (0x25),  Control_R (0x69)
+mod1        Alt_L (0x40),  Alt_R (0x6c),  Meta_L (0xcd)
+mod2        Num_Lock (0x4d)
+mod3      
+mod4        Super_L (0x85),  Super_R (0x86),  Super_L (0xce),  Hyper_L (0xcf)
+mod5        ISO_Level3_Shift (0x5c),  Mode_switch (0xcb)
+
+你看.
+lock        BackSpace (0x42)
+ 这个 keycode 66 的按键虽然keysym 已经改写成 backspace 了, 但是它依然表示一个大小写切换的功能.
+所以先把CapsLock 从 lock 中移除, 然后再修改keysym
+
+remove lock = Caps_Lock
+keycode  66 = BackSpace BackSpace BackSpace BackSpace
+
+这样键盘上的那个capslock 按键就完全改成backspace 了.
+remove lock = Caps_Lock 这一句表示从 lock 组里移除Caps_Lock 这个keysym.
+同样添加一个keysym 也是类似的语法 : add lock = Caps_Lock
+
+同样的方法也用于其他按键.比如
+! change left control into capslock
+remove control = Control_L
+keycode 37 = Caps_Lock NoSymbol Caps_Lock
+add lock = Caps_Lock
+
+
+
+! change left window into control
+remove mod4 = Super_L
+keycode 133 = Control_L NoSymbol Control_L
+add control = Control_L
+
+
+注意, 这里我是先从modifier的组里先 移除一个keysym , 然后再加到另一个组里的.
+因为你不能把已经存在于A组的一个keysym 加到B组里. 会报错的.
+
+如下就是我的完整的一个配置文件(请无视蹩脚的英语注释):
+! first , exchange  (1) esc (2) grave ,"~",
+! keycode   9 = Escape NoSymbol Escape
+! keycode  49 = grave asciitilde grave asciitilde
+
+
+keycode  49 = Escape NoSymbol Escape
+keycode  9 = grave asciitilde grave asciitilde
+
+! xmodmap original
+!shift       Shift_L (0x32),  Shift_R (0x3e)
+!lock        Caps_Lock (0x42)
+!control     Control_L (0x25),  Control_R (0x69)
+!mod1        Alt_L (0x40),  Alt_R (0x6c),  Meta_L (0xcd)
+!mod2        Num_Lock (0x4d)
+!mod3      
+!mod4        Super_L (0x85),  Super_R (0x86),  Super_L (0xce),  Hyper_L (0xcf)
+!mod5        ISO_Level3_Shift (0x5c),  Mode_switch (0xcb)
+
+! keys on the keyboard can be divide into some groups
+! as the non modification keys and modification keys
+! you can use "xmodmap -pke" to get report of all keys .and "xmodmap" to get all modification keys
+
+! take left control for example ,
+! use "xmodmap -pke | grep 37" , we get a string like "keycode  37 = Control_L NoSymbol Control_L "
+! here , this string explains [Control_L (0x25)] in " control     Control_L (0x25),  Control_R (0x69)"
+! system translate left contorl key in keyboard into  "keycode 133(133 = 0x25)" and then recognized it as  "Control_L" ,
+! but as a modification key , the system use "Control_L "as a member of "control " group
+
+! layer1             layer2         layer3
+! keycode 133 ----> Control_L ----> contorl
+
+! it is easy to  exchange  esc and grave, just set these two keycode to each other .
+! but those modification keys need two more steps ,
+
+! you have to redirect the relationship between  layer2 and layer3
+! use "remove control = Control_L " to remove Control_L from control group
+! and then "add control  = ...." to add something new to control group
+
+! but remeber , you can only change 1 relationship between 2 of the 3 layers in 1 sentence .
+
+
+
+
+! change capslock into back space
+remove lock = Caps_Lock
+keycode  66 = BackSpace BackSpace BackSpace BackSpace
+
+
+! change left control into capslock
+remove control = Control_L
+keycode 37 = Caps_Lock NoSymbol Caps_Lock
+add lock = Caps_Lock
+
+! change left window into control
+remove mod4 = Super_L
+keycode 133 = Control_L NoSymbol Control_L
+add control = Control_LLinux <wbr>下使用xmodmap <wbr>修改键位
