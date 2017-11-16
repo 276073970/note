@@ -1,4 +1,5 @@
 Windows下的文字到了Linux下乱码原因是Windows中默认的文件格式是GBK(gb2312)，而Linux一般都是UTF-8，编码格式不相同导致的乱码。
+
 几种解决办法如下：
 
 1、在Windows上用记事本把文件，选择另存为编码方式改为 UTF-8；
@@ -12,3 +13,79 @@ Windows下的文字到了Linux下乱码原因是Windows中默认的文件格式�
 // 比如将一个GBK编码的文件转换成UTF-8编码
 # iconv -f UTF-8 -t GBK file1 -o file2
 // 转码后，在Linux上面就不会乱码了
+
+================================================================================
+================================================================================
+
+Windows转到linux中，文件乱码，文件编码转换
+
+最近，学习又重新开始Linux学习，所以一直在CentOS中。
+昨天一朋友把他在Windows下写的C程序发给我，我欣然答应，本以为很快就能在我的Linux系统中运行起来，
+没想到出现了乱码，结果想把这个问题解决，一下子就搞了近三个小时没有解决。
+今天，又想起来这个问题，竟然一下子就解决了，现在把学到的一些东西总结如下。
+
+首先Windows下的文件拿到Linux中来查看出现乱码是一种很常见的现象，这方面的资料在网上也有很多。
+但解决方法大多都类似，有些概念没有解释清楚，也许是个人没有理解清楚。
+
+尝试方法一：
+
+一碰到这个问题，我想到的是Linux课上学到的一个命令dos2unix，以前也没用过，这次用了也没有解决问题。
+因为，这个命令主要是用来处理Dos与Linux之间断行的差异的。
+DOS下的文本文件是以\r\n作为断行标志的，表示成十六进制就是0D 0A。
+而Unix下的文本文件是以\n作为断行标志的，表示成十六进制就是 0A。
+有时我们会遇到这样一种情况，dos下的文件在unix下显示是不出现断行，显得很乱，这时用这个命令就OK。
+
+后来在网上查了下，知道是编码格式不一致导致的。
+因为Dos下编辑的文本默认是以GBK存储的，而Linux默认采取的存储方式是UTF-8，当然会出现乱码了，但是如何去将Dos下的GBK文件转换成UTF-8呢？
+
+尝试方法二：更改Vim读取时采用的编码
+
+先补充一个知识，参考博客http://blog.csdn.net/kl222/article/details/4550269
+
+vim编码方面的基础知识：
+存在3个变量：
+encoding—-该选项使用于缓冲的文本(你正在编辑的文件)，寄存器，Vim 脚本文件等等。你可以把 'encoding' 选项当作是对 Vim 内部运行机制的设定。
+fileencoding—-该选项是vim写入文件时采用的编码类型。
+termencoding—-该选项代表输出到客户终端（Term）采用的编码类型。
+
+所以，我尝试了在Vim中
+:set encoding
+:set fileencoding=utf-8          #让Vim将gbk的文本转换成utf-8后，显示出来
+经过这样改了之后，果然，Vim中看到的乱码消失了，此时心情小小的激动了一下子。
+
+但是，当我退出Vim再次打开文件时，乱码又出现了，原来是我更改的Vim设置只是临时的，所以我决定将其写死到vim配置文件当中去，操作如下：
+编辑~/.vimrc文件，加上如下几行：
+set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
+set termencoding=utf-8
+set encoding=utf-8
+这时，每次用Vim打开文件时都不出现乱码了，本以为问题解决了，我开始编译程序，当我运行的时候，乱码还是出现了。。。。此时，欲哭无泪
+
+后来，我仔细想了一下，我更改Vim的配置，只是让我们看到的没有乱码，但从根本上讲，文件的编码方式还是没有变，
+所以当我用gcc编译后，文件的编码格式应该还是gbk的。这样导致的乱码。
+所以，我决定找个工具，直接讲gbk文件转换成utf-8。
+
+尝试三：
+
+1.查看文件存储格式
+# file test.cpp
+test.cpp: ISO-8859 English text, with CRLF line terminators
+可以看出文件是以ISO-8859存储的。
+
+2.查看系统语言设置
+# cat /etc/sysconfig/i18n
+LANG="en_US.UTF-8"
+SYSFONT="latarcyrheb-sun16"
+可以看出Linux是以UTF-8编码的
+
+3.利用工具将文件从ISO-8859转换成UTF-8（这里我采用的是iconv命令）
+＃ iconv -f ISO-8859 -t UTF-8 test.c -o test_u.c
+
+这时竟然出现了一个错误：
+iconv: conversion from `ISO-8859' is not supported
+Try `iconv --help' or `iconv --usage
+
+解决方案：
+将ISO-8859换成GBK
+＃iconv -f GBK -t UTF-8 test.c -o test_u.c
+
+终于大功告成！
