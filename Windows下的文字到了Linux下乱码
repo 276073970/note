@@ -1,0 +1,14 @@
+Windows下的文字到了Linux下乱码原因是Windows中默认的文件格式是GBK(gb2312)，而Linux一般都是UTF-8，编码格式不相同导致的乱码。
+几种解决办法如下：
+
+1、在Windows上用记事本把文件，选择另存为编码方式改为 UTF-8；
+
+2、在Linux上用vim编辑，在命令模式下输入：
+:set fileencoding=utf-8
+
+3、iconv 转换，iconv的命令格式如下：
+# iconv -f encoding -t encoding input_file -o output_file
+//
+// 比如将一个GBK编码的文件转换成UTF-8编码
+# iconv -f UTF-8 -t GBK file1 -o file2
+// 转码后，在Linux上面就不会乱码了
