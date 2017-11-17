@@ -1,0 +1,17 @@
+Kali 2017.1设置滚动更新源
+
+原来在使用KALI2016.2的时候，设置更新源都是直接设置国内的源，比如阿里、中科大、清华。
+今天安装了2017.1后，再去找源的地址，发现好难记，不过也发现有人说可以直接设置成官方的源，官方会自动重定向到国内源，一试果然。
+
+设置kali的更新源。
+
+在终端中打开sources.list
+root@kali-2017-1:~# vim /etc/apt/sources.list
+
+删除里面的注释，清空。
+
+然后输入下面的更新源地址
+deb http://http.kali.org/kali kali-rolling main non-free contrib
+
+保存，推出，然后更新。
+root@kali-2017-1:~# apt-get update apt-get upgrade -y
