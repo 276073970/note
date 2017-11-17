@@ -3,37 +3,40 @@
 gedit /etc/apt/sources.list
 
 二、国内更新源
-复制代码
-复制代码
 
-#auto
-deb http://http.kali.org/kali kali-rolling main non-free contrib（一般更新这一条就好了）
+#官方源
+deb http://http.kali.org/kali kali main non-free contrib
+deb-src http://http.kali.org/kali kali main non-free contrib
+deb http://security.kali.org/kali-security kali/updates main contrib non-free
+#官方源
+deb http://http.kali.org/kali kali-rolling main non-free contrib
+deb-src http://http.kali.org/kali kali-rolling main non-free contrib
 
+#中科大kali源
+deb http://mirrors.ustc.edu.cn/kali kali main non-free contrib
+deb-src http://mirrors.ustc.edu.cn/kali kali main non-free contrib
+deb http://mirrors.ustc.edu.cn/kali-security kali/updates main contrib non-free
 #中科大
 deb http://mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib
 deb-src http://mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib
 
-#浙大
-deb http://mirrors.zju.edu.cn/kali kali-rolling main contrib non-free
-deb-src http://mirrors.zju.edu.cn/kali kali-rolling main contrib non-free
+#阿里云kali源
+deb http://mirrors.aliyun.com/kali kali main non-free contrib
+deb-src http://mirrors.aliyun.com/kali kali main non-free contrib
+deb http://mirrors.aliyun.com/kali-security kali/updates main contrib non-free
 
-#东软大学
-deb http://mirrors.neusoft.edu.cn/kali kali-rolling/main non-free contrib
-deb-src http://mirrors.neusoft.edu.cn/kali kali-rolling/main non-free contrib
-
-#官方源
-#deb http://http.kali.org/kali kali-rolling main non-free contrib
-#deb-src http://http.kali.org/kali kali-rolling main non-free contrib
- 
 三、更新
 
-apt-get clean && apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y （加了-y之后你就不用回车啦）
+# apt-get clean
+# apt-get update
+# apt-get upgrade -y
+# apt-get dist-upgrade -y
+# apt-get clean
 
 #linux内核更新
-apt-get install linux-headers-$(uname -r)
+# apt-get install linux-headers-$(uname -r)
 
 拓展
-
 apt-get clean    //清除缓存索引
 apt-get update    //更新索引文件
 apt-get upgrade    //更新实际的软件包文件
