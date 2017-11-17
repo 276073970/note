@@ -38,3 +38,7 @@ apt-get clean    //清除缓存索引
 apt-get update    //更新索引文件
 apt-get upgrade    //更新实际的软件包文件
 apt-get dist-upgrade    //根据依赖关系更新
+
+apt-get update //刷新源，获得最近的软件包的列表
+apt-get upgrade  //更新系统，系统将现有的Package升级,如果有相依性的问题,而此相依性需要安装其它新的Package或影响到其它Package的相依性时,此Package就不会被升级,会保留下来.
+apt-get dist-upgrade  //可以聪明的解决相依性的问题,如果有相依性问题,需要安装/移除新的Package,就会试着去安装/移除它. (所以通常这个会被认为是有点风险的升级，可以不用执行)
