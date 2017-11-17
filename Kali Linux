@@ -81,15 +81,14 @@ OR /etc/init.d/networking restart
 OR systemctl restart networking.service
 6) See man interfaces for more options.
 
-5. 
+5. Ctrl键 与 Capslock键 交换
 Method 1:
 (1) "Tweak Tool" (Gnome Desktop)
 (2) "Typing" Option (Option menu on the left)
 (3) "Ctrl key position" Option (Option menu on the right)
-(4) ""
+(4) "Swap Ctrl and Caps Lock"
 
-Method 2:
-Ctrl键 与 Capslock键 交换 (重启无效)
+Method 2: (重启无效)
 可以在任何 desktop environment ，所以可以通用在 GNOME 和 KDE 其他平台。
 1) Ctrl与Capslock交换：
 (1) # vim ~/.xmodmap
