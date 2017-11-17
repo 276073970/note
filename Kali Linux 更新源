@@ -4,22 +4,23 @@ gedit /etc/apt/sources.list
 
 二、国内更新源
 
-#官方源
-deb http://http.kali.org/kali kali main non-free contrib
-deb-src http://http.kali.org/kali kali main non-free contrib
-deb http://security.kali.org/kali-security kali/updates main contrib non-free
+============================== After Kali 2.0 ==============================
 #官方源
 deb http://http.kali.org/kali kali-rolling main non-free contrib
 deb-src http://http.kali.org/kali kali-rolling main non-free contrib
-
-#中科大kali源
-deb http://mirrors.ustc.edu.cn/kali kali main non-free contrib
-deb-src http://mirrors.ustc.edu.cn/kali kali main non-free contrib
-deb http://mirrors.ustc.edu.cn/kali-security kali/updates main contrib non-free
 #中科大
 deb http://mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib
 deb-src http://mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib
 
+============================== Before Kali 1.0 ==============================
+#官方源
+deb http://http.kali.org/kali kali main non-free contrib
+deb-src http://http.kali.org/kali kali main non-free contrib
+deb http://security.kali.org/kali-security kali/updates main contrib non-free
+#中科大kali源
+deb http://mirrors.ustc.edu.cn/kali kali main non-free contrib
+deb-src http://mirrors.ustc.edu.cn/kali kali main non-free contrib
+deb http://mirrors.ustc.edu.cn/kali-security kali/updates main contrib non-free
 #阿里云kali源
 deb http://mirrors.aliyun.com/kali kali main non-free contrib
 deb-src http://mirrors.aliyun.com/kali kali main non-free contrib
