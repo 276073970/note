@@ -34,3 +34,41 @@ deb http://mirrors.aliyun.com/kali-security kali/updates main contrib non-free
 
 ================================================================================
 ================================================================================
+Method 3:
+昨天晚上折腾了一个晚上安装搜狗输入法，各种依赖怎么搞都是会出错，网上的大部分教程也都比较旧了，参考意义比较小，
+今天起来还是不服，但是小小怂了一下，转而安装ibus输入法，于是 折腾出这篇文章。
+//
+1. 更新源
+最好是备份一下原本的软件源sources.list文件，然后修改source.list      
+# vi /etc/apt/sources.list  
+添加国内的源，如果能科学上网，那就用原来的也行。
+#中科大kali源
+deb http://mirrors.ustc.edu.cn/kali kali main non-free contrib
+deb-src http://mirrors.ustc.edu.cn/kali kali main non-free contrib
+deb http://mirrors.ustc.edu.cn/kali-security kali/updates main contrib non-free
+#阿里云kali源
+deb http://mirrors.aliyun.com/kali kali main non-free contrib
+deb-src http://mirrors.aliyun.com/kali kali main non-free contrib
+deb http://mirrors.aliyun.com/kali-security kali/updates main contrib non-free
+//
+2. 保存然后到terminal更新:
+# apt-get update
+//
+3. 安装输入法
+# apt-get install ibus ibus-pinyin  
+# apt-get install fcitx fcitx-googlepinyin
+//
+4. 配置
+在终端输入命令:
+# ibus-setup
+（如果出现错误，则按照提示补全.bashrc里面的内容）
+// 
+5. 在input method中添加中文拼音
+//
+6. 设置系统输入法
+// 
+7. 最后一步
+# reboot
+//
+搞定！
+如果中间出现错误，尝试使用 ibus-damon -d -x -r                 
