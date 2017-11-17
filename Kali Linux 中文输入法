@@ -5,4 +5,127 @@ Method 1：
 终端输入:
 # init 6(命令行重启)
 
+================================================================================
+================================================================================
 Method 2：
+
+第一步：修改sources.list文件(etc/apt目录下）在下方加几个软件源
+#官方源
+deb http://http.kali.org/kali kali main non-free contrib
+deb-src http://http.kali.org/kali kali main non-free contrib
+deb http://security.kali.org/kali-security kali/updates main contrib non-free
+
+#中科大kali源
+deb http://mirrors.ustc.edu.cn/kali kali main non-free contrib
+deb-src http://mirrors.ustc.edu.cn/kali kali main non-free contrib
+deb http://mirrors.ustc.edu.cn/kali-security kali/updates main contrib non-free
+
+#阿里云kali源
+deb http://mirrors.aliyun.com/kali kali main non-free contrib
+deb-src http://mirrors.aliyun.com/kali kali main non-free contrib
+deb http://mirrors.aliyun.com/kali-security kali/updates main contrib non-free
+
+保存。
+
+第二步： 解决依赖关系。 apt-get install -f
+
+第三步：apt-get update(apt-get upgrade我用了不行，用update就额可以了）
+
+第四步：安装输入法. apt-get install fcitx-googlepinyin
+
+第五步:安装fcitx配置的GUI： apt-get install fcitx-config-gtk2
+
+第六步：重启.reboot
+
+第七步:如图
+
+搜狗的话可以去http://pinyin.sougou.com/linux/64(我是64位，32的改成32） 然后命令行 dpkg -i 搜狗输入法安装包名字 .然后就可以Ctrl+shift直接用了。
+
+================================================================================
+================================================================================
+Method 3：
+
+kali linux安装好之后，如果选的只中文，会看到中文界面，但输入法还是英文输入法，linux中文输入法里面，搜狗算是很好用的了，安装过程踩了好多坑，记录一下。
+
+一 安装准备
+
+1.1 更新源
+
+先把源更新一下，注意，不同的源软件版本不一样，比如163的源，版本比较低，我通过163的源安装fcitx后安装搜狗的时候提示版本太低。
+所以建议在sources.list中多写几个。
+
+安装方法
+
+终端中输入：
+leafpad /etc/apt/sources.list
+
+在打开的文件中输入下面的源，保存退出
+#kali官方源
+deb http://http.kali.org/kali kali-rolling main non-free contrib
+
+#中科大的源
+deb http://mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib
+deb http://mirrors.ustc.edu.cn/kali kali-rolling main contrib non-free
+deb-src http://mirrors.ustc.edu.cn/kali kali-rolling main contrib non-free
+deb http://mirrors.ustc.edu.cn/kali-security kali-current/updates main contrib non-free
+deb-src http://mirrors.ustc.edu.cn/kali-security kali-current/updates main contrib non-free
+
+#阿里云源
+deb http://mirrors.aliyun.com/kali sana main non-free contrib
+deb http://mirrors.aliyun.com/kali-security/ sana/updates main contrib non-free
+deb-src http://mirrors.aliyun.com/kali-security/ sana/updates main contrib non-free
+#
+deb http://ppa.launchpad.net/hzwhuang/ss-qt5/ubuntu xenial main
+
+更新源配置好之后，更新
+# apt-get update
+
+1.2 安装fcitx
+
+# apt-get install fcitx
+
+顺利的话会自动安装成功，如果遇到依赖错误，按提示修复或者输入apt-get -f install 修复，
+但是如果提示“依赖xxx，但是xxx将不会被安装”，这一般是源太旧，建议换个其他的源。
+
+1.3 安装fcitx-libs-qt
+
+apt-get install fcitx-libs-qt
+
+安装搜狗的时候也提示依赖这个，所以也安装下。
+
+二 安装搜狗输入法
+
+2.1 下载对应版本deb
+
+去搜狗输入法官网http://pinyin.sogou.com/linux/ 下载自己系统对应版本的输入法安装包。
+
+2.2 安装搜狗输入法
+
+# cd ~/下载/        /*也可以文件浏览器在定位到下载目录，右击选择在终端中打开*/
+
+# dpkg -i 下载的sogo安装包文件名
+
+这一步比较慢，
+如果提示有依赖没有安装，可以用apt-get --fix-broken install 安装，
+如果提示“sogoupinyin依赖xxx(>=1.2.3…)，但系统中版本为1.1.1”之类的，说明源太旧了，需要换个其他源。
+可以用apt-get remove [package-name] 卸载旧版软件。
+要查看制定软件可用版本（本机的源上）可以用apt-cache madison [package-name] 查看，
+要安装制定版本的软件，可以用apt-get install fcitx=1.2.3 这样的语法安装。
+
+2.3 启用搜狗输入法
+
+安装好之后默认没有启用，需要先重启下kali ：reboot
+重启登录后左下角会有输入法的键盘图标，右击选择搜狗，然后可以试试Windows+空格或者Ctrl+空格切换输入法。
+如果依旧不能切换为搜狗输入法，这时候可以试下搜狗的切换快捷键：“Ctrl+，”，还不行就试试更改默认输入法：
+
+终端中输入：
+# im-config
+
+进入输入法配置，选择确定，然后点击是，在弹出来的输入法选择框中选择default或者fcitx，都试试，然后确定 。
+
+2.4 在sublime中启用搜狗输入法
+
+上面操作后，已经可以在浏览器，终端，leafpad中使用中文输入了，
+但是在sublime中依旧不可以，可以参考这篇文章：http://www.jianshu.com/p/bf05fb3a4709，
+里面列出了三种方法，推荐第一种 ，安装sublime-text-imfix后重启就可以了，很简单方便。
+第一种不行在试试别的。
