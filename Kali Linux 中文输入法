@@ -7,3 +7,30 @@ Method 1：
 
 ================================================================================
 ================================================================================
+Method 2：
+
+第一步：修改sources.list文件(etc/apt目录下）在下方加几个软件源
+#官方源
+deb http://http.kali.org/kali kali main non-free contrib
+deb-src http://http.kali.org/kali kali main non-free contrib
+deb http://security.kali.org/kali-security kali/updates main contrib non-free
+#中科大kali源
+deb http://mirrors.ustc.edu.cn/kali kali main non-free contrib
+deb-src http://mirrors.ustc.edu.cn/kali kali main non-free contrib
+deb http://mirrors.ustc.edu.cn/kali-security kali/updates main contrib non-free
+#阿里云kali源
+deb http://mirrors.aliyun.com/kali kali main non-free contrib
+deb-src http://mirrors.aliyun.com/kali kali main non-free contrib
+deb http://mirrors.aliyun.com/kali-security kali/updates main contrib non-free
+保存。
+第二步： 解决依赖关系。 apt-get install -f
+第三步：apt-get update(apt-get upgrade我用了不行，用update就额可以了）
+第四步：安装输入法. apt-get install fcitx-googlepinyin
+第五步:安装fcitx配置的GUI： apt-get install fcitx-config-gtk2
+第六步：重启.reboot
+第七步:如图
+搜狗的话可以去http://pinyin.sougou.com/linux/64(我是64位，32的改成32） 
+然后命令行 dpkg -i 搜狗输入法安装包名字 .然后就可以Ctrl+shift直接用了。
+
+================================================================================
+================================================================================
