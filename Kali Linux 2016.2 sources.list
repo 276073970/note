@@ -1,0 +1,71 @@
+#
+
+# deb cdrom:[Debian GNU/Linux 2016.1 _Kali-rolling_ - Official Snapshot amd64 LIVE/INSTALL Binary 20160830-11:29]/ kali-rolling contrib main non-free
+
+#deb cdrom:[Debian GNU/Linux 2016.1 _Kali-rolling_ - Official Snapshot amd64 LIVE/INSTALL Binary 20160830-11:29]/ kali-rolling contrib main non-free
+
+deb http://http.kali.org/kali kali-rolling main non-free contrib
+deb-src http://http.kali.org/kali kali-rolling main non-free contrib
+
+
+#官方2016.x的源
+deb http://security.kali.org/kali-security kali-rolling/updates main contrib non-free
+deb-src http://security.kali.org/kali-security kali-rolling/updates main contrib non-free
+
+#官方1.0的源
+deb http://http.kali.org/kali kali main non-free contrib
+deb-src http://http.kali.org/kali kali main non-free contrib
+deb http://security.kali.org/kali-security kali/updates main contrib non-free
+deb-src http://security.kali.org/kali-security kali/updates main contrib non-free
+
+#官方2.0的源
+deb http://http.kali.org/kali sana main non-free contrib
+deb-src http://http.kali.org/kali sana main non-free contrib
+deb http://security.kali.org/kali-security sana/updates main contrib non-free
+deb-src http://security.kali.org/kali-security sana/updates main contrib non-free
+
+#激进源，新手不推荐使用这个软件源
+deb http://repo.kali.org/kali kali-bleeding-edge main
+deb-src http://repo.kali.org/kali kali-bleeding-edge main
+
+
+
+#阿里云kali1.0的源
+deb http://mirrors.aliyun.com/kali kali main non-free contrib
+deb-src http://mirrors.aliyun.com/kali kali main non-free contrib
+deb http://mirrors.aliyun.com/kali-security kali/updates main contrib non-free
+deb-src http://mirrors.aliyun.com/kali-security kali/updates main contrib non-free
+
+#中科大kali1.0的源
+deb http://mirrors.ustc.edu.cn/kali kali main non-free contrib
+deb-src http://mirrors.ustc.edu.cn/kali kali main non-free contrib
+deb http://mirrors.ustc.edu.cn/kali-security kali/updates main contrib non-free
+deb-src http://mirrors.ustc.edu.cn/kali-security kali/updates main contrib non-free
+
+
+
+#阿里云kali2.0的源
+deb http://mirrors.aliyun.com/kali sana main non-free contrib
+deb-src http://mirrors.aliyun.com/kali sana main non-free contrib
+deb http://mirrors.aliyun.com/kali-security/ sana/updates main contrib non-free
+deb-src http://mirrors.aliyun.com/kali-security/ sana/updates main contrib non-free
+
+#中科大kali2.0的源
+deb http://mirrors.ustc.edu.cn/kali sana main non-free contrib
+deb-src http://mirrors.ustc.edu.cn/kali sana main non-free contrib
+deb http://mirrors.ustc.edu.cn/kali-security/ sana/updates main contrib non-free
+deb-src http://mirrors.ustc.edu.cn/kali-security/ sana/updates main contrib non-free
+
+
+
+#阿里云kali2016.x的源
+deb http://mirrors.aliyun.com/kali kali-rolling main non-free contrib
+deb-src http://mirrors.aliyun.com/kali kali-rolling main non-free contrib
+deb http://mirrors.aliyun.com/kali-security kali-rolling/updates main contrib non-free
+deb-src http://mirrors.aliyun.com/kali-security kali-rolling/updates main contrib non-free
+
+#中科大kali2016.x的源
+deb http://mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib
+deb-src http://mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib
+deb http://mirrors.ustc.edu.cn/kali-security kali-current/updates main contrib non-free
+deb-src http://mirrors.ustc.edu.cn/kali-security kali-current/updates main contrib non-free
