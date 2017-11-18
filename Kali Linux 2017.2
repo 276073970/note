@@ -74,22 +74,22 @@ No / Yes
 
 二. Setting
 
-1. wifi
-1) "Select Network" => "Connect"
+1. WiFi
+1) "Settings" => "Wi-Fi" => "Visible Networks"
 2) "Firefox" => "accounts" => "sync"
 
 2. Background
-1) "All Settings" => "Background"
+1) "Settings" => "Background"
 2) "Background"
 3) "Lock Screen"
 
 3. Displays
-1) "All Settings" => "Displays"
+1) "Settings" => "Devices" => "Displays"
 2) "Mirror"(the display) => "Apply"
 3) "Lid Closed"(the host) => "Resolution"(the display)
 
 4. Date & Time
-1) "All Settings" => "Date & Time"
+1) "Settings" => "Details" => "Date & Time"
 2) "Automatic Date & Time"(On)
 3) "Automatic Time Zone"(Off) => "Time Zone"(CST (Shanghai, China))
 
@@ -175,7 +175,26 @@ deb-src http://mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib
 ================================================================================
 ================================================================================
 
-七. 中文输入法
+七. LiberOffice
+
+
+
+================================================================================
+================================================================================
+
+八. 中文输入法
+
+亲测：
+(1) # apt-get install fcitx*
+(2) # reboot
+(3) "Applications"(alt + a) => "Fcitx Configuration"
+(4) "Input Method" => "+" => "Only Show Current Language"(off) => "Search Input Method"(Pinyin) => "OK"
+(5) "Global Config" => "Trigger Input Method"(Ctrl+Space)
+(6) Ctrl + Space / Shift
+注：
+当“# apt-get install fcitx”安装fcitx，其后无法通过“Tab”键适配相应安装包时，
+可先执行一次“# apt-get install fcitx*”，当出现是否安装（Y/n）对话时，输入“n”，
+再次输入“# apt-get install fcitx”时，即可通过双击“Tab”键，展示全部对应的安装包。
 
 1. fcitx
 # apt-get install fcitx 
