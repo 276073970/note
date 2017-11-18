@@ -1,0 +1,39 @@
+刚刚装好linux,作为中文使用者，最应该首先要做的就是中文输入法，那么fcitx就是不二选择，中文名叫小企鹅输入法还有记得安装相应的中文字体。
+
+fcitx在源里面就有，所以直接apt-get install fcitx (安装输入法框架)
+
+从安装kali直到现在都是用fcitx，当初也想装搜狗拼音输入法，但是恰好要写超长的论文什么的，就直接用fcitx自带的拼音输入法顶上了，
+但是最近闲下来还是希望能用上搜狗拼音输入法，一方面是为了它的云词库，另一方面是智能推荐什么的（fcitx拼音打字还是不怎么流畅）。
+多亏了搜狗和Ubuntu Kylin有合作，所以官方有deb包，dpkg系的都很简单就可以安装了。
+因为linux搜狗拼音输入法是基于fcitx框架的，所以搜狗拼音输入法之前要装fcitx，
+我之前装了fcitx，但是在装的时候还是没有满足依赖关系，用sudo apt-get -f install修复依赖关系就好了，
+然后再安装下载的.deb包就好了，重启输入法，就可以愉快地使用搜狗拼音输入法了，
+体验了几天，虽然没有办法登陆，而且皮肤也没有多少，但是输入体验很好。
+
+之前没有详细讲中文字体问题，其实这个问题没有弄清楚也挺严重的，
+特别是对于滚动更新而言，因为总是要维持最新版本，所以极有可能会出现中文乱码，全是方块的情况，谁叫一般最新版本都是英文的呢。
+http://www.linuxdiyf.com/linux/20701.html 这是我找到并且在kalirolling上验证可行的中文乱码解决方法：
+本来如果我一apt-get dist-upgrade就各种方块出来的包括浏览的网页内容也是方块， 
+所以在你刚装好系统后，用apt-get install locales 确认机子有没有安装locales，
+如果安装了会有提示的，如果没有安装这个命令就正好可以安装，
+在输入dpkg-reconfigure locales打开图形界面，向下找到en_US.UTF-8和zh_CN.UTF-8,将en_US.UTF-8选为默认，
+之后apt-get install xfonts-intl-chinese xfonts-intl-chinese-big ttf-wqy-microhei ttf-wqy-zenhei安装中文字体,安装好以后重启即可。
+
+今天作死改了/etc/passwd的内容（作死的我把我的用户的UID改成0～），结果马上就出问题了，那就是终端里面无论你做什么都会说不认识你
+（我UID明明改成了0，非要说不认识我这个1000UID的用户….瞬间一头黑线），
+用其他tty登陆root把/etc/passwd内容修改回去，再回来登陆gnome，gnome就变得奇奇怪怪，最严重的是，gnome-termianl都打不开了！
+
+到其他tty察看到/var/log/syslog，找到事发时间段，发现错误提示 
+org.gnoem.Terminal:/org/gnome/Terminal/Factory0:Error calling StarServiceByName….
+
+果断谷歌之！找到这个——https://bbs.archlinux.org/viewtopic.php?id=180103，
+虽然不是完全相同的情况，但是尝试用里面的建议做了locale的设置 ——localectl set-locale LANG=”en_US.UTF-8”，
+reboot后可以启动gnome-terminal了！喜大普奔～
+我完全没有想到一个语系问题竟然直接可以导致gnome-terminal无法唤出….
+然后再重新设置了一边语系：终端输入dpkg-reconfigure locales打开图形界面，向下找到en_US.UTF-8和zh_CN.UTF-8,将en_US.UTF-8选为默认，
+由于原本我们的字体就装好了，装中文字体就省略了，接着重启基本上问题就可以解决了，
+如果出现弄不出搜狗拼音输入法的情况，请直接到系统设置里面改区域语言里面的语言选项就可以了～
+
+感悟：用的起linux就别怕折腾，也别一出问题就重装！
+如果一出问题就重装，那和windows有什么区别，linux还是很好fix的，而且google神器在手，要相信神器的力量，相信开源的力量～
+还有注意备份，我已经三四次后悔没有备份了！
