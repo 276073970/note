@@ -147,17 +147,18 @@ deb-src http://mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib
 # apt-get upgrade -y    //更新实际的软件包文件
 # apt-get dist-upgrade -y    //根据依赖关系更新
 # apt-get clean    //清除缓存索引
+# reboot    //重启
 
-// linux内核更新
+1. linux内核更新
 # apt-get install linux-headers-$(uname -r)
 
-// 拓展
-(1) apt-get update
+2. 拓展
+1) apt-get update
 //刷新源，获得最近的软件包的列表
-(2) apt-get upgrade
+2) apt-get upgrade
 //更新系统，系统将现有的Package升级,
 //如果有相依性的问题,而此相依性需要安装其它新的Package或影响到其它Package的相依性时,此Package就不会被升级,会保留下来.
-(3) apt-get dist-upgrade
+3) apt-get dist-upgrade
 //可以聪明地解决相依性的问题,
 //如果有相依性问题,需要安装/移除新的Package,就会试着去安装/移除它. 
 //(所以通常这个会被认为是有点风险的升级，可以不用执行)
@@ -166,3 +167,71 @@ deb-src http://mirrors.ustc.edu.cn/kali kali-rolling main non-free contrib
 ================================================================================
 
 七. 中文输入法
+
+1. fcitx
+# apt-get install fcitx 
+# apt-get install fcitx-googlepinyin
+# reboot
+
+2. ibus
+# apt-get install ibus  
+# apt-get install ibus-pinyin
+# reboot
+# ibus-setup
+
+3. Sogou
+//
+1) 安装fcitx
+# apt-get install fcitx
+//顺利的话会自动安装成功，
+//如果遇到依赖错误，按提示修复或者输入apt-get -f install 修复，
+//但是如果提示“依赖xxx，但是xxx将不会被安装”，这一般是源太旧，建议换个其他的源。
+//
+2) 安装fcitx-libs-qt
+# apt-get install fcitx-libs-qt
+//安装搜狗的时候也提示依赖这个，所以也安装下。
+//
+3) 下载对应版本的.deb
+//去搜狗输入法官网http://pinyin.sogou.com/linux/ 下载自己系统对应版本的输入法安装包。
+//
+4) 安装搜狗输入法
+# cd ~/Download/	/*也可以文件浏览器在定位到下载目录，右击选择在终端中打开*/
+# dpkg -i sogou.deb
+//这一步比较慢，
+//如果提示有依赖没有安装，可以用apt-get --fix-broken install 安装，
+//如果提示“sogoupinyin依赖xxx(>=1.2.3…)，但系统中版本为1.1.1”之类的，说明源太旧了，需要换个其他源。
+//可以用apt-get remove [package-name] 卸载旧版软件。
+//要查看制定软件可用版本（本机的源上）可以用apt-cache madison [package-name] 查看，
+//要安装制定版本的软件，可以用apt-get install fcitx=1.2.3 这样的语法安装。
+//
+5) 启用搜狗输入法
+# reboot
+安装好之后默认没有启用，需要先重启下kali：
+重启登录后左下角会有输入法的键盘图标，右击选择搜狗，然后可以试试Windows+空格或者Ctrl+空格切换输入法。
+如果依旧不能切换为搜狗输入法，这时候可以试下搜狗的切换快捷键：“Ctrl+，”，还不行就试试更改默认输入法：
+6) 输入法配置
+# im-config
+进入输入法配置，选择确定，然后点击是，在弹出来的输入法选择框中选择default或者fcitx，都试试，然后确定 。
+
+4. 安装报错
+# apt-get -f install
+//解决软件包有未满足的依赖关系
+//如果安装中出现依赖问题，系统会提示使用apt-get -f install。 
+//-f是“force”强行安装的意思，系统会自动下载安装依赖包来解决依赖问题。
+# apt-get --fix-broken install
+# apt-get remove
+# dpkg -r 
+//可以卸载掉已经安装的包，但是需要确切地知道包的名字（并不是.deb文件的名字），而且还需要考虑包之间的依赖问题。
+//我只能用它卸载掉fctix，其他很多包都无能为力。
+//卸载完包之后，可以按照提示用dpkg --purge删除掉配置文件。
+
+5. 其他安装包
+# apt-get install ibus ibus-pinyin		#经典的ibus
+# apt-get install fcitx fcitx-pinyin fcitx-module-cloudpinyin fcitx-googlepinyin	#fcitx拼音
+# apt-get install gnome-tweak-tool		#安装gnome管理软件
+# apt-get install synaptic			#安装新立德
+# apt-get install software-center		#安装ubuntu软件中心
+# apt-get install file-roller			#安装解压缩软件
+# apt-get install gedit				#安装gedit编辑软件
+# apt-get install audacious			#audacious音乐播放器
+# apt-get install smplayer			#安装smplayer视频播放器
