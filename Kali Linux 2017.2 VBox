@@ -94,13 +94,29 @@ deb-src http://http.kali.org/kali kali-rolling main non-free contrib
 //
 Installing VirtualBox Guest Additions in Kali Linux
 //
-apt-get update
-apt-get install -y virtualbox-guest-x11
-reboot
+# apt-get update
+# apt-get install -y virtualbox-guest-x11
+# reboot
 //
 Installing VirtualBox Guest Additions in Older Kali Versions
 // 
-apt-get update && apt-get install -y linux-headers-$(uname -r)
+# apt-get update && apt-get install -y linux-headers-$(uname -r)
+//
+Once this is complete you can now attach the “Guest Additions” CD-ROM image. 
+Select “Devices” from the VirtualBox menu and then select “Install Guest Additions”. 
+This will mount the Guest Additions ISO in the virtual CD drive in your Kali Linux virtual machine. 
+When prompted to autorun the CD, click the Cancel button.
+//
+From a terminal window, copy the VboxLinuxAdditions.run file from the Guest Additions CD-ROM to a path on your local system. 
+Ensure it is executable and run the file to begin the installation.
+# cp /media/cd-rom/VBoxLinuxAdditions.run /root/
+# chmod 755 /root/VBoxLinuxAdditions.run
+# cd /root
+# ./VBoxLinuxAdditions.run
+//
+Reboot the Kali Linux VM to complete the Guest Additions installation. 
+You should now have full mouse and screen integration as well as the ability to share folders with the host system.
+//
 
 
 1. linux内核更新
