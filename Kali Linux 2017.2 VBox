@@ -91,6 +91,18 @@ deb-src http://http.kali.org/kali kali-rolling main non-free contrib
 # apt-get clean    //清除缓存索引
 # reboot    //重启
 
+//
+Installing VirtualBox Guest Additions in Kali Linux
+//
+apt-get update
+apt-get install -y virtualbox-guest-x11
+reboot
+//
+Installing VirtualBox Guest Additions in Older Kali Versions
+// 
+apt-get update && apt-get install -y linux-headers-$(uname -r)
+
+
 1. linux内核更新
 # apt-get install linux-headers-$(uname -r)
 
