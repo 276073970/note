@@ -1,4 +1,4 @@
-1. Vim
+# Vim
 1) :e $VIM/vimrc
 2) /usr/share/vim/vimrc ->
 3) /etc/vim/vimrc
@@ -7,52 +7,74 @@
 ================================================================================
 ================================================================================
 
-二. Setting
+1. Install Windosw10 (en_windows_10_multi-edition_version_1709_updated_sept_2017_x64_dvd_100090817)
 
-2. Background
-1) "Settings" => "Background"
-2) "Background"
-3) "Lock Screen"
-
-4. Date & Time
-1) "Settings" => "Details" => "Date & Time"
-2) "Automatic Date & Time"(On)
-3) "Automatic Time Zone"(Off) => "Time Zone"(CST (Shanghai, China))
+(1) en_office_professional_plus_2016_x86_x64_dvd_6962141
+(2) mu_visual_studio_professional_2017_version_15.3_x86_x64_11100064
 
 ================================================================================
 ================================================================================
 
+2. VirtualBox-5.1.30-118389-Win (VirtualBox-5.2.0-118431-Win 安装后无法联网)
+
+1) Create Virtual Machine
+//
+(1) Name and operating system
+Name: kali-linux-2017.3-amd64
+Type: Linux
+Version: Debian (64-bit)
+(2) Memory size
+4096 MB
+(3) Hard disk
+Create a virtual hard disk now
+//
+(4) File Location
+L:\kali-linux-2017.3-amd64
+(5) File size
+28.00 GB
+(6) Hard disk file type
+VDI (VirtualBox Disk Image)
+(7) Storage on physical hard disk
+Fixed size
+
+2) Network Configuration
+Settings => Network => Adapter 1 => Attached to: => Bridged Adpter
+
+3) Snapshots
+
+================================================================================
+================================================================================
+
+3. kali-linux-2017.3-amd64
+
+1) Setting
+(1) "Settings" => "Background"
+"Background"
+"Lock Screen"
+(2) "Settings" => "Details" => "Date & Time"
+"Automatic Date & Time"(On)
+"Automatic Time Zone"(Off) => "Time Zone"(CST (Shanghai, China))
+
+2) Dock
 "Dash to Dock Settings" => "Position on screen"(Bottom)
 
-三. Tweak Tool
+3) Tweak Tool
+(1) "Appearance" => "Global Dark Theme"(On)
+(2) "Top Bar" => "Clock" => "Show date"(On)
 
-1. "Appearance" => "Global Dark Theme"(On)
-
-2. "Top Bar" => "Clock" => "Show date"(On)
-
-================================================================================
-================================================================================
-
-四. Terminal
-
-1. "Terminal" => "Preferences" => "Profiles" => "Edit"(Unnamed)
-
-2. "General" => "Initial terminal size" => "80_columns, 43_rows"
-
-3. "General" => "Custom font" => "Monospace Bold 16"
-
-4. "Colors" => "Built-in schemes" => "Custom"
-
-5. "Colors" => "Default color" => "Text"
-
-6. "Colors" => "Default color" => "Background"
-
-7. "Colors" => "Transparent background"(off)
+4) Terminal
+"Terminal" => "Preferences" => "Profiles" => "Edit"(Unnamed)
+(1) "General" => "Initial terminal size" => "80_columns, 43_rows"
+(2) "General" => "Custom font" => "Monospace Bold 16"
+(3) "Colors" => "Built-in schemes" => "Custom"
+(4) "Colors" => "Default color" => "Text"
+(5) "Colors" => "Default color" => "Background"
+(6) "Colors" => "Transparent background"(off)
 
 ================================================================================
 ================================================================================
 
-五. 配置源
+4. Repositories & Sources
 
 1. 编辑配置文件
 # vim /etc/apt/sources.list
@@ -127,39 +149,3 @@ You should now have full mouse and screen integration as well as the ability to 
 
 ================================================================================
 ================================================================================
-
-1. 安装
-
-1) en_windows_10_multi-edition_version_1709_updated_sept_2017_x64_dvd_100090817
-(1) en_office_professional_plus_2016_x86_x64_dvd_6962141
-(2) mu_visual_studio_professional_2017_version_15.3_x86_x64_11100064
-
-2) VirtualBox-5.1.30-118389-Win (VirtualBox-5.2.0-118431-Win 安装后无法联网)
-//// Create Virtual Machine
-//
-(1) Name and operating system
-Name: kali-linux-2017.3-amd64
-Type: Linux
-Version: Debian (64-bit)
-(2) Memory size
-4096 MB
-(3) Hard disk
-Create a virtual hard disk now
-//
-(4) File Location
-L:\kali-linux-2017.3-amd64
-(5) File size
-28.00 GB
-(6) Hard disk file type
-VDI (VirtualBox Disk Image)
-(7) Storage on physical hard disk
-Fixed size
-//
-//// Network Configuration
-Settings => Network => Adapter 1 => Attached to: => Bridged Adpter
-//// Snapshots
-
-3) kali-linux-2017.3-amd64
-
-
-2. 的
