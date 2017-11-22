@@ -18,7 +18,7 @@
 ================================================================================
 ================================================================================
 
-1. Install Windows 10
+1. Windows 10
 
 1) en_windows_10_multi-edition_version_1709_updated_sept_2017_x64_dvd_100090817
 
@@ -53,6 +53,9 @@ Fixed size
 
 2) Network Configuration
 Settings => Network => Adapter 1 => Attached to: => Bridged Adpter
+
+3) ISO
+Storage => kali-linux-2017.3-amd64.iso => Start
 
 ================================================================================
 ================================================================================
@@ -145,9 +148,6 @@ You should now have full mouse and screen integration as well as the ability to 
 (2) Folder Path: D:\Share
 (3) Folder Name: Share
 (4) Auto-mount & Make-permanent
-
-8) Snapshots
-
 
 ================================================================================
 ================================================================================
