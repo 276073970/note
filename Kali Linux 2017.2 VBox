@@ -4,13 +4,27 @@
 3) /etc/vim/vimrc
 4) [vimrc] ~ [gvimrc]
 
+# 功能介绍
+1) apt-get update
+//刷新源，获得最近的软件包的列表
+2) apt-get upgrade
+//更新系统，系统将现有的Package升级,
+//如果有相依性的问题,而此相依性需要安装其它新的Package或影响到其它Package的相依性时,此Package就不会被升级,会保留下来.
+3) apt-get dist-upgrade
+//可以聪明地解决相依性的问题,
+//如果有相依性问题,需要安装/移除新的Package,就会试着去安装/移除它. 
+//(所以通常这个会被认为是有点风险的升级，可以不用执行)
+
 ================================================================================
 ================================================================================
 
-1. Install Windosw10 (en_windows_10_multi-edition_version_1709_updated_sept_2017_x64_dvd_100090817)
+1. Install Windows 10
 
-(1) en_office_professional_plus_2016_x86_x64_dvd_6962141
-(2) mu_visual_studio_professional_2017_version_15.3_x86_x64_11100064
+1) en_windows_10_multi-edition_version_1709_updated_sept_2017_x64_dvd_100090817
+
+2) en_office_professional_plus_2016_x86_x64_dvd_6962141
+
+3) mu_visual_studio_professional_2017_version_15.3_x86_x64_11100064
 
 ================================================================================
 ================================================================================
@@ -76,17 +90,18 @@ Settings => Network => Adapter 1 => Attached to: => Bridged Adpter
 
 4. Repositories & Sources
 
-1. 编辑配置文件
+1) sources.list
 # vim /etc/apt/sources.list
 
-2. 添加更新源
-1) 将 源地址 追加到文件末即可.
-2) 通常添加 官方源 即可, 更新依赖关系时会自动适配当前最优源.
-#官方源
+2) defining package sources
 deb http://http.kali.org/kali kali-rolling main non-free contrib
 deb-src http://http.kali.org/kali kali-rolling main non-free contrib
 
-3. Kali Linux 2017.2 的原 sources.list 内容如下：
+3)
+deb for binary packages
+deb-src for source packages
+
+4) Kali Linux 2017.2 的原 sources.list 内容如下：
 # 
 
 # deb cdrom:[Debian GNU/Linux 2017.2 _Kali-rolling_ - Official Snapshot amd64 LIVE/INSTALL Binary 20170917-01:51]/ kali-rolling contrib main non-free
@@ -96,56 +111,43 @@ deb-src http://http.kali.org/kali kali-rolling main non-free contrib
 ================================================================================
 ================================================================================
 
-六. 更新依赖关系
+5. Update & VBox Additions
 
-# apt-get clean    //清除缓存索引
+1) Update
 # apt-get update    //更新索引文件
 # apt-get upgrade -y    //更新实际的软件包文件
 # apt-get dist-upgrade -y    //根据依赖关系更新
 # apt-get clean    //清除缓存索引
 # reboot    //重启
 
-//
-Installing VirtualBox Guest Additions in Kali Linux
-//
+2) Installing VirtualBox Guest Additions in Kali Linux
 # apt-get update
 # apt-get install -y virtualbox-guest-x11
 # reboot
-//
-Installing VirtualBox Guest Additions in Older Kali Versions
-// 
+3) Installing VirtualBox Guest Additions in Older Kali Versions
 # apt-get update && apt-get install -y linux-headers-$(uname -r)
-//
-Once this is complete you can now attach the “Guest Additions” CD-ROM image. 
+
+4) Once this is complete you can now attach the “Guest Additions” CD-ROM image. 
 Select “Devices” from the VirtualBox menu and then select “Install Guest Additions”. 
 This will mount the Guest Additions ISO in the virtual CD drive in your Kali Linux virtual machine. 
 When prompted to autorun the CD, click the Cancel button.
-//
-From a terminal window, copy the VboxLinuxAdditions.run file from the Guest Additions CD-ROM to a path on your local system. 
+
+5) From a terminal window, copy the VboxLinuxAdditions.run file from the Guest Additions CD-ROM to a path on your local system. 
 Ensure it is executable and run the file to begin the installation.
 # cp /media/cd-rom/VBoxLinuxAdditions.run /root/
 # chmod 755 /root/VBoxLinuxAdditions.run
 # cd /root
 # ./VBoxLinuxAdditions.run
-//
-Reboot the Kali Linux VM to complete the Guest Additions installation. 
+
+6) Reboot the Kali Linux VM to complete the Guest Additions installation. 
 You should now have full mouse and screen integration as well as the ability to share folders with the host system.
-//
 
+7) Shared Folders
+(1) Settings => Shared Folders => Adds new shared folder
+(2) Folder Path: D:\Share
+(3) Folder Name: Share
+(4) Auto-mount & Make-permanent
 
-1. linux内核更新
-# apt-get install linux-headers-$(uname -r)
-
-2. 功能介绍
-1) apt-get update
-//刷新源，获得最近的软件包的列表
-2) apt-get upgrade
-//更新系统，系统将现有的Package升级,
-//如果有相依性的问题,而此相依性需要安装其它新的Package或影响到其它Package的相依性时,此Package就不会被升级,会保留下来.
-3) apt-get dist-upgrade
-//可以聪明地解决相依性的问题,
-//如果有相依性问题,需要安装/移除新的Package,就会试着去安装/移除它. 
-//(所以通常这个会被认为是有点风险的升级，可以不用执行)
 
 ================================================================================
 ================================================================================
