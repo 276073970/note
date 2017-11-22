@@ -57,6 +57,8 @@ Settings => Network => Adapter 1 => Attached to: => Bridged Adpter
 3) ISO
 Storage => kali-linux-2017.3-amd64.iso => Start
 
+4) Snapshots
+
 ================================================================================
 ================================================================================
 
@@ -148,6 +150,8 @@ You should now have full mouse and screen integration as well as the ability to 
 (2) Folder Path: D:\Share
 (3) Folder Name: Share
 (4) Auto-mount & Make-permanent
+
+8) Snapshots
 
 ================================================================================
 ================================================================================
