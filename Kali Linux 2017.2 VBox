@@ -4,14 +4,6 @@
 3) /etc/vim/vimrc
 4) [vimrc] ~ [gvimrc]
 
-2. Firefox
-[Status]        [Close]=>[Open]  =>  [Maximize]=>[Unmaximize]
-# Unmaximize    # Unmaximize     =>  # Unmaximize(random)
-# Maximize      # Maximize       =>  # Unmaximize(random)
-# ViewSplit     # ViewSplit      =>  # ViewSplit
-
-[ViewSplit] => [Maximize] => Close => Open => [Unmaximize(Default)]
-
 ================================================================================
 ================================================================================
 
@@ -138,7 +130,32 @@ You should now have full mouse and screen integration as well as the ability to 
 
 1. 安装
 1) en_windows_10_multi-edition_version_1709_updated_sept_2017_x64_dvd_100090817
+(1) en_office_professional_plus_2016_x86_x64_dvd_6962141
+(2) mu_visual_studio_professional_2017_version_15.3_x86_x64_11100064
 2) VirtualBox-5.1.30-118389-Win (VirtualBox-5.2.0-118431-Win 安装后无法联网)
+//// Create Virtual Machine
+//
+(1) Name and operating system
+Name: kali-linux-2017.3-amd64
+Type: Linux
+Version: Debian (64-bit)
+(2) Memory size
+4096 MB
+(3) Hard disk
+Create a virtual hard disk now
+//
+(4) File Location
+L:\kali-linux-2017.3-amd64
+(5) File size
+28.00 GB
+(6) Hard disk file type
+VDI (VirtualBox Disk Image)
+(7) Storage on physical hard disk
+Fixed size
+//
+//// Network Configuration
+Settings => Network => Adapter 1 => Attached to: => Bridged Adpter
+//// Snapshots
 3) kali-linux-2017.3-amd64
 
 2. 的
