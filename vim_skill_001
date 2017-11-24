@@ -15,6 +15,11 @@
 这里只是只是为了显示方便，折行显示，部增加新的行。
 
 
+Kali Linux Vim:
+1) :e $VIM/vimrc
+2) /usr/share/vim/vimrc ->
+3) /etc/vim/vimrc
+4) [vimrc] ~ [gvimrc]
 
 
 set autoindent 
