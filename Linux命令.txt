@@ -374,8 +374,8 @@ Kali Linux 2017.3
 //
 3) # python3 (交互式编程)
 (1) 版本: python3 --version
-(2) 退出: exit() 或 Ctrl-D)
-(3) 查看其他信息
+(2) 退出: exit() 或 Ctrl-D
+(3) 查看其他信息:
 help() (quit退出)
 copyright()
 credits()
