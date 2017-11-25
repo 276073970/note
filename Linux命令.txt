@@ -361,6 +361,55 @@ Unix或Windows中路径变量为PATH（UNIX区分大小写，Windows不区分大
 Kali Linux 2017.3
 1. export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 2. /usr/bin/python3
+-rwxr-xr-x  1 root root        7806 Oct 26 15:09  py3clean
+-rwxr-xr-x  1 root root       12113 Oct 26 15:09  py3compile
+lrwxrwxrwx  1 root root          31 Nov 22 06:54  py3versions -> ../share/python3/py3versions.py
+-rwxr-xr-x  1 root root          60 Sep 25 20:06  pyalacarte
+-rwxr-xr-x  1 root root          59 Sep 25 20:06  pyalamode
+lrwxrwxrwx  1 root root          26 Nov 22 06:54  pybuild -> ../share/dh-python/pybuild
+-rwxr-xr-x  1 root root        4123 Sep 18 04:17  pyclean
+-rwxr-xr-x  1 root root       11894 Sep 18 04:17  pycompile
+-rwxr-xr-x  1 root root          57 Sep 25 20:06  pycrust
+lrwxrwxrwx  1 root root           8 Nov 22 06:48  pydoc -> pydoc2.7
+-rwxr-xr-x  1 root root          79 Sep 17 14:50  pydoc2.7
+lrwxrwxrwx  1 root root           8 Nov 22 06:48  pydoc3 -> pydoc3.6
+-rwxr-xr-x  1 root root          79 Oct  3 17:16  pydoc3.6
+lrwxrwxrwx  1 root root          12 Nov 22 06:48  pygettext -> pygettext2.7
+-rwxr-xr-x  1 root root       22096 Sep 17 14:50  pygettext2.7
+lrwxrwxrwx  1 root root          12 Nov 22 06:48  pygettext3 -> pygettext3.6
+-rwxr-xr-x  1 root root       21098 Oct  3 17:16  pygettext3.6
+-rwxr-xr-x  1 root root         148 Jan 23  2017  pygmentize
+-rwxr-xr-x  1 root root         391 Sep 26 17:25  pyhtmlizer
+-rwxr-xr-x  1 root root         289 Jan 10  2017  pyrit
+-rwxr-xr-x  1 root root          57 Sep 25 20:06  pyshell
+-rwxr-xr-x  1 root root        5443 May 21  2012  pysnmpbulkwalk
+-rwxr-xr-x  1 root root        2571 May 21  2012  pysnmpget
+-rwxr-xr-x  1 root root        2575 May 21  2012  pysnmpset
+-rwxr-xr-x  1 root root        6295 May 21  2012  pysnmptranslate
+-rwxr-xr-x  1 root root        8396 May 21  2012  pysnmptrap
+-rwxr-xr-x  1 root root        4784 May 21  2012  pysnmpwalk
+-rwxr-xr-x  1 root root         376 Sep  4 06:13  pytest
+lrwxrwxrwx  1 root root           6 Nov 22 06:48  py.test -> pytest
+lrwxrwxrwx  1 root root           9 Nov 22 06:48  python -> python2.7
+lrwxrwxrwx  1 root root           9 Nov 22 06:48  python2 -> python2.7
+-rwxr-xr-x  1 root root     3701568 Sep 17 14:50  python2.7
+lrwxrwxrwx  1 root root          33 Nov 22 06:48  python2.7-config -> x86_64-linux-gnu-python2.7-config
+lrwxrwxrwx  1 root root          16 Nov 22 06:48  python2-config -> python2.7-config
+-rwxr-xr-x  1 root root         383 Sep 23  2016  python2-futurize
+-rwxr-xr-x  1 root root         387 Sep 23  2016  python2-pasteurize
+-rwxr-xr-x  1 root root         285 Aug 22  2016  python2-qr
+lrwxrwxrwx  1 root root           9 Nov 22 06:48  python3 -> python3.6
+-rwxr-xr-x  2 root root     4568920 Oct  3 17:16  python3.6
+-rwxr-xr-x  2 root root     4568920 Oct  3 17:16  python3.6m
+lrwxrwxrwx  1 root root          10 Nov 22 06:48  python3m -> python3.6m
+-rwxr-xr-x  1 root root        5695 Sep  8  2016  python3-wsdump
+-rwxr-xr-x  1 root root        2554 Jan 24  2017  python-argcomplete-check-easy-install-script
+-rwxr-xr-x  1 root root         314 Jan 19  2017  python-argcomplete-tcsh
+lrwxrwxrwx  1 root root          16 Nov 22 06:48  python-config -> python2.7-config
+-rwxr-xr-x  1 root root         130 Nov 20 11:16  python-faraday
+lrwxrwxrwx  1 root root          29 Nov 22 06:54  pyversions -> ../share/python/pyversions.py
+-rwxr-xr-x  1 root root          56 Sep 25 20:06  pywrap
+-rwxr-xr-x  1 root root          60 Sep 25 20:06  pywxrc
 3. 在 Windows 下可以不写第一行注释: #!/usr/bin/python3
 第一行注释标的是指向 python 的路径，告诉操作系统执行这个脚本的时候，调用 /usr/bin 下的 python 解释器。
 此外还有以下形式（推荐写法）：
