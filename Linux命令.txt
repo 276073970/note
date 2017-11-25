@@ -360,7 +360,12 @@ Unix或Windows中路径变量为PATH（UNIX区分大小写，Windows不区分大
 
 Kali Linux 2017.3
 1. export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-2. /usr/bin/python3
+2. #!/usr/bin/python3
+(1) 在 Windows 下可以不写第一行注释
+(2) 第一行注释标的是指向 python 的路径，告诉操作系统执行这个脚本的时候，调用 /usr/bin 下的 python 解释器。
+(3) 此外还有以下形式（推荐写法）: #!/usr/bin/env python3
+这种用法先在 env（环境变量）设置里查找 python 的安装路径，再调用对应路径下的解释器程序完成操作。
+3. /usr/bin/
 -rwxr-xr-x  1 root root        7806 Oct 26 15:09  py3clean
 -rwxr-xr-x  1 root root       12113 Oct 26 15:09  py3compile
 lrwxrwxrwx  1 root root          31 Nov 22 06:54  py3versions -> ../share/python3/py3versions.py
@@ -410,11 +415,6 @@ lrwxrwxrwx  1 root root          16 Nov 22 06:48  python-config -> python2.7-con
 lrwxrwxrwx  1 root root          29 Nov 22 06:54  pyversions -> ../share/python/pyversions.py
 -rwxr-xr-x  1 root root          56 Sep 25 20:06  pywrap
 -rwxr-xr-x  1 root root          60 Sep 25 20:06  pywxrc
-3. 在 Windows 下可以不写第一行注释: #!/usr/bin/python3
-第一行注释标的是指向 python 的路径，告诉操作系统执行这个脚本的时候，调用 /usr/bin 下的 python 解释器。
-此外还有以下形式（推荐写法）：
-#!/usr/bin/env python3
-这种用法先在 env（环境变量）设置里查找 python 的安装路径，再调用对应路径下的解释器程序完成操作。
 
 ====================================================================================================
 =firewall相关操作===================================================================================
