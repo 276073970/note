@@ -68,7 +68,9 @@ Storage => kali-linux-2017.3-amd64.iso => Start
 (1) "Settings" => "Background"
 "Background"
 "Lock Screen"
-(2) "Settings" => "Details" => "Date & Time"
+(2) "Settings" => "Power"
+"Power Saving" => "Blank screen"(Never)
+(3) "Settings" => "Details" => "Date & Time"
 "Automatic Date & Time"(On)
 "Automatic Time Zone"(Off) => "Time Zone"(CST (Shanghai, China))
 
