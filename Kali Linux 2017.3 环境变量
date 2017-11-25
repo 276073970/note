@@ -1,0 +1,129 @@
+====================================================================================================
+=配置环境变量=======================================================================================
+====================================================================================================
+[root@localhost ~]# vi /etc/profile
+
+export JAVA_HOME=/usr/local/share/jdk1.8.0_131
+export CATALINA_HOME=/usr/local/share/apache-tomcat-8.5.14
+export CATALINA_BASE=/usr/local/share/apache-tomcat-8.5.14
+export PATH=$PATH:$JAVA_HOME/bin
+export CLASSPATH=.:$CLASSPATH:$JAVA_HOME/lib
+
+[root@localhost ~]# source /etc/profile
+
+http://192.168.1.123:8080（验证）
+
+注意问题：
+linux 环境变量不小心被改了几乎所有的基本命令（ls,vi 等）都不能用了，怎么改回来？
+解决方法：
+一般重新启动下就好了。
+也可以用命令：
+export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+但是只对对当前会话窗口有用。
+
+环境变量配置 (Python)
+程序和可执行文件可以在许多目录，而这些路径很可能不在操作系统提供可执行文件的搜索路径中。
+path(路径)存储在环境变量中，这是由操作系统维护的一个命名的字符串。这些变量包含可用的命令行解释器和其他程序的信息。
+Unix或Windows中路径变量为PATH（UNIX区分大小写，Windows不区分大小写）。
+在Mac OS中，安装程序过程中改变了python的安装路径。如果你需要在其他目录引用Python，你必须在path中添加Python目录。
+在 Unix/Linux 设置环境变量
+(1) 在 csh shell 输入:
+    setenv PATH "$PATH:/usr/local/bin/python"
+(2) 在 bash shell (Linux) 输入:
+    export PATH="$PATH:/usr/local/bin/python" 
+(3) 在 sh 或者 ksh shell 输入:
+    PATH="$PATH:/usr/local/bin/python" 
+注意: /usr/local/bin/python 是 Python 的安装目录。
+
+Kali Linux 2017.3
+
+1. export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+2. 运行 file_name.py 的3种方式:
+//
+1) # python3 file_name.py (脚本式编程)
+//
+2) # ./file_name.py (脚本式编程)
+(1) 在Linux/Unix系统中，可以在脚本顶部添加以下命令让Python脚本可以像SHELL脚本一样可直接执行：
+#! /usr/bin/env python3
+(2) 然后修改脚本权限，使其有执行权限，命令如下：
+# chmod +x file_name.py
+//
+3) # python3 (交互式编程)
+(1) 版本: python3 --version
+(2) 退出: exit() 或 Ctrl-D
+(3) 查看其他信息:
+help() (quit退出)
+copyright()
+credits()
+license() (q退出)
+
+3. #! /usr/bin/python3
+1) 在 Windows 下可以不写第一行注释
+2) 第一行注释标的是指向 python 的路径，告诉操作系统执行这个脚本的时候，调用 /usr/bin 下的 python 解释器。
+3) 此外还有以下形式（推荐写法）: #! /usr/bin/env python3
+这种用法先在 env（环境变量）设置里查找 python 的安装路径，再调用对应路径下的解释器程序完成操作。
+
+4. /usr/bin/ (Python安装目录)
+-rwxr-xr-x  1 root root        7806 Oct 26 15:09  py3clean
+-rwxr-xr-x  1 root root       12113 Oct 26 15:09  py3compile
+lrwxrwxrwx  1 root root          31 Nov 22 06:54  py3versions -> ../share/python3/py3versions.py
+-rwxr-xr-x  1 root root          60 Sep 25 20:06  pyalacarte
+-rwxr-xr-x  1 root root          59 Sep 25 20:06  pyalamode
+lrwxrwxrwx  1 root root          26 Nov 22 06:54  pybuild -> ../share/dh-python/pybuild
+-rwxr-xr-x  1 root root        4123 Sep 18 04:17  pyclean
+-rwxr-xr-x  1 root root       11894 Sep 18 04:17  pycompile
+-rwxr-xr-x  1 root root          57 Sep 25 20:06  pycrust
+lrwxrwxrwx  1 root root           8 Nov 22 06:48  pydoc -> pydoc2.7
+-rwxr-xr-x  1 root root          79 Sep 17 14:50  pydoc2.7
+lrwxrwxrwx  1 root root           8 Nov 22 06:48  pydoc3 -> pydoc3.6
+-rwxr-xr-x  1 root root          79 Oct  3 17:16  pydoc3.6
+lrwxrwxrwx  1 root root          12 Nov 22 06:48  pygettext -> pygettext2.7
+-rwxr-xr-x  1 root root       22096 Sep 17 14:50  pygettext2.7
+lrwxrwxrwx  1 root root          12 Nov 22 06:48  pygettext3 -> pygettext3.6
+-rwxr-xr-x  1 root root       21098 Oct  3 17:16  pygettext3.6
+-rwxr-xr-x  1 root root         148 Jan 23  2017  pygmentize
+-rwxr-xr-x  1 root root         391 Sep 26 17:25  pyhtmlizer
+-rwxr-xr-x  1 root root         289 Jan 10  2017  pyrit
+-rwxr-xr-x  1 root root          57 Sep 25 20:06  pyshell
+-rwxr-xr-x  1 root root        5443 May 21  2012  pysnmpbulkwalk
+-rwxr-xr-x  1 root root        2571 May 21  2012  pysnmpget
+-rwxr-xr-x  1 root root        2575 May 21  2012  pysnmpset
+-rwxr-xr-x  1 root root        6295 May 21  2012  pysnmptranslate
+-rwxr-xr-x  1 root root        8396 May 21  2012  pysnmptrap
+-rwxr-xr-x  1 root root        4784 May 21  2012  pysnmpwalk
+-rwxr-xr-x  1 root root         376 Sep  4 06:13  pytest
+lrwxrwxrwx  1 root root           6 Nov 22 06:48  py.test -> pytest
+lrwxrwxrwx  1 root root           9 Nov 22 06:48  python -> python2.7
+lrwxrwxrwx  1 root root           9 Nov 22 06:48  python2 -> python2.7
+-rwxr-xr-x  1 root root     3701568 Sep 17 14:50  python2.7
+lrwxrwxrwx  1 root root          33 Nov 22 06:48  python2.7-config -> x86_64-linux-gnu-python2.7-config
+lrwxrwxrwx  1 root root          16 Nov 22 06:48  python2-config -> python2.7-config
+-rwxr-xr-x  1 root root         383 Sep 23  2016  python2-futurize
+-rwxr-xr-x  1 root root         387 Sep 23  2016  python2-pasteurize
+-rwxr-xr-x  1 root root         285 Aug 22  2016  python2-qr
+lrwxrwxrwx  1 root root           9 Nov 22 06:48  python3 -> python3.6
+-rwxr-xr-x  2 root root     4568920 Oct  3 17:16  python3.6
+-rwxr-xr-x  2 root root     4568920 Oct  3 17:16  python3.6m
+lrwxrwxrwx  1 root root          10 Nov 22 06:48  python3m -> python3.6m
+-rwxr-xr-x  1 root root        5695 Sep  8  2016  python3-wsdump
+-rwxr-xr-x  1 root root        2554 Jan 24  2017  python-argcomplete-check-easy-install-script
+-rwxr-xr-x  1 root root         314 Jan 19  2017  python-argcomplete-tcsh
+lrwxrwxrwx  1 root root          16 Nov 22 06:48  python-config -> python2.7-config
+-rwxr-xr-x  1 root root         130 Nov 20 11:16  python-faraday
+lrwxrwxrwx  1 root root          29 Nov 22 06:54  pyversions -> ../share/python/pyversions.py
+-rwxr-xr-x  1 root root          56 Sep 25 20:06  pywrap
+-rwxr-xr-x  1 root root          60 Sep 25 20:06  pywxrc
+
+5. sh/bash/csh/Tcsh/ksh/pdksh等shell的区别
+1) sh(全称 Bourne Shell): 是UNIX最初使用的 shell，而且在每种 UNIX 上都可以使用。
+Bourne Shell 在 shell 编程方面相当优秀，但在处理与用户的交互方面做得不如其他几种 shell。
+2) bash（全称 Bourne Again Shell）: Linux OS 默认的，它是 Bourne Shell 的扩展。
+与 Bourne Shell 完全兼容，并且在 Bourne Shell 的基础上增加了很多特性。可以提供命令补全，命令编辑和命令历史等功能。
+它还包含了很多 C Shell 和 Korn Shell 中的优点，有灵活和强大的编辑接口，同时又很友好的用户界面。
+3) csh(全称 C Shell): 是一种比 Bourne Shell更适合的变种 Shell，它的语法与 C 语言很相似。
+4) Tcsh: 是 Linux 提供的 C Shell 的一个扩展版本。
+Tcsh 包括命令行编辑，可编程单词补全，拼写校正，历史命令替换，作业控制和类似 C 语言的语法，
+他不仅和 Bash Shell 提示符兼容，而且还提供比 Bash Shell 更多的提示符参数。
+5) ksh (全称 Korn Shell): 集合了 C Shell 和 Bourne Shell 的优点并且和 Bourne Shell 完全兼容。
+6) pdksh: 是 Linux 系统提供的 ksh 的扩展。pdksh 支持人物控制，可以在命令行上挂起，后台执行，唤醒或终止程序。
