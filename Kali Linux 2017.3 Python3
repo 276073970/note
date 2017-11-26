@@ -325,3 +325,8 @@ type(B()) == A        # returns False
 区别就是:
 type()不会认为子类是一种父类类型。
 isinstance()会认为子类是一种父类类型。
+//
+type 是用于求一个未知数据类型对象，而 isinstance 是用于判断一个对象是否是已知类型。
+type 不认为子类是父类的一种类型，而isinstance会认为子类是父类的一种类型。
+可以用 isinstance 判断子类对象是否继承于父类，type 不行。
+综合以上几点，type 与 isinstance 虽然都与数据类型相关，但两者其实用法不同，type 主要用于判断未知数据类型，isinstance 主要用于判断 A 类是否继承于 B 类：
