@@ -14,6 +14,10 @@
 :set nowrap 设置不自动折行
 这里只是只是为了显示方便，折行显示，部增加新的行。
 
+Debian Linux Vim:
+/usr/share/vim/vimrc -> /etc/vim/vimrc
+$VIM/vimrc
+$HOME/.vimrc
 
 Kali Linux Vim:
 1) :e $VIM/vimrc
@@ -29,20 +33,12 @@ set softtabstop=4
 set shiftwidth=4
 set tabstop=4
 
-/usr/share/vim/vimrc -> /etc/vim/vimrc (Debian)
-$VIM/vimrc
-$HOME/.vimrc
-==========
-==========
+==================================================
+==================================================
 
 vim格式化代码实际上就是 "缩进代码", 命令是等号=
-
-vim格式化代码实际上就是 "缩进代码", 命令是等号=
-
-格式化就是 vim 根据 文件的类型, 自动的对代码进行 缩进
-
+格式化就是 vim 根据 文件的类型, 自动的对代码进行缩进
 缩进的类型有多种, 都是用等号命令: =
-
     全部格式化 : gg=G
     对当前行格式化(缩进): ==
     对以下多行格式化(倍数操作): [count] ==
