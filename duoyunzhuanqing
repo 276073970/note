@@ -37,7 +37,7 @@ Nmap done: 256 IP addresses (7 hosts up) scanned in 1.51 seconds
 arpspoof -i eth0 -t 192.168.1.100 192.168.1.1
 
 // arpspoof的命令参数解释:
-arpspoof -i 本机网卡 -t 目标IP 网关IP
+arpspoof -i 本机网卡名 -t 目标IP 网关IP
 
 3. #303-506-Mac
 TP(new): DC:FE:18:0C:1B:0B
