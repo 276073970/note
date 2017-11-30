@@ -1,6 +1,30 @@
 1. LAN IP & Mac
 # nmap -sP 192.168.1.0/24
 
+// 2017.11.30 (# nmap -sP 192.168.1.0/24)
+Starting Nmap 7.60 ( https://nmap.org ) at 2017-11-30 06:02 EST
+Nmap scan report for 192.168.1.1
+Host is up (0.00057s latency).
+MAC Address: DC:FE:18:0C:1B:0B (Tp-link Technologies)
+Nmap scan report for 192.168.1.10
+Host is up (0.00071s latency).
+MAC Address: 00:10:00:05:52:20 (Cable Television Laboratories)
+Nmap scan report for 192.168.1.100
+Host is up (0.0014s latency).
+MAC Address: 14:75:90:9B:55:D3 (Tp-link Technologies)
+Nmap scan report for 192.168.1.116
+Host is up (0.0020s latency).
+MAC Address: D8:CB:8A:F2:A1:C8 (Micro-star Intl)
+Nmap scan report for 192.168.1.117
+Host is up (0.00043s latency).
+MAC Address: 5C:F9:DD:64:F1:94 (Dell)
+Nmap scan report for 192.168.1.132
+Host is up (0.00068s latency).
+MAC Address: 28:D2:44:DE:90:60 (Lcfc(hefei) Electronics Technology)
+Nmap scan report for 192.168.1.118
+Host is up.
+Nmap done: 256 IP addresses (7 hosts up) scanned in 1.51 seconds
+
 2. ARP（Address Resolution Protocol）
 arpspoof -i eth0 -t 192.168.1.100 192.168.1.1
 
