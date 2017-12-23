@@ -30,7 +30,7 @@
             shadowrocket
     2. 服务端
        市面上有一些shadowsocks服务可供购买，比如：
-         https://www.shadowsocks.com.hk/
+       https://www.shadowsocks.com.hk/
        如果你愿意折腾，可以自己租一个VPS搭建shadowsocks服务，成本更低，而且流量上限取决于你购买的VPS套餐，一般来说都很充裕。
 
 三、shadowsocks服务搭建指南
