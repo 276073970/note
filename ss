@@ -1,11 +1,11 @@
 使用shadowsocks科学上网
 
-刚刚，有司又对VPN下手了。墙越来越高了。
-7月1日，中国加大力度打击 VPN
-据报导，自7月1日起，中国的 Android 和苹果应用商店将不再允许 VPN 应用下载，以阻止中国网民绕过“网络防火墙”（GFW）浏览墙外内容。
-VPN 供应商 Green 已于6月22日发布公告，证实自7月1日起停止服务。此外，Netfits、VPN Master Pro、Ponhon、Snap VPN 和 SkyX 等 VPN 供应商在过去几个月里，也或被迫停止服务，或从应用商店消失。
-不过，想翻墙还是有办法的，比如本文要介绍的shadowsocks。
-shadowsocks是一款自定义协议的代理软件，由于其流量特征不明显，不太容易用技术手段拦截。虽然作者@clowwindy两年前就被有司请喝茶了，shadowsocks却一直运转良好没有被彻底封杀过。
+  刚刚，有司又对VPN下手了。墙越来越高了。
+  7月1日，中国加大力度打击 VPN
+  据报导，自7月1日起，中国的 Android 和苹果应用商店将不再允许 VPN 应用下载，以阻止中国网民绕过“网络防火墙”（GFW）浏览墙外内容。
+  VPN 供应商 Green 已于6月22日发布公告，证实自7月1日起停止服务。此外，Netfits、VPN Master Pro、Ponhon、Snap VPN 和 SkyX 等 VPN 供应商在过去几个月里，也或被迫停止服务，或从应用商店消失。
+  不过，想翻墙还是有办法的，比如本文要介绍的shadowsocks。
+  shadowsocks是一款自定义协议的代理软件，由于其流量特征不明显，不太容易用技术手段拦截。虽然作者@clowwindy两年前就被有司请喝茶了，shadowsocks却一直运转良好没有被彻底封杀过。
 
 一、简单介绍一下shadowsocks翻墙的原理
   shadowsocks客户端启动后会在本地开启一个代理，可以理解为一个数据的出入口。用户想通过shadowsocks访问墙外网站的请求都要经过这个本地代理。
@@ -20,28 +20,28 @@ shadowsocks是一款自定义协议的代理软件，由于其流量特征不明
 二、我不想听原理，我只想马上翻墙
   简单地说，用shadowsocks翻墙，你需要一个客户端和一个服务端。
   1. 客户端
-    Windows、macOS、Android平台都有官方提供的免费客户端可用，下载地址如下：
+    （1）Windows、macOS、Android平台都有官方提供的免费客户端可用，下载地址如下：
       Windows
       macOS
       Android
-    iOS平台有一些收费的App支持shadowsocks, 比如
+    （2）iOS平台有一些收费的App支持shadowsocks, 比如：
       shadowrocket
   2. 服务端
-    市面上有一些shadowsocks服务可供购买，比如
+    市面上有一些shadowsocks服务可供购买，比如：
       https://www.shadowsocks.com.hk/
     如果你愿意折腾，可以自己租一个VPS搭建shadowsocks服务，成本更低，而且流量上限取决于你购买的VPS套餐，一般来说都很充裕。
 
 三、shadowsocks服务搭建指南
   1. 购买VPS服务器
     主流的VPS（虚拟主机）服务器提供商有三家：
-      linode
-      digital ocean
-      bandwagon
+    （1）linode
+    （2）digital ocean
+    （3）bandwagon
     下面的比上面的便宜。如果只是自用，bandwagon足够。
     一般使用paypal绑定一个visa或mastercard信用卡来付款。注意要用国际paypal帐号，国内的是不能用外币付款的。
     在bandwagon购买VPS以后会获得一个主机地址和用于ssh登录的root密码。
   2. 远程登陆VPS
-    Mac OS X 或Linux下直接在终端中
+    Mac OS X 或Linux下直接在终端中：
       # ssh root@your_vps_ip -p your_ssh_port
     即可。
     在windows系统下需要专门的客户端来SSH登录VPS。在xShell官网  下载xShell。
