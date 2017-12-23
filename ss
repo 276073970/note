@@ -1,63 +1,67 @@
 使用shadowsocks科学上网
+
 刚刚，有司又对VPN下手了。墙越来越高了。
 7月1日，中国加大力度打击 VPN
 据报导，自7月1日起，中国的 Android 和苹果应用商店将不再允许 VPN 应用下载，以阻止中国网民绕过“网络防火墙”（GFW）浏览墙外内容。
 VPN 供应商 Green 已于6月22日发布公告，证实自7月1日起停止服务。此外，Netfits、VPN Master Pro、Ponhon、Snap VPN 和 SkyX 等 VPN 供应商在过去几个月里，也或被迫停止服务，或从应用商店消失。
 不过，想翻墙还是有办法的，比如本文要介绍的shadowsocks。
 shadowsocks是一款自定义协议的代理软件，由于其流量特征不明显，不太容易用技术手段拦截。虽然作者@clowwindy两年前就被有司请喝茶了，shadowsocks却一直运转良好没有被彻底封杀过。
+
 一、简单介绍一下shadowsocks翻墙的原理
-shadowsocks客户端启动后会在本地开启一个代理，可以理解为一个数据的出入口。用户想通过shadowsocks访问墙外网站的请求都要经过这个本地代理。
-通过shadowsocks翻墙上网的过程是这样的：
-1. 用户发起一个网络访问请求，比如用浏览器访问google.com，请求被发送到本地代理。
-2. 客户端从本地代理拿到请求数据，然后发送至墙外的shadowsocks服务端。
-3. 服务端向google.com发起请求，然后收到google的响应数据，也就是google首页的数据。
-4. 服务端把响应数据发回客户端。
-5. 客户端再通过本地代理把响应数据交给浏览器，google首页就显示出来了。
-整个过程中的第2步和第4步都是通过shadowsocks自定义的协议隐蔽地进行，很难被过滤，所以我们才能一直用它顺畅地翻墙。
+  shadowsocks客户端启动后会在本地开启一个代理，可以理解为一个数据的出入口。用户想通过shadowsocks访问墙外网站的请求都要经过这个本地代理。
+  通过shadowsocks翻墙上网的过程是这样的：
+  1. 用户发起一个网络访问请求，比如用浏览器访问google.com，请求被发送到本地代理。
+  2. 客户端从本地代理拿到请求数据，然后发送至墙外的shadowsocks服务端。
+  3. 服务端向google.com发起请求，然后收到google的响应数据，也就是google首页的数据。
+  4. 服务端把响应数据发回客户端。
+  5. 客户端再通过本地代理把响应数据交给浏览器，google首页就显示出来了。
+  整个过程中的第2步和第4步都是通过shadowsocks自定义的协议隐蔽地进行，很难被过滤，所以我们才能一直用它顺畅地翻墙。
+
 二、我不想听原理，我只想马上翻墙
-简单地说，用shadowsocks翻墙，你需要一个客户端和一个服务端。
-1. 客户端
-Windows、macOS、Android平台都有官方提供的免费客户端可用，下载地址如下：
-Windows
-macOS
-Android
-iOS平台有一些收费的App支持shadowsocks, 比如
-shadowrocket
-2. 服务端
-市面上有一些shadowsocks服务可供购买，比如
-https://www.shadowsocks.com.hk/
-如果你愿意折腾，可以自己租一个VPS搭建shadowsocks服务，成本更低，而且流量上限取决于你购买的VPS套餐，一般来说都很充裕。
+  简单地说，用shadowsocks翻墙，你需要一个客户端和一个服务端。
+  1. 客户端
+    Windows、macOS、Android平台都有官方提供的免费客户端可用，下载地址如下：
+    Windows
+    macOS
+    Android
+    iOS平台有一些收费的App支持shadowsocks, 比如
+    shadowrocket
+  2. 服务端
+    市面上有一些shadowsocks服务可供购买，比如
+    https://www.shadowsocks.com.hk/
+    如果你愿意折腾，可以自己租一个VPS搭建shadowsocks服务，成本更低，而且流量上限取决于你购买的VPS套餐，一般来说都很充裕。
+
 三、shadowsocks服务搭建指南
-1. 购买VPS服务器
-主流的VPS（虚拟主机）服务器提供商有三家：
-linode
-digital ocean
-bandwagon
-下面的比上面的便宜。如果只是自用，bandwagon足够。
-一般使用paypal绑定一个visa或mastercard信用卡来付款。注意要用国际paypal帐号，国内的是不能用外币付款的。
-在bandwagon购买VPS以后会获得一个主机地址和用于ssh登录的root密码。
-2. 远程登陆VPS
-Mac OS X 或Linux下直接在终端中
-ssh root@your_vps_ip -p your_ssh_port
-即可。
-在windows系统下需要专门的客户端来SSH登录VPS。在xShell官网  下载xShell。
-家庭和学校用户可以免费试用，下载时选择home and school use即可。需要用邮箱注册一下，下载链接会发送到邮箱中。
-xShell中新建一个连接，会要求输入目标IP地址和端口，以及root密码，按提示操作即可。
-3. 安装shadowsocks
-打开shell，使用VPS服务商提供的root用户和密码SSH登录VPS。然后执行如下命令：
-（1）Debian/Ubuntu:
-apt-get install python-pip
-pip install shadowsocks
-（2）CentOS:
-yum install python-setuptools && easy_install pip
-pip install shadowsocks
-shadowsocks就安装好了。
-有时Ubuntu会遇到第一个命令安装python-pip时找不到包的情况。pip官方给出了一个安装脚本，可以自动安装pip。先下载脚本，然后执行即可：
-wget https://bootstrap.pypa.io/get-pip.py
-python get-pip.py
-或者使用easy_install安装：
-sudo easy_install shadowsocks
-4. 编写配置文件
+  1. 购买VPS服务器
+    主流的VPS（虚拟主机）服务器提供商有三家：
+      linode
+      digital ocean
+      bandwagon
+    下面的比上面的便宜。如果只是自用，bandwagon足够。
+    一般使用paypal绑定一个visa或mastercard信用卡来付款。注意要用国际paypal帐号，国内的是不能用外币付款的。
+    在bandwagon购买VPS以后会获得一个主机地址和用于ssh登录的root密码。
+  2. 远程登陆VPS
+    Mac OS X 或Linux下直接在终端中
+    # ssh root@your_vps_ip -p your_ssh_port
+    即可。
+    在windows系统下需要专门的客户端来SSH登录VPS。在xShell官网  下载xShell。
+    家庭和学校用户可以免费试用，下载时选择home and school use即可。需要用邮箱注册一下，下载链接会发送到邮箱中。
+    xShell中新建一个连接，会要求输入目标IP地址和端口，以及root密码，按提示操作即可。
+  3. 安装shadowsocks
+    打开shell，使用VPS服务商提供的root用户和密码SSH登录VPS。然后执行如下命令：
+    （1）Debian/Ubuntu:
+    apt-get install python-pip
+    pip install shadowsocks
+    （2）CentOS:
+    yum install python-setuptools && easy_install pip
+    pip install shadowsocks
+    shadowsocks就安装好了。
+    有时Ubuntu会遇到第一个命令安装python-pip时找不到包的情况。pip官方给出了一个安装脚本，可以自动安装pip。先下载脚本，然后执行即可：
+    wget https://bootstrap.pypa.io/get-pip.py
+    python get-pip.py
+    或者使用easy_install安装：
+    sudo easy_install shadowsocks
+  4. 编写配置文件
 shadowsocks启动时的参数，如服务器端口，代理端口，登录密码等，可以通过启动时的命令行参数来设定，也可以通过json格式的配置文件设定。推荐使用配置文件，方便查看和修改。
 用vi新建一个配置文件：
 vi /etc/shadowsocks.json
@@ -98,11 +102,13 @@ ssserver -c /etc/shadowsocks.json -d start
 ssserver -c /etc/shadowsocks.json -d stop
 shadowsocks的日志保存在
 /var/log/shadowsocks.log
+
 四、配置shadowsocks客户端
 客户端和服务端都有了，只要配置一下客户端就可以愉快地翻墙了。
 客户端需要按照服务器的配置填写服务器IP地址、服务器端口、本地端口（如果没有本地端口选项，就是默认的1080）、密码、加密方式等参数，可以参看上面的“编写配置文件”小节。
 Windows和macOS客户端支持全局代理和PAC代理两种方式，后者会使用一个脚本来自动检查一个网站是否在需要代理的网站列表中，自动选择直接连接或代理连接。
 PAC列表可以在线更新，但是难免有收录不全的情况。如果你用Chrome,可以使用支持自定义规则的代理管理插件来实现自动切换代理，比如switchyOmega。
+
 五、使用switchyOmega实现自动切换代理
 switchyOmega是Chrome浏览器上一个很好用的代理管理插件。
 chrome应用商店本身需要翻墙才能访问，因此需要先在shadowsocks启动代理模式下下载安装，再关闭shadowsocks代理。
