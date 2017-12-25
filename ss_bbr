@@ -1,0 +1,39 @@
+搬瓦工大家都懂的，前两天推出了KVM架构的VPS测试版。
+目前，KVM架构VPS可以后台更换机房，大家可以选择对自己友好的线路，对于国内用户首推洛杉矶机房。
+同时，搬瓦工在安装系统时可以选择带“-bbr”后缀的系统，免除了新手不会安装加速软件的烦恼。
+
+BBR是Google 开源的TCP拥塞控制算法，根据实地测试，在部署了最新版内核并开启了 TCP BBR 的机器上，网速甚至可以提升好几个数量级。
+
+当然，我们也可以手动安装BBR，一键包来源于teddysun（作者也写有s&s一键安装包）。
+需要注意的是，无论是BBR还是锐速，目前只支持KVM构架的VPS，Openvz构架VPS可以通过其他途径安装BBR，但是CPU耗用较大，对于限制严格的VPS存在极大的封号风险。
+
+使用root用户登录，运行以下命令：
+  # wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh
+  # chmod +x bbr.sh
+  # ./bbr.sh
+安装完成后，脚本会提示需要重启VPS，输入 y 并回车后重启。
+
+重启完成后，进入 VPS，验证一下是否成功安装最新内核并开启 TCP BBR，输入以下命令：
+  # uname -r
+查看内核版本，含有 4.10 就表示 OK 了
+
+输入命令：
+  # sysctlnet.ipv4.tcp_available_congestion_control
+返回值一般为：
+  net.ipv4.tcp_available_congestion_control =bbr cubic reno
+
+输入命令：
+  # sysctl net.ipv4.tcp_congestion_control
+返回值一般为：
+  net.ipv4.tcp_congestion_control = bbr
+
+输入命令：
+  # sysctl net.core.default_qdisc
+返回值一般为：
+  net.core.default_qdisc = fq
+
+输入命令：
+  # lsmod | grep bbr
+返回值有 tcp_bbr 模块即说明bbr已启动。
+
+此时再使用ss，速度会有质的飞跃！
