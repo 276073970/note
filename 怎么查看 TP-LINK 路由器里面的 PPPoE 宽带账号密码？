@@ -1,0 +1,1 @@
+用chrome 查看TP-Link WAN口设置的那个页面的的源代码：搜pppoeInf ，var pppoeInf = new Array (.... 后边就是账号和密码了。
