@@ -39,7 +39,7 @@
 (4) Update apt sources and install Sublime Text:
     sudo apt-get update
     sudo apt-get install sublime-text
-(5) 
+(5) 安装包SyncedSidebarBg，自动同步侧边栏底色为编辑窗口底色。
 
 2. NetEase Cloud Music
 (1) 
