@@ -1,16 +1,14 @@
 1. Sougou
 (1)[System setting] => [Language Support]
 (2)"The language support is not installed completely" => [Install]
-(3)
+(3)The language support is not installed completely
 (4)
 (5)
 
 2. NetEase Cloud Music
-(1)
-(2)
-(3)
-(4)
-(5)
+(1)ch@dell:~/Downloads$ sudo dpkg -i netease-cloud-music_1.1.0_amd64_ubuntu.deb
+(2)ch@dell:~/Downloads$ sudo apt-get -f install
+(3)ch@dell:~/Downloads$ sudo dpkg -i netease-cloud-music_1.1.0_amd64_ubuntu.deb
 
 2. NetEase Cloud Music
 (1)
