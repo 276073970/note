@@ -2,8 +2,11 @@
 (1)[System setting] => [Language Support]
 (2)"The language support is not installed completely" => [Install]
 (3)[Keyboard input method system: IBus] => [fcitx]
-(4)
-(5)
+(4)ch@dell:~/Downloads$ sudo dpkg -i sogoupinyin_2.2.0.0102_amd64.deb
+(5)ch@dell:~/Downloads$ sudo apt-get -f install 
+(6)ch@dell:~/Downloads$ sudo dpkg -i sogoupinyin_2.2.0.0102_amd64.deb
+(7)ch@dell:~/Downloads$ reboot
+(8)
 
 2. NetEase Cloud Music
 (1)ch@dell:~/Downloads$ sudo dpkg -i netease-cloud-music_1.1.0_amd64_ubuntu.deb
