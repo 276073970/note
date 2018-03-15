@@ -41,6 +41,12 @@
     sudo apt-get install sublime-text
 (5) 安装包SyncedSidebarBg，自动同步侧边栏底色为编辑窗口底色。
 
+2. Youdao Dict
+(1) sudo dpkg -i youdao-dict_1.1.0-0-ubuntu_amd64.deb
+(2) sudo apt-get -f install
+(3) sudo dpkg -i youdao-dict_1.1.0-0-ubuntu_amd64.deb
+(4) 
+
 2. NetEase Cloud Music
 (1) 
 (2) 
