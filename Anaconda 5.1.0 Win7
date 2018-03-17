@@ -1,3 +1,15 @@
+1. 安装Anaconda Navigator 5.1.0
+(1) Install for：
+// Just Me (recommended)
+// All Users (requires admin privileges)
+(2) Destination Folder
+// C:\Users\CH\Anaconda3
+(3) Advanced Options
+// Add Anaconda to my PATH environment variable
+// Register Anaconda as my default Python 3.6
+(2) 更新：
+(3) 新建环境：
+
 1. [Anaconda Prompt]终端
 (1) 窗口属性设置
 // [字体] => [大小：10 x 20]
