@@ -1,11 +1,11 @@
 1. 安装Anaconda Navigator 5.1.0
 (1) Install for：
 // Just Me (recommended)
-// All Users (requires admin privileges) *
+// All Users (requires admin privileges)  *
 (2) Destination Folder
-// C:\Users\CH\Anaconda3 *
+// C:\Users\CH\Anaconda3  *
 (3) Advanced Options
-// Add Anaconda to my PATH environment variable *
+// Add Anaconda to my PATH environment variable  *
   C:\Users\CH\Anaconda3;
   C:\Users\CH\Anaconda3\Library\mingw-w64\bin;
   C:\Users\CH\Anaconda3\Library\usr\bin;
@@ -13,15 +13,17 @@
   C:\Users\CH\Anaconda3\Scripts;
   C:\Users\CH\AppData\Local\atom\bin;
   C:\Program Files\Microsoft VS Code\bin
-// Register Anaconda as my default Python 3.6 *
+// Register Anaconda as my default Python 3.6  *
 (4) Install Microsoft VSCode
+
 
 2. cmd终端窗口属性设置
 (1) [字体] => [大小：10 x 20]
 (2) [布局] => [屏幕缓冲区大小：100/100] => [窗口大小：100/30] => [窗口位置：100/30]
 (3) [颜色] => [屏幕文字：第3绿色]
 
-3. 更换国内源
+
+3. 添加国内源
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
 conda config --set show_channel_urls yes
@@ -30,11 +32,14 @@ conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/msys2/
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/bioconda/
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/menpo/
 
+
 4. 更新所有包
 [] => [] => [] => [] => [] => []
 
+
 5. 新建环境
 [] => [] => [] => [] => [] => []
+
 
 6. Anaconda Prompt终端
 (base) C:\Users\CH>conda info
@@ -77,7 +82,7 @@ C:\Users\CH>vim .condarc
 channels:
   - defaults
 ssl_verify: true
-(2) 运行[Anaconda Prompt]
+(2) 运行[Anaconda Prompt]添加源
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
 conda config --set show_channel_urls yes
