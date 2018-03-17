@@ -1,22 +1,43 @@
 1. 安装Anaconda Navigator 5.1.0
 (1) Install for：
 // Just Me (recommended)
-// All Users (requires admin privileges)
+// All Users (requires admin privileges) *
 (2) Destination Folder
-// C:\Users\CH\Anaconda3
+// C:\Users\CH\Anaconda3 *
 (3) Advanced Options
-// Add Anaconda to my PATH environment variable
-// Register Anaconda as my default Python 3.6
+// Add Anaconda to my PATH environment variable *
+  C:\Users\CH\Anaconda3;
+  C:\Users\CH\Anaconda3\Library\mingw-w64\bin;
+  C:\Users\CH\Anaconda3\Library\usr\bin;
+  C:\Users\CH\Anaconda3\Library\bin;
+  C:\Users\CH\Anaconda3\Scripts;
+  C:\Users\CH\AppData\Local\atom\bin;
+  C:\Program Files\Microsoft VS Code\bin
+// Register Anaconda as my default Python 3.6 *
 (4) Install Microsoft VSCode
-(2) 更新：
-(3) 新建环境：
 
-1. [Anaconda Prompt]终端
-(1) 窗口属性设置
-// [字体] => [大小：10 x 20]
-// [布局] => [屏幕缓冲区大小：100/100] => [窗口大小：100/30] => [窗口位置：100/30]
-// [颜色] => [屏幕文字：第3绿色]
-(2) (base) C:\Users\CH>conda info
+2. cmd终端窗口属性设置
+(1) [字体] => [大小：10 x 20]
+(2) [布局] => [屏幕缓冲区大小：100/100] => [窗口大小：100/30] => [窗口位置：100/30]
+(3) [颜色] => [屏幕文字：第3绿色]
+
+3. 更换国内源
+conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
+conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
+conda config --set show_channel_urls yes
+conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/conda-forge/
+conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/msys2/
+conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/bioconda/
+conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/menpo/
+
+4. 更新所有包
+[] => [] => [] => [] => [] => []
+
+5. 新建环境
+[] => [] => [] => [] => [] => []
+
+6. Anaconda Prompt终端
+(base) C:\Users\CH>conda info
 
      active environment : base
     active env location : C:\Users\CH\Anaconda3
@@ -50,7 +71,7 @@ indows/6.1.7601
            offline mode : False
 
 
-2. 更改源
+7. ~/.condarc配置文件
 (1) ~/.condarc原内容
 C:\Users\CH>vim .condarc
 channels:
@@ -77,7 +98,7 @@ ssl_verify: true
 show_channel_urls: true
 
 
-3. 中科大源：https://mirrors.ustc.edu.cn/
+8. 中科大源：https://mirrors.ustc.edu.cn/
 (1) 添加USTC仓库镜像：
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
@@ -93,7 +114,7 @@ conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/bioconda/
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/menpo/
 
 
-4. 清华源：https://mirrors.tuna.tsinghua.edu.cn/
+9. 清华源：https://mirrors.tuna.tsinghua.edu.cn/
 (1) Anaconda 镜像使用帮助
 Anaconda 是一个用于科学计算的 Python 发行版，支持 Linux, Mac, Windows, 包含了众多流行的科学计算、数据分析的 Python 包。
 Anaconda 安装包可以到 https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/ 下载。
@@ -120,10 +141,11 @@ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/
 对于conda的其他三方源，如有需要请在这个issue中提出请求，我们会综合考虑多方因素来酌情增减。
 
 
-5. 以Linux/Mac为例，安装完成后设置PATH的操作
+10. 其他
+(1) 以Linux/Mac为例，安装完成后设置PATH的操作
 # 将anaconda的bin目录加入PATH，根据版本不同，也可能是~/anaconda3/bin
 echo 'export PATH="~/anaconda2/bin:$PATH"' >> ~/.bashrc
 # 更新bashrc以立即生效
 source ~/.bashrc
-# Git环境变量
+(2) Git环境变量
 C:\Users\CH\Anaconda3\pkgs\git-2.14.2-3\Library\bin
