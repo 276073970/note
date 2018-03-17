@@ -1,5 +1,9 @@
-1. 运行[Anaconda Prompt]
-(base) C:\Users\CH>conda info
+1. [Anaconda Prompt]终端
+(1) 窗口属性设置
+// [字体] => [大小：10 x 20]
+// [布局] => [屏幕缓冲区大小：100/100] => [窗口大小：100/30] => [窗口位置：100/30]
+// [颜色] => [屏幕文字：第3绿色]
+(2) (base) C:\Users\CH>conda info
 
      active environment : base
     active env location : C:\Users\CH\Anaconda3
