@@ -1,5 +1,4 @@
 1. 运行[Anaconda Prompt]
-
 (base) C:\Users\CH>conda info
 
      active environment : base
@@ -32,7 +31,8 @@ indows/6.1.7601
           administrator : False
              netrc file : None
            offline mode : False
-           
+
+
 2. 更改源
 (1) ~/.condarc原内容
 C:\Users\CH>vim .condarc
@@ -58,6 +58,7 @@ channels:
   - defaults
 ssl_verify: true
 show_channel_urls: true
+
 
 3. 中科大源：https://mirrors.ustc.edu.cn/
 (1) 添加USTC仓库镜像：
