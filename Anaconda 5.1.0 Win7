@@ -34,11 +34,11 @@ conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/menpo/
 
 
 4. 更新所有包
-[] => [] => [] => [] => [] => []
+[Environments] => [All] => [Channels] => [Update channels] => [Update index] => []
 
 
 5. 新建环境
-[] => [] => [] => [] => [] => []
+[Environments] => [Create] => [] => [] => [] => []
 
 
 6. Anaconda Prompt终端
