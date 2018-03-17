@@ -105,3 +105,10 @@ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/menpo/
 // 其他三方源
 对于conda的其他三方源，如有需要请在这个issue中提出请求，我们会综合考虑多方因素来酌情增减。
+
+
+5. 以Linux/Mac为例，安装完成后设置PATH的操作
+# 将anaconda的bin目录加入PATH，根据版本不同，也可能是~/anaconda3/bin
+echo 'export PATH="~/anaconda2/bin:$PATH"' >> ~/.bashrc
+# 更新bashrc以立即生效
+source ~/.bashrc
