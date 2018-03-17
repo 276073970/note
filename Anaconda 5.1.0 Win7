@@ -17,17 +17,13 @@
 (4) Install Microsoft VSCode
 
 
-2. 新建环境
-[Environments] => [Create] => [Name] => [Create]
-
-
-3. cmd终端窗口属性设置
+2. cmd终端窗口属性设置
 (1) [字体] => [大小：10 x 20]
 (2) [布局] => [屏幕缓冲区大小：100/100] => [窗口大小：100/30] => [窗口位置：100/30]
 (3) [颜色] => [屏幕文字：第3绿色]
 
 
-4. 添加国内源
+3. 添加国内源
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
 conda config --set show_channel_urls yes
@@ -35,6 +31,10 @@ conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/conda-for
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/msys2/
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/bioconda/
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/cloud/menpo/
+
+
+4. 新建环境
+[Environments] => [Create] => [Name] => [Create]
 
 
 5. 更新所有包
