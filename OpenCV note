@@ -9,7 +9,7 @@ mode = imgInfo[2]  # 第三个参数 = 像素点通道数 = 3通道（BGR）
 dstHeight = int(height * 0.5)  # 系数相同时即为等比缩放
 dstWidth = int(width * 0.5)
 dst = cv2.resize(img, (dstWidth, dstHeight))  # 参数为目标图片的宽和高
-cv2.imshow('image', dst)  # 展示图片临时命名为“image”
+cv2.imshow('image', dst)  # 图片展示的临时窗体名称“image”
 cv2.waitKey(0)
 '''
 （1）OpenCV读入图片后，会将图片解码成完整数据，矩阵形式2
