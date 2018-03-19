@@ -26,4 +26,20 @@ cv2.waitKey(0)
     srcX = dstX * (src行数 / dst行数)
     srcY = dstY * (src列数 / dst列数)
 （3）出现小数时，取小于该小数的第一个整数（最近）
+import cv2
+import numpy as np
+src = cv2.imread('image0.jpg', 1)
+src_info = src.shape
+src_row = src_info[0]
+src_col = src_info[1]
+dst_row = int(src_row * 0.5)
+dst_col = int(src_col * 0.5)
+dst = np.zeros((dst_row, dst_col, 3), np.uint8)
+for dst_i in range(0, dst_row):
+    for dst_j in range(0, dst_col):
+        src_i = int(dst_i * (src_row * 1.0 / dst_row))
+        src_j = int(dst_j * (src_col * 1.0 / dst_col))
+        dst[dst_i, dst_j] = src[src_i, src_j]
+cv2.imshow('dst_image', dst)
+cv2.waitKey(0)   
 2）双线性插值
