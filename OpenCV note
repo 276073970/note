@@ -1,15 +1,15 @@
 1. 图片缩放 shape & resize
 import cv2
-img = cv2.imread('dog.jpg', 1)  # 读取图片完整数据，矩阵形式
-imgInfo = img.shape  # 获取图片完整数据参数
-print(imgInfo)  # 打印3个参数，分别为矩阵行数、矩阵列数、像素点通道数
-height = imgInfo[0]  # 第一个参数 = 矩阵行数 = 图片高度
-width = imgInfo[1]  # 第二个参数 = 矩阵列数 = 图片宽度
-mode = imgInfo[2]  # 第三个参数 = 像素点通道数 = 3通道（BGR）
-dstHeight = int(height * 0.5)  # 系数相同时即为等比缩放
-dstWidth = int(width * 0.5)
-dst = cv2.resize(img, (dstWidth, dstHeight))  # 参数为目标图片的宽和高
-cv2.imshow('image', dst)  # 图片展示的临时窗体名称“image”
+src = cv2.imread('image0.jpg', 1)  # 读取图片完整数据，矩阵形式
+src_info = src.shape  # 获取图片完整数据参数
+print(src_info)  # 打印3个参数，分别为矩阵行数、矩阵列数、像素点通道数
+src_row = src_info[0]  # 第一个参数 = 矩阵行数 = 图片高度
+src_col = src_info[1]  # 第二个参数 = 矩阵列数 = 图片宽度
+src_mode = src_info[2]  # 第三个参数 = 像素点通道数 = 3通道（BGR）
+dst_row = int(src_row * 0.5)  # 系数相同时即为等比缩放
+dst_col = int(src_col * 0.5)
+dst = cv2.resize(src, (dst_col, dst_row))  # 参数为目标图片的宽（width=dst_col）和高（height=dst_row）
+cv2.imshow('dst_image', dst)  # 图片展示的临时窗体名称“dst_image”
 cv2.waitKey(0)
 '''
 （1）OpenCV读入图片后，会将图片解码成完整数据，矩阵形式2
