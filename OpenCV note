@@ -1,7 +1,14 @@
 1. 图片缩放 shape & resize
 import cv2
+# （1）读取图片完整数据，矩阵形式，且为各点为BGR形式
+# （2）cv2.read()函数参数：cv2.read('src_img_name', mode)
+# （3）当mode=0，以灰度模式读入图像；当mode=1，读入彩色图像忽略透明度
+# img = cv2.imread('dog.jpg') 打开原图。
+# img = cv2.imread('dog.jpg', cv2.IMREAD_GRAYSCALE) 以灰度模式读入图像。
+# img = cv2.imread('dog.jpg', cv2.IMREAD_COLOR) 读入彩色图像，图像的透明度会忽略。
+# img = cv2.imread('dog.jpg', cv2.IMREAD_UNCHANGED) 读入原图。
 src = cv2.imread('image0.jpg', 1)  # 读取图片完整数据，矩阵形式
-src_info = src.shape  # 获取图片完整数据参数
+src_info = src.shape  # 获取矩阵形状参数
 print(src_info)  # 打印3个参数，分别为矩阵行数、矩阵列数、像素点通道数
 src_row = src_info[0]  # 第一个参数 = 矩阵行数 = 图片高度
 src_col = src_info[1]  # 第二个参数 = 矩阵列数 = 图片宽度
@@ -34,6 +41,7 @@ src_row = src_info[0]
 src_col = src_info[1]
 dst_row = int(src_row * 0.5)
 dst_col = int(src_col * 0.5)
+# 函数参数np.zeros(shape, dtype)
 dst = np.zeros((dst_row, dst_col, 3), np.uint8)
 for dst_i in range(0, dst_row):
     for dst_j in range(0, dst_col):
@@ -43,3 +51,306 @@ for dst_i in range(0, dst_row):
 cv2.imshow('dst_image', dst)
 cv2.waitKey(0)   
 2）双线性插值
+
+3. 仿射变换实现缩放
+（1）仿射矩阵 mat_scale 由人工计算得出
+（2）cv2.warpAffine()函数需给出缩放后图片宽高
+# mat_scale: [[a1 a2 b1],
+              [a3 a4 b2]]
+# dst_x = a1 * scr_x + a2 * src_y + b1
+# dst_y = a3 * scr_x + a4 * src_y + b2
+#
+# if dst_x = 0.5 * src_x
+     dst_y = 0.5 * src_y
+# so [[a1 a2 b1], => [[0.5, 0, 0],
+      [a3 a4 b2]]     [0, 0.5, 0]]
+import cv2
+import numpy as np
+src = cv2.imread('image0.jpg',src)
+cv2.imshow('src_image', src)
+src_info = src.shape
+src_row = src_info[0]
+src_col = src_info[1]
+mat_scale = np.float32([[0.5,0,0], [0,0.5,0]])
+dst = cv2.warpAffine(src, mat_scale, (int(src_col*0.5), int(src_row*0.5)))
+cv2.imshow('dst_image', dst)
+cv2.waitKey(0)
+
+4. 仿射变换实现拉伸
+（1）确定原图片上任意三个点，通常取左上、左下、右上三点
+（2）仿射矩阵 mat_affine 由 cv2.getAffineTransform(mat_src, mat_dst) 计算得出
+（3）cv2.warpAffine()函数图片宽高不变
+import cv2
+
+import numpy as np
+
+src = cv2.imread('image0.jpg', 1)
+
+cv2.imshow('src_image', src)
+src_info = src.shape
+
+src_row = src_info[0]
+
+src_col = src_info[1]
+# src_points => dst_pints
+mat_src = np.float32([[0,0], [0,src_row-1], [src_col-1,0]])  # src_points
+
+mat_dst = np.float32([[50,50], [300,src_row-200], [src_col-300,100]])  # dst_points
+
+# get mat_affine
+mat_affine = cv2.getAffineTransform(mat_src, mat_dst)
+dst = cv2.warpAffine(src, mat_affine, (src_col, src_row))
+
+# 
+cv2.imshow('dst_image', dst)
+
+cv2.waitKey(0)
+
+5. 仿射变换实现旋转
+import cv2
+import numpy as np
+src = cv2.imread('image0.jpg', 1)
+cv2.imshow('src_image', src)
+img_info = src.shape
+src_row = img_info[0]
+src_col = img_info[1]
+# cv2.getRotationMatrix2D()函数的三个参数：中心点、旋转角度、缩放比
+mat_rotate = cv2.getRotationMatrix2D((height*0.5,width*0.5), 45, 0.5)
+dst = cv2.warpAffine(src, mat_rotate, (src_col, src_row))
+cv2.imshow('dst_image', dst)
+cv2.waitKey(0)
+
+6. 仿射矩阵生成函数 & 仿射变换执行函数
+（1）缩放函数
+## mat_scale = np.float32([[0.5,0,0], [0,0.5,0]])
+#  dst = cv2.warpAffine(src, mat_scale, (int(src_col*0.5), int(src_row*0.5)))
+（2）拉伸函数
+#  mat_src = np.float32([[0,0], [0,src_row-1], [src_col-1,0]])  # src_points
+
+#  mat_dst = np.float32([[50,50], [300,src_row-200], [src_col-300,100]])  # dst_points
+
+## mat_affine = cv2.getAffineTransform(mat_src, mat_dst)
+#  dst = cv2.warpAffine(src, mat_affine, (src_col, src_row))
+
+（3）旋转函数
+## mat_rotate = cv2.getRotationMatrix2D((height*0.5,width*0.5), 45, 0.5)
+#  dst = cv2.warpAffine(src, mat_rotate, (src_col, src_row))
+（4）执行函数
+## dst = cv2.warpAffine(src, mat_, (src_col, src_row))
+## 其三个参数分别为：原图片、仿射矩阵、生成图片的窗口宽高
+## 图片的缩放在仿射矩阵中体现，而执行函数控制了生成图片的窗口大小
+## 仿射变换的本质，即原图片依据仿射矩阵产生的变换（矩阵运算）
+
+7. 灰度处理 => Gray = R = G = B
+（1）算法一：Gray = (R + G + B) / 3
+（2）算法二：Gray =  R*0.299 + G*0.587 + B*0.114（心理学公式）
+1）方法一：imread()函数
+import cv2
+img0 = cv2.imread('image0.jpg',0)
+img1 = cv2.imread('image0.jpg',1)
+print(img0.shape)
+print(img1.shape)
+cv2.imshow('src',img0)
+cv2.waitKey(0)
+2）方法二：cvtColor()函数
+import cv2
+img = cv2.imread('image0.jpg', 1)
+#  颜色空间转换函数cvColor()参数：原图片数据、颜色转换方式
+dst = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+cv2.imshow('dst',dst)
+cv2.waitKey(0)
+3）方法三：
+import cv2
+import numpy as np
+img = cv2.imread('image0.jpg',1)
+imgInfo = img.shape
+height = imgInfo[0]
+width = imgInfo[1]
+#  Gray = R = G = B = (R+G+B)/ 3
+dst = np.zeros((height,width,3),np.uint8)
+for i in range(0,height):
+    for j in range(0,width):
+        (b,g,r) = img[i,j]
+        gray = (int(b)+int(g)+int(r))/3
+        dst[i,j] = np.uint8(gray)
+cv2.imshow('dst',dst)
+cv2.waitKey(0)
+4）方法四：
+import cv2
+import numpy as np
+img = cv2.imread('image0.jpg',1)
+imgInfo = img.shape
+height = imgInfo[0]
+width = imgInfo[1]
+dst = np.zeros((height,width,3),np.uint8)
+for i in range(0,height):
+    for j in range(0,width):
+        (b,g,r) = img[i,j]
+        b = int(b)
+        g = int(g)
+        r = int(r)
+        gray = r*0.299+g*0.587+b*0.114
+        dst[i,j] = np.uint8(gray)
+cv2.imshow('dst',dst)
+cv2.waitKey(0)
+
+8. 算法优化
+（1）'定点' > '浮点'
+（2）'>>' > '+/-' > '*//'
+优化：
+1) gray = r*0.299 + g*0.587 + b*0.114
+2) gray = (r*1 + g*2 + b*1) / 4
+3) gray = (r + g<<1 + b) >> 2
+
+9. 图像处理：RGB转灰度
+方法一：
+对于彩色转灰度，有一个很著名的心理学公式：
+    Gray = R*0.299 + G*0.587 + B*0.114
+
+方法二：
+而实际应用时，希望避免低速的浮点运算，所以需要整数算法。
+注意到系数都是3位精度的没有，我们可以将它们缩放1000倍来实现整数运算算法：
+    Gray = (R*299 + G*587 + B*114 + 500) / 1000
+RGB一般是8位精度，现在缩放1000倍，所以上面的运算是32位整型的运算。注意后面那个除法是整数 除法，所以需要加上500来实现四舍五入。
+就是由于该算法需要32位运算，所以该公式的另一个变种很流行：
+    Gray = (R*30 + G*59 + B*11 + 50) / 100
+
+方法三：
+上面的整数算法已经很快了，但是有一点仍制约速度，就是最后的那个除法。移位比除法快多了，所以可以将系数缩放成 2的整数幂。
+习惯上使用16位精度，2的16次幂是65536，所以这样计算系数：
+    0.299 * 65536 = 19595.264 ≈ 19595
+    0.587 * 65536 + (0.264) = 38469.632 + 0.264 = 38469.896 ≈ 38469
+    0.114 * 65536 + (0.896) =   7471.104 + 0.896 = 7472
+可能很多人看见了，我所使用的舍入方式不是四舍五入。四舍五入会有较大的误差，应该将以前的计算结果的误差一起计算进去，舍入方式是去尾法：
+写成表达式是：
+    Gray = (R*19595 + G*38469 + B*7472) >> 16
+2至20位精度的系数：
+    Gray = (R*1 + G*2 + B*1) >> 2
+    Gray = (R*2 + G*5 + B*1) >> 3
+    Gray = (R*4 + G*10 + B*2) >> 4
+    Gray = (R*9 + G*19 + B*4) >> 5
+    Gray = (R*19 + G*37 + B*8) >> 6
+    Gray = (R*38 + G*75 + B*15) >> 7
+    Gray = (R*76 + G*150 + B*30) >> 8
+    Gray = (R*153 + G*300 + B*59) >> 9
+    Gray = (R*306 + G*601 + B*117) >> 10
+    Gray = (R*612 + G*1202 + B*234) >> 11
+    Gray = (R*1224 + G*2405 + B*467) >> 12
+    Gray = (R*2449 + G*4809 + B*934) >> 13
+    Gray = (R*4898 + G*9618 + B*1868) >> 14
+    Gray = (R*9797 + G*19235 + B*3736) >> 15
+    Gray = (R*19595 + G*38469 + B*7472) >> 16
+    Gray = (R*39190 + G*76939 + B*14943) >> 17
+    Gray = (R*78381 + G*153878 + B*29885) >> 18
+    Gray = (R*156762 + G*307757 + B*59769) >> 19
+    Gray = (R*313524 + G*615514 + B*119538) >> 20
+仔细观察上面的表格，这些精度实际上是一样的：3与4、7与8、10与11、13与14、19与20
+所以16位运算下最好的计算公式是使用7位精度，比先前那个系数缩放100倍的精度高，而且速度快：
+    Gray = (R*38 + G*75 + B*15) >> 7
+其实最有意思的还是那个2位精度的，完全可以移位优化：
+    Gray = (R + (WORD)G<<1 + B) >> 2
+另一种是 Adobe Photoshop 里的公式 
+    Adobe RGB (1998) [gamma=2.20] 
+    Gray = (R^2.2 * 0.2973 + G^2.2 * 0.6274 + B^2.2 * 0.0753)^(1/2.2)
+该方法运行速度稍慢，但是效果很好。
+
+平均值方法 
+    GRAY = (RED+BLUE+GREEN)/3
+用（GRAY,GRAY,GRAY）替代（RED,GREEN,BLUE）
+
+10. 底板效果（图片颜色反转）
+（1）灰度图片颜色反转原理：先灰度处理，再对各个像素点（255-当前值）
+import cv2
+import numpy as np
+img = cv2.imread('image0.jpg',1)
+imgInfo = img.shape
+height = imgInfo[0]
+width = imgInfo[1]
+gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+dst = np.zeros((height,width,1),np.uint8)
+for i in range(0,height):
+    for j in range(0,width):
+        grayPixel = gray[i,j]
+        dst[i,j] = 255-grayPixel
+cv2.imshow('dst',dst)
+cv2.waitKey(0)
+（2）彩色图片颜色反转原理：对各个像素点（255-b & 255-g & 255-r）
+#RGB 255-R=newR
+#0-255 255-当前
+import cv2
+import numpy as np
+img = cv2.imread('image0.jpg',1)
+imgInfo = img.shape
+height = imgInfo[0]
+width = imgInfo[1]
+dst = np.zeros((height,width,3),np.uint8)
+for i in range(0,height):
+    for j in range(0,width):
+        (b,g,r) = img[i,j]
+        dst[i,j] = (255-b,255-g,255-r)
+cv2.imshow('dst',dst)
+cv2.waitKey(0)
+
+11. 马赛克效果
+原理：用小方块中的一个像素点，替换该小方块中的所有像素点
+import cv2
+import numpy as np
+img = cv2.imread('image0.jpg',1)
+imgInfo = img.shape
+height = imgInfo[0]
+width = imgInfo[1]
+# 确定打马赛克区域
+for m in range(100,300):
+    for n in range(100,200):
+        # 确定马赛克小方块（如：10 * 10）
+        if m%10 == 0 and n%10 == 0:
+            for i in range(0,10):
+                for j in range(0,10):
+                    # 用每个小方块的第一个像素值，覆盖该小方块内的100个像素点
+                    (b,g,r) = img[m,n]
+                    img[i+m,j+n] = (b,g,r)
+cv2.imshow('dst',img)
+cv2.waitKey(0)
+
+12. 毛玻璃效果
+原理：用像素点周围随机的一个像素点，替换该像素点
+import cv2
+import numpy as np
+import random
+img = cv2.imread('image0.jpg',1)
+imgInfo = img.shape
+height = imgInfo[0]
+width = imgInfo[1]
+dst = np.zeros((height,width,3),np.uint8)
+mm = 8  # 取随机像素点的范围（该点右侧8像素、下方8像素范围内）
+for m in range(0,height-mm):
+    for n in range(0,width-mm):
+        index = int(random.random()*8)  # 获取0-8的随机整数
+        (b,g,r) = img[m+index,n+index]
+        dst[m,n] = (b,g,r)
+cv2.imshow('dst',dst)
+cv2.waitKey(0)
+
+13. 融合效果
+原理：dst = src_1 * a + src_2 * (1-a)，且两张待融合图片的大小需相同
+import cv2
+import numpy as np
+img0 = cv2.imread('image0.jpg',1)
+img1 = cv2.imread('image1.jpg',1)
+# 任选一张图片，获取其shape属性
+imgInfo = img0.shape
+height = imgInfo[0]
+width = imgInfo[1]
+# 设定想要融合部分的尺寸ROI（需小于img0、img1）
+roiH = int(height/2)
+roiW = int(width/2)
+# 从两张图片中截取相同的ROI部分
+img0ROI = img0[0:roiH,0:roiW]
+img1ROI = img1[0:roiH,0:roiW]
+# 通过addWeighted()方法（参数：src1、a、src2、1-a），实现dst = src_1*a + src_2*(1-a)
+dst = np.zeros((roiH,roiW,3),np.uint8)
+dst = cv2.addWeighted(img0ROI, 0.5, img1ROI, 0.5, 0)
+# 1 src1 2 a 3 src2 4 1-a
+cv2.imshow('dst',dst)
+cv2.waitKey(0)
+
