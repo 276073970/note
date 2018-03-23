@@ -354,3 +354,239 @@ dst = cv2.addWeighted(img0ROI, 0.5, img1ROI, 0.5, 0)
 cv2.imshow('dst',dst)
 cv2.waitKey(0)
 
+14. 边缘检测
+原理：图像的卷积运算
+# Canny实现图片的边缘检测步骤：
+# （1）图片的灰度处理
+# （2）高斯滤波，去除噪声干扰
+# （3）调用OpenCV中的Canny方法实现
+import cv2
+import numpy as np
+import random
+img = cv2.imread('image0.jpg',1)
+imgInfo = img.shape
+height = imgInfo[0]
+width = imgInfo[1]
+cv2.imshow('src',img)
+# 灰度处理cv2.cvtColor()
+gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+# 高斯滤波cv2.GaussianBlur()
+imgG = cv2.GaussianBlur(gray,(3,3),0)
+# Canny方法cv2.Canny()
+dst = cv2.Canny(img,50,50)
+cv2.imshow('dst',dst)
+cv2.waitKey(0)
+
+15. 边缘检测原理
+（1）sobel算子模板
+竖直方向算子A： 水平方向算子B：
+[  1  2  1      [  1  2  1
+   0  0  0         0  0  0
+  -1 -2 -1 ]      -1 -2 -1 ]
+竖直方向梯度a   水平方向梯度b
+（2）图片卷积
+原理：图片数据（矩阵src）与算子模板（矩阵A或B）对应位置元素相乘在求和，求得梯度值
+src 与 A 卷积  =>  a
+src 与 B 卷积  =>  b
+（3）阈值判决
+计算合梯度：sqrt(a*a + b*b) = grad > th  =>  边缘
+                                   < th  =>  非边缘
+import cv2
+import numpy as np
+import random
+import math
+img = cv2.imread('image0.jpg',1)
+imgInfo = img.shape
+height = imgInfo[0]
+width = imgInfo[1]
+cv2.imshow('src',img)
+gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+dst = np.zeros((height,width,1),np.uint8)
+for i in range(0,height-2):
+    for j in range(0,width-2):
+        gy = gray[i,j]*1+gray[i,j+1]*2+gray[i,j+2]*1-gray[i+2,j]*1-gray[i+2,j+1]*2-gray[i+2,j+2]*1
+        gx = gray[i,j]+gray[i+1,j]*2+gray[i+2,j]-gray[i,j+2]-gray[i+1,j+2]*2-gray[i+2,j+2]
+        grad = math.sqrt(gx*gx+gy*gy)
+        # 设定th=50
+        if grad>50:
+            dst[i,j] = 255
+        else:
+            dst[i,j] = 0
+cv2.imshow('dst',dst)
+cv2.waitKey(0)
+
+16. 浮雕效果
+原理：
+（1）每个像素点的像素值，等于相邻像素点的像素值之差，再加上一个固定值
+（2）newPixel = gray_01 - gray_02 + constant
+（3）gray_01 - gray_02目的：突出灰度的图片，及其边缘特征
+（4）constant目的：增强图片的浮雕灰度等级
+import cv2
+import numpy as np
+img = cv2.imread('image0.jpg',1)
+imgInfo = img.shape
+height = imgInfo[0]
+width = imgInfo[1]
+gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+# newP = gray0-gray1+150
+dst = np.zeros((height,width,1),np.uint8)
+for i in range(0,height):
+    for j in range(0,width-1):
+        grayP0 = int(gray[i,j])
+        grayP1 = int(gray[i,j+1])
+        newP = grayP0-grayP1+150
+        if newP > 255:
+            newP = 255
+        if newP < 0:
+            newP = 0
+        dst[i,j] = newP
+cv2.imshow('dst',dst)
+cv2.waitKey(0)
+
+17. 颜色风格
+原理：
+（1）制作查找表，根据原始图像的RGB值，通过查找表得到一组新的RGB值，并替代原RGB值
+（2）也可通过公式进行颜色的映射，但颜色效果越复杂，利用公式进行拟合的时候难度越大
+import cv2
+import numpy as np
+img = cv2.imread('image0.jpg',1)
+cv2.imshow('src',img)
+imgInfo = img.shape
+height = imgInfo[0]
+width = imgInfo[1]
+# 偏蓝色风格
+# b = b * 1.5
+# g = g * 1.3
+dst = np.zeros((height,width,3),np.uint8)
+for i in range(0,height):
+    for j in range(0,width):
+        (b,g,r) = img[i,j]
+        b = b*1.5
+        g = g*1.3
+        if b>255:
+            b = 255
+        if g>255:
+            g = 255
+        dst[i,j]=(b,g,r)
+cv2.imshow('dst',dst)
+cv2.waitKey(0)
+
+18. 油画特效
+原理：
+（1）图片的灰度处理
+（2）将图片分割为若干个小方块，统计小方块中各像素的灰度值
+（3）将0——255的灰度值划分为几个等级，并将（2）中结果映射到各等级，如：
+0级：  0——31
+1级： 32——63
+2级： 64——95
+3级： 96——127
+4级：128——159
+5级：160——191
+6级：192——223
+7级：224——255
+8级：256
+（4）找到每个小方块中，灰等级度段的个数统计，并求取这些像素的均值
+（5）用（4）中求得的平均值，替代小方块中的原像素值，以实现油画效果
+import cv2
+import numpy as np
+img = cv2.imread('image00.jpg',1)
+cv2.imshow('src',img)
+imgInfo = img.shape
+height = imgInfo[0]
+width = imgInfo[1]
+gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+dst = np.zeros((height,width,3),np.uint8)
+for i in range(4,height-4):
+    for j in range(4,width-4):
+        # 对每个小方块执行如下统计
+        array1 = np.zeros(8,np.uint8)
+        for m in range(-4,4):
+            for n in range(-4,4):
+                p1 = int(gray[i+m,j+n]/32)
+                array1[p1] = array1[p1]+1
+        # 假设：当前方块中0级灰度的像素点最多，该l级灰度像素点个数为currentMax
+        currentMax = array1[0]
+        l = 0
+        # 统计当前方块中像素点最多的灰度等级，及该等级下的像素点个数
+        for k in range(0,8):
+            if currentMax<array1[k]:
+                currentMax = array1[k]
+                l = k
+        # 简化均值求解，用当前方块中检索到的第一个满足l灰度等级的灰度值，
+          来充当当前方块中所有满足l灰度等级的像素点的灰度值的平均值
+        for m in range(-4,4):
+            for n in range(-4,4):
+                if gray[i+m,j+n]>=(l*32) and gray[i+m,j+n]<((l+1)*32):
+                    (b,g,r) = img[i+m,j+n]
+        dst[i,j] = (b,g,r)
+cv2.imshow('dst',dst)
+cv2.waitKey(0)
+
+19. 线段绘制
+import cv2
+import numpy as np
+newImageInfo = (500,500,3)
+dst = np.zeros(newImageInfo,np.uint8)
+# 线段绘制cv2.line()参数：dst、begin、end、color、weight、type
+#
+cv2.line(dst,(100,100),(400,400),(0,0,255))
+#
+cv2.line(dst,(100,200),(400,200),(0,255,255),20)
+# cv2.LINE_AA 防锯齿化
+cv2.line(dst,(100,300),(400,300),(0,255,0),20,cv2.LINE_AA)
+# 三角形
+cv2.line(dst,(200,150),(50,250),(25,100,255))
+cv2.line(dst,(50,250),(400,380),(25,100,255))
+cv2.line(dst,(400,380),(200,150),(25,100,255))
+#
+cv2.imshow('dst',dst)
+cv2.waitKey(0)
+
+20. 矩形、圆形等绘制
+import cv2
+import numpy as np
+newImageInfo = (500,500,3)
+dst = np.zeros(newImageInfo,np.uint8)
+# 矩形绘制cv2.rectangle()参数：dst、左上、右下、color、fill(-1)/line_weight(>0)
+cv2.rectangle(dst,(50,100),(200,300),(255,0,0),5)
+# 圆形绘制cv2.circle()参数：dst、center、r、color、fill(-1)/line_weight(>0)
+cv2.circle(dst,(250,250),(50),(0,255,0),2)
+# 椭圆、扇形、圆弧绘制cv2.ellipse()参数：（类似圆规作图）
+# dst、center、横竖轴、偏转角度angle、起始角度begin、终止角度end、color、fill(-1)/line_weight(>0)
+cv2.ellipse(dst,(256,256),(150,100),0,0,180,(255,255,0),-1)
+# 多边形绘制
+# （1）np.array()记录多边形各点坐标
+points = np.array([[150,50],[140,140],[200,170],[250,250],[150,50]],np.int32)
+print(points.shape)
+# （2）points.reshape()矩阵维度转换
+points = points.reshape((-1,1,2))
+print(points.shape)
+# （3）cv2.polylines()绘制多边形
+cv2.polylines(dst,[points],True,(0,255,255))
+#
+cv2.imshow('dst',dst)
+cv2.waitKey(0)
+
+21. 文字、图片等绘制
+（1）文字
+import cv2 
+import numpy as np
+img = cv2.imread('image0.jpg',1)
+font = cv2.FONT_HERSHEY_SIMPLEX
+cv2.rectangle(img,(200,100),(500,400),(0,255,0),3)
+# 文字绘制cv2.putText()参数：
+# dst、context、坐标、font、size、color、weight、type
+cv2.putText(img,'this is flow',(100,300),font,1,(200,100,255),2,cv2.LINE_AA)
+cv2.imshow('src',img)
+cv2.waitKey(0)
+（2）图片（像素的叠加）
+import cv2 
+img = cv2.imread('image0.jpg',1)
+height = int(img.shape[0]*0.2)
+width = int(img.shape[1]*0.2)
+imgResize = cv2.resize(img,(width,height))
+for i in range(0,height):
+    for j in range(0,width):
+        img[i+200,j+350] = imgResize[i,j]
+cv2.imshow('src',img)
+cv2.waitKey(0)
