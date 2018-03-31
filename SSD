@@ -6,3 +6,8 @@ TLC = Trinary-Level Cell，即3bit/cell，也有Flash厂家叫8LC，速度慢寿
 
 TLC最廉价，也是最差的，MLC 居中，不好不坏，SLC最好，价格也最贵
 SLC>MLC>TLC
+
+在固态硬盘领域，掌握了闪存颗粒几乎可以说就掌控了固态市场。
+目前，全球范围内从事NAND flash的厂商大大小小不计其数，但具有统治地位的就只有区区六家，
+他们分别是三星（Samsung）、东芝（Toshiba）、英特尔（intel）、海力士（SK hynix）、美光（Micron）、闪迪（SanDisk），
+这六家从事NAND FLASH制造的厂商几乎垄断了全球大部分的市场份额，
