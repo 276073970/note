@@ -1,0 +1,8 @@
+由于在实际的工作中需要使用到python来进行GUI的开发，基于python的GUI开发，只是去考虑具体使用依赖那个GUI库来进行开发。
+
+GUI库的选择：
+1、TKinter，python配备的标准gui库，但是功能比较弱，似乎只适合开发非常简单的界面。
+2、Wxpython，目前官方网站还没有release针对python3.0以上版本的库，虽然在国外的博客上有针对python3的版本。
+3、Pyqt，Pyqt基于QT,在GUI开发上可以参考QT的开发 。
+
+对比了Tkinter,Wxpython,Pyqt之后，选择使用Pyqt来进行GUI的开发，PyQt基于GPL许可开发。
