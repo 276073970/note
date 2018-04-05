@@ -24,4 +24,29 @@ from math import sqrt
 sqrt(4)
 注：“包”实则是一个“.py”文件，但在引入时不加“.py”扩展名，且引入函数时也不加“()”
 
-3. 
+3. 格式化输出
+%运算符就是用来格式化字符串的。
+在字符串内部，%s表示用字符串替换，%d表示用整数替换，有几个%?占位符，后面就跟几个变量或者值，顺序要对应好。
+如果只有一个%?，括号可以省略。
+
+常见的占位符有：
+占位符	替换内容
+  %d	整数
+  %f	浮点数
+  %s	字符串
+  %x	十六进制整数
+
+其中，格式化整数和浮点数还可以指定是否补0和整数与小数的位数：
+# -*- coding: utf-8 -*-
+
+print('%2d-%02d' % (3, 1))
+print('%.2f' % 3.1415926)
+
+或直接通过“,”将要输出字符串连接：
+def person(name, age, **extra):
+    print('name:', name, 'age:', age, 'other:', extra)
+其等价于：
+def person(name, age, **extra):
+    print('name: %s, age: %d, other: %s' % (name, age, extra))
+
+4. 
