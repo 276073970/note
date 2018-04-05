@@ -10,7 +10,7 @@ math.sqrt(4)
 # 方法四：
 import math
 math.pow(4, 0.5)
-注：math.pow(a, b)只接收两个参数
+注：math.pow(a, b)只接收两个参数，且math模块中没有计算平方的函数，用pow(x, 2)实现平方计算
 #方法五：
 import numpy
 numpy.sqrt(4)
