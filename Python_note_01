@@ -1,0 +1,25 @@
+1.  求平方根
+# 方法一：
+4 ** 0.5
+# 方法二：
+pow(4, 0.5)
+注：pow(a, b, c) = a ** b % c
+# 方法三：
+import math
+math.sqrt(4)
+# 方法四：
+import math
+math.pow(4, 0.5)
+注：math.pow(a, b)只接收两个参数
+#方法五：
+import numpy
+numpy.sqrt(4)
+
+2. “引入包” 和 “引入函数”
+# 引入包
+import math
+math.sqrt(4)
+# 引入函数
+from math import sqrt
+sqrt(4)
+注：“包”实则是一个“.py”文件，但在引入时不加“.py”扩展名
