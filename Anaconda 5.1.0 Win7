@@ -6,6 +6,7 @@
 // C:\Users\CH\Anaconda3  *
 (3) Advanced Options
 // Add Anaconda to my PATH environment variable  *
+// # CH的用户变量
   C:\Users\CH\Anaconda3;
   C:\Users\CH\Anaconda3\Library\mingw-w64\bin;
   C:\Users\CH\Anaconda3\Library\usr\bin;
@@ -13,6 +14,18 @@
   C:\Users\CH\Anaconda3\Scripts;
   C:\Users\CH\AppData\Local\atom\bin;
   C:\Program Files\Microsoft VS Code\bin
+// # 系统变量  *
+  C:\ProgramData\Anaconda3;
+  C:\ProgramData\Anaconda3\Library\mingw-w64\bin;
+  C:\ProgramData\Anaconda3\Library\usr\bin;
+  C:\ProgramData\Anaconda3\Library\bin;
+  C:\ProgramData\Anaconda3\Scripts;
+  C:\Windows\system32;
+  C:\Windows;
+  C:\Windows\System32\Wbem;
+  C:\Windows\System32\WindowsPowerShell\v1.0\;
+  C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;
+  C:\vim\vim80;
 // Register Anaconda as my default Python 3.6  *
 (4) Install Microsoft VSCode
 
