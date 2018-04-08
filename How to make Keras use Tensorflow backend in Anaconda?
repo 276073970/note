@@ -1,19 +1,18 @@
 Q:
 I have install tensorflow-gpu in my Anaconda environment. They both work well.
 Now I am trying to install Keras with Tensorflow backend. According to the instruction I just run:
-  # pip install keras
+  pip install keras
 But it doesn't install keras, then I tried:
-  # conda install -c conda-forge keras=2.0.2
+  conda install -c conda-forge keras=2.0.2
 Then I am now able import keras in python. But the problem is, it always use the Theano backend. 
 I am trying to change this, but not knowing how to do it.
 I also tried edit the file ~/.keras, but actually default backend was tensorflow already.
 Please help.. Thank you so much!
 
-A:
+A1:
 This happens because the keras conda-forge package puts a file in ${CONDA_PREFIX}/etc/conda/activate.d/keras_activate.sh, 
 which sets the environment variable KERAS_BACKEND
-
-(root) [root@starlabs ~]# cat $CONDA_PREFIX/etc/conda/activate.d/keras_activate.sh
+  (root) [root@starlabs ~]# cat $CONDA_PREFIX/etc/conda/activate.d/keras_activate.sh
   #!/bin/bash
   if [ "$(uname)" == "Darwin" ]
   then
@@ -24,11 +23,36 @@ which sets the environment variable KERAS_BACKEND
       # for Linux
       export KERAS_BACKEND=theano
   fi
-
 As you can see from the file, in Linux, it sets the value to 'theano' and according to the official docs:
-  # the environment variable KERAS_BACKEND will override what is defined in your config file
+  the environment variable KERAS_BACKEND will override what is defined in your config file
 To work around this, you can either edit this file and change 'theano' to 'tensorflow' 
 (which would probably get overwritten on reinstall or on changing environments) 
 or, do the following:
-  # export KERAS_BACKEND=tensorflow
-  # python /path/to/python/program.py
+  export KERAS_BACKEND=tensorflow
+  python /path/to/python/program.py
+
+A2: Could be the answer for people who use Windows
+Had the same problem after installing keras from conda-forge. keras.json already had tensorflow:
+  {
+      "floatx": "float32",
+      "epsilon": 1e-07,
+      "backend": "tensorflow",
+      "image_data_format": "channels_last"
+  }
+but activate tensorflow_keras (where "tensorflow_keras" is the environment name), changes the backend to theano:
+  C:\Users\User1>activate tensorflow_keras
+  
+  (tensorflow_keras) C:\Program Files\Anaconda3\envs\tensorflow_keras\etc\conda\ac
+  tivate.d>set "KERAS_BACKEND=theano"
+Following @FvD above, I edited this file:
+  C:\Program Files\Anaconda3\envs\tensorflow_keras\etc\conda\activate.d
+and changed theano to tensorflow:
+  set "KERAS_BACKEND=tensorflow"
+
+A3:
+On a multi-user install on Windows 10 the Anaconda environment activation file is:
+  C:\Users\<user name>\AppData\Local\Continuum\Anaconda3\envs\<environment name>\etc\conda\activate.d\keras_activate.bat
+Just change <user name> and <environment name> to match.
+
+A4:
+Had a similar problem, seems that if ~/.keras/keras.json is not accessible, keras is using /tmp/.keras/keras.json
