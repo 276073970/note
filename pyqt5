@@ -1,0 +1,68 @@
+PyQt5说明
+
+pyqt5是一套Python绑定Digia QT5应用的框架。
+它可用于Python 2和3。本教程使用Python 3。
+Qt库是最强大的GUI库之一。
+pyqt5的官方网站http://www.riverbankcomputing.co.uk/news。
+
+pyqt5做为Python的一个模块，它有620多个类和6000个函数和方法。
+这是一个跨平台的工具包，它可以运行在所有主要的操作系统，包括UNIX，Windows，Mac OS。
+pyqt5是双重许可。开发者可以在GPL和商业许可之间进行选择。
+
+pyqt5的类别分为几个模块，包括以下：
+QtCore
+QtGui
+QtWidgets
+QtMultimedia
+QtBluetooth
+QtNetwork
+QtPositioning
+Enginio
+QtWebSockets
+QtWebKit
+QtWebKitWidgets
+QtXml
+QtSvg
+QtSql
+QtTest
+
+QtCore: 包含了核心的非GUI功能。此模块用于处理时间、文件和目录、各种数据类型、流、URL、MIME类型、线程或进程。
+QtGui: 包含类窗口系统集成、事件处理、二维图形、基本成像、字体和文本。
+QtWidgets: 模块包含创造经典桌面风格的用户界面提供了一套UI元素的类。
+QtMultimedia: 包含的类来处理多媒体内容和API来访问相机和收音机的功能。
+QtBluetooth: 模块包含类的扫描设备和连接并与他们互动。描述模块包含了网络编程的类。这些类便于TCP和IP和UDP客户端和服务器的编码，使网络编程更容易和更便携。
+QtPositioning: 包含类的利用各种可能的来源，确定位置，包括卫星、Wi-Fi、或一个文本文件。
+Enginio: 模块实现了客户端库访问Qt云服务托管的应用程序运行时。
+QtWebsockets: 模块包含实现WebSocket协议类。
+QtWebKit: 包含一个基于Webkit2库的Web浏览器实现类。
+QtWebkitWidgets: 包含的类的基础webkit1一用于qtwidgets应用Web浏览器的实现。
+QtXml: 包含与XML文件的类。这个模块为SAX和DOM API提供了实现。
+QtSvg: 模块提供了显示SVG文件内容的类。可伸缩矢量图形（SVG）是一种描述二维图形和图形应用的语言。
+QtSql: 模块提供操作数据库的类。
+QtTest: 包含的功能，使pyqt5应用程序的单元测试
+
+PyQt4和PyQt5的区别
+pyqt5不向后兼容pyqt4。pyqt5有几个显著的变化。
+将旧代码调整到新库并不困难。有几个大的改变如下：
+(1) Python模块已经重组。一些模块已经删除（qtscript），有的被分割成子模块（QtGui，QtWebKit）。
+(2) 新的模块作了详细的介绍，包括qtbluetooth，qtpositioning，或enginio。
+(3) pyqt5只支持新型的信号和槽handlig。电话signal()或slot()不再支持。
+(4) pyqt5不支持Qt的API被标记为过时或陈旧的任何部分在QT V5.0。
+
+Python
+Python是一个通用的，动态的，面向对象的编程语言。
+Python语言的设计目的强调程序员的生产率和代码可读性。
+Python最初是由Guido van Rossum在1991首次发布。
+Python的灵感来自于ABC，Haskell，java，Lisp，图标，和Perl编程语言。
+Python是一种高级的、通用的、跨平台的、解释型语言。
+Python是一种简单的语言。一个最明显的特征是，它不使用分号和括号。它使用缩进代替。
+目前Python有两个主要的分支：Python 2.x和Python 3.X。
+Python 3与先前发布的Python版本向后兼容。它是为了纠正语言的一些设计缺陷，使语言更干净。
+Python是由全世界的一大群志愿者维护的。Python是开源软件。
+对于想学习编程的人来说，Python是一个理想的开始。
+本教程使用Python 3版。
+Python编程语言支持多种编程风格。它不会强迫程序员到特定的范例。
+Python支持面向对象和程序编程。功能编程也有有限的支持。
+对于Python编程语言的官方网站的使用
+Perl，Python和Rube是广泛使用的脚本语言。他们有许多相似之处，他们是密切的竞争对手。
+本章是pyqt5工具包介绍。
