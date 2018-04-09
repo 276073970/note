@@ -2,6 +2,15 @@
 (1) Install for：
 // Just Me (recommended)
 // All Users (requires admin privileges)  *
+注：
+# 若选择“All Users”安装，则：
+Anaconda3被安装在：C:\ProgramData\Anaconda3
+而新创建的环境在：C:\Users\CH\AppData\Local\conda\conda\envs
+# 若选择“Just Me”安装，则：
+C:\Program Files\Anaconda3
+C:\Program Files\Anaconda3\envs\snowflakes
+# 查看当前环境命令为：
+conda info --envs 或 conda info -e
 (2) Destination Folder
 // C:\Users\CH\Anaconda3  *
 (3) Advanced Options
@@ -37,7 +46,7 @@
 (3) [属性] => [颜色] => [屏幕文字：第3绿色]
 
 
-3. 添加国内源
+3. 添加国内源（优先使用中科大源）
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
 conda config --set show_channel_urls yes
