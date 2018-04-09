@@ -44,8 +44,7 @@ Had the same problem after installing keras from conda-forge. keras.json already
 but activate tensorflow_keras (where "tensorflow_keras" is the environment name), changes the backend to theano:
   C:\Users\User1>activate tensorflow_keras
   
-  (tensorflow_keras) C:\Program Files\Anaconda3\envs\tensorflow_keras\etc\conda\ac
-  tivate.d>set "KERAS_BACKEND=theano"
+  (tensorflow_keras) C:\Program Files\Anaconda3\envs\tensorflow_keras\etc\conda\activate.d>set "KERAS_BACKEND=theano"
 Following @FvD above, I edited this file:
   C:\Program Files\Anaconda3\envs\tensorflow_keras\etc\conda\activate.d
 and changed theano to tensorflow:
