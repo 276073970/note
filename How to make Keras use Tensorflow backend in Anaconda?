@@ -57,3 +57,57 @@ Just change <user name> and <environment name> to match.
 
 A4:
 Had a similar problem, seems that if ~/.keras/keras.json is not accessible, keras is using /tmp/.keras/keras.json
+
+****************************************************************************************************
+****************************************************************************************************
+
+问题：keras修改backend（keras的backend同时支持tensorflow和theano）
+
+方法1：修改keras的配置文件，～/.keras/keras.json
+如果已经运行过一次Keras，你将在下面的目录下找到Keras的配置文件：~/.keras/keras.json
+如果该目录下没有该文件，你可以手动创建一个
+将文件的默认配置如下：
+{
+    "backend": "tensorflow",
+    "epsilon": 1e-07,
+    "floatx": "float32",
+    "image_data_format": "channels_last"
+}
+可以直接将backend项修改为tensorflow或theano，如果直接修改有问题，可以在文本中修改再整体拷贝修改该配置文件即可。
+[Method 1]
+sudo gedit ~/.keras/keras.json
+# The default configuration file looks like this:
+{
+    "image_dim_ordering": "tf",
+    "epsilon": 1e-07,
+    "floatx": "float32",
+    "backend": "theano"
+}
+# Simply change the field backend to either "theano" or  "tensorflow"
+
+方法2：通过命令修改
+KERAS_BACKEND = tensorflow python -c "from keras import backend"
+# 这种修改方式只是临时修改了backend，
+[Method 2]
+KERAS_BACKEND = tensorflow Python -c "from keras import backend"
+# 仅仅只是临时修改了backend
+
+方法3：可以在程序中加入
+import os
+os.environ['KERAS_BACKEND']= 'theano'
+[Method 3]
+python
+>>> import os
+>>> os.environ['KERAS_BACKEND']='theano'
+>>> import keras
+Using Theano backend.:
+
+方法4：修改__init__.py文件
+C:\Users\CH\AppData\Local\conda\conda\envs\bishe\Lib\site-packages\keras\backend\__init__.py
+原内容：
+# Default backend: Tensorflow
+_BACKEND = 'tensorflow'
+修改为：
+# Default backend: Tensorflow
+# _BACKEND = 'tensorflow'
+_BACKEND = 'theano'
