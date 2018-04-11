@@ -1,1 +1,7 @@
-21. 
+21. 命名规则
+(1) 模块名：modelName
+(2) 类名：ClassName
+(3) 方法名：method_name
+(4) 参数名：argument_name
+
+22. 
