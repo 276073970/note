@@ -91,7 +91,7 @@ Python 代码规范：简明概述、注释、命名规范
         x = x*2 - 1
         hypot2 = x*x + y*y
         c = (a+b) * (a-b)
-   2) 函数的参数列表中，,之后要有空格
+   2) 函数的参数列表中，“,”之后要有空格
         # 正确的写法
         def complex(real, imag):
             pass
