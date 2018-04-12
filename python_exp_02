@@ -1,7 +1,7 @@
 21. 命名规则
-(1) 模块名：modelName
-(2) 类名：ClassName
-(3) 方法名：method_name
-(4) 参数名：argument_name
+(1) 模块名：modoule_name（“类”型则名词优先，“方法”型则动词优先）
+(2) 类名：ClassName（名词组合）
+(3) 方法名：method_name（动词组合）
+(4) 参数名：argument_name（名词组合）
 
 22. 
