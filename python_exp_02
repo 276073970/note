@@ -15,7 +15,7 @@
     read_img(user_src_img_path, 'jpg')
 
 22. 函数传入多个参数时
-(1) 先定义list，才传入函数
+(1) 先定义list，再传入函数
 def calc(numbers):
     pass
 list = [a, b, c]
