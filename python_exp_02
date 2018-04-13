@@ -75,9 +75,20 @@ calc(*list)
 (1) 包是一个分层次的文件目录结构，它定义了一个由模块、子包、子包下的子包等组成的 Python 的应用环境。
 (2) 简单来说，包就是文件夹，但该文件夹下必须存在 __init__.py 文件, 该文件的内容可以为空。__int__.py用于标识当前文件夹是一个包。
 (3) 考虑一个在 package_runoob 目录下的 runoob1.py、runoob2.py、__init__.py 文件，test.py 为测试调用包的代码，目录结构如下：
+    test.py
+    package_runoob
+    |-- __init__.py
+    |-- runoob1.py
+    |-- runoob2.py
+(4) 调用test.py()源码如下：
+    #!/usr/bin/python
+    # -*- coding: UTF-8 -*-
 
-test.py
-package_runoob
-|-- __init__.py
-|-- runoob1.py
-|-- runoob2.py
+    # 导入 Phone 包
+    from package_runoob.runoob1 import runoob1
+    from package_runoob.runoob2 import runoob2
+
+    runoob1()
+    runoob2()
+
+29. 
