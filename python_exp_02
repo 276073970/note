@@ -71,4 +71,15 @@ calc(*list)
 (3) 如果在函数内部调用 globals()，返回的是所有在该函数里能访问的全局名字。
 (4) 两个函数的返回类型都是字典。所以名字们能用 keys() 函数摘取。
 
-28. 
+28. Python中的包
+(1) 包是一个分层次的文件目录结构，它定义了一个由模块及子包，和子包下的子包等组成的 Python 的应用环境。
+
+简单来说，包就是文件夹，但该文件夹下必须存在 __init__.py 文件, 该文件的内容可以为空。__int__.py用于标识当前文件夹是一个包。
+
+考虑一个在 package_runoob 目录下的 runoob1.py、runoob2.py、__init__.py 文件，test.py 为测试调用包的代码，目录结构如下：
+
+test.py
+package_runoob
+|-- __init__.py
+|-- runoob1.py
+|-- runoob2.py
