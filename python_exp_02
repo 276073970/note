@@ -15,21 +15,22 @@
     read_img(user_src_img_path, 'jpg')
 
 22. 函数传入多个参数时
-(1) 先定义list，再传入函数
+(1) 先定义list或tuple，再传入函数：
 def calc(numbers):
     pass
 list = [a, b, c]
 calc(list)
 (2) 将函数参数定义成可变参数：
+# 在函数内部，参数numbers接收到的是一个tuple
 def calc(*numbers):
     pass
 calc(a, b, c)
-(3) 将函数参数定义成可变参数，并传入list
+(3) 将函数参数定义成可变参数，并传入list或tuple：
 def calc(*numbers):
     pass
 list = [a, b, c]
 calc(list[0], list[1], list[2])
-(4) 将函数参数定义成可变参数，并传入list
+(4) 将函数参数定义成可变参数，并传入list或tuple：
 def calc(*numbers):
     pass
 list = [a, b, c]
