@@ -1,0 +1,64 @@
+1. 模块的定义：
+   模块定义：用来逻辑上组织python代码（变量、函数、类、逻辑；目的是：实现一个功能），本质就是.py结尾的python文件。
+   补充：包的定义：用来从逻辑组织模块的，本质就是一个目录（必须带有一个__init__.py文件）
+
+2. 导入方法：
+   1) 导入模块的方法：
+      (1) import module_name    导入一个模块
+      使用的时候需要加上前缀module_name.name
+      (2) import module_name,module2_name   导入多个模块
+      (3) from module_name import *     导入module_name模块里边的所有变量，不建议使用！
+      (4)from module_name import name  只导入module_name里边的name解释了一遍。
+      使用的时候直接 name 调用即可
+   2) import 和from 的区别
+      (1) import 的时候    module_name.logger()
+      (2) from 的时候      logger（） 直接执行；from的时候等于把所有代码都复制了一份，执行一下。
+
+   3) 解释器：做的事就是指定一个变量 并指向一个内存地址，将代码内容放在了内存地址里边。
+   4) 导入包的方法：
+      import 包的名字
+   5) 多级目录导入方法：
+      (1) 查看当前路径：
+          import sys
+          sys.path
+      (2) 查找父及目录
+          import os
+          os.path.abspath(__file__)
+          abspath()   当前文件的绝对路径
+          __file__    当前文件的文件名
+          os.path.dirname(os.path.abspath(__file__))
+          dirname()   获取目录名
+          os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+      (3) 路径加入
+          sys.path.append()   这样会把路径加入到python系统路径列表的最后，不利于快速查找。
+          sys.path.insert()   这样就会把路径加入到python系统路径列表的最前边。
+      (4) 例子：
+          import sys,os
+          print(sys.path)
+          a = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+          sys.path.insert(a)
+          print(sys.path)
+          from xxx import xxx
+
+3. import本质（路径搜索和搜索路径）
+
+导入模块的本质: 就是把python文件解释一遍
+分析：import module_name - - -》就是要解释module_name.py- - -》首先要找到module_name.py的位置- - -》查找系统路径sys.path，当前路径优先。
+
+导入包的本质：就是执行该包下的__init__.py文件
+
+导入包下边的test1.py文件
+1.修改__init__.py文件，导入包下边的py文件
+from . imprt test1
+#import test1
+2.在py文件中导入包下边的模块test1.py文件
+
+4. 导入优化
+例如：
+优化前：
+View Code　
+优化后：
+View Code
+注意：
+如果导入模块的方法和目前环境中有冲突，导入的时候可以设置别名：
+from module_test import test as test01
