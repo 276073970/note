@@ -91,4 +91,18 @@ calc(*list)
     runoob1()
     runoob2()
 
-29. 
+29. 多行字符串拼接使用小括号
+s = ('select *'
+     'from atable'
+     'where id=888')
+print s, type(s)
+#输出
+select *from atablewhere id=888 <type 'str'>
+1
+2
+3
+4
+5
+6
+7
+python遇到未闭合的小括号，自动将多行拼接为一行,相比三个引号和换行符，这种方式不会把换行符、前导空格当作字符。
