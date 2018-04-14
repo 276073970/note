@@ -92,17 +92,24 @@ calc(*list)
     runoob2()
 
 29. 多行字符串拼接使用小括号
-s = ('select *'
-     'from atable'
-     'where id=888')
-print s, type(s)
-#输出
-select *from atablewhere id=888 <type 'str'>
-1
-2
-3
-4
-5
-6
-7
-python遇到未闭合的小括号，自动将多行拼接为一行,相比三个引号和换行符，这种方式不会把换行符、前导空格当作字符。
+python遇到未闭合的小括号，自动将多行拼接为一行，相比三个引号和换行符，这种方式不会把换行符、前导空格当作字符。
+# 源码
+s = ('a'
+     'b'
+     'c')
+print(s, type(s))
+# 输出
+abc <type 'str'>
+
+注：
+(1) 单行注释：#
+(2) 多行注释：三个单引号（或三个双引号）
+(3) 三个单引号（或三个双引号）也可以表示跨行字符串
+(4) 跨行字符串可以用来进行格式化输出，如：
+print('''Personnal information of %s:
+name:%s
+sex:%s
+age:%s
+job:%s''' % (name,sex,age,job))
+
+30. 
