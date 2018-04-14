@@ -41,24 +41,41 @@
           from xxx import xxx
 
 3. import本质（路径搜索和搜索路径）
-
-导入模块的本质: 就是把python文件解释一遍
-分析：import module_name - - -》就是要解释module_name.py- - -》首先要找到module_name.py的位置- - -》查找系统路径sys.path，当前路径优先。
-
-导入包的本质：就是执行该包下的__init__.py文件
-
-导入包下边的test1.py文件
-1.修改__init__.py文件，导入包下边的py文件
-from . imprt test1
-#import test1
-2.在py文件中导入包下边的模块test1.py文件
+   1) 导入模块的本质: 就是把python文件解释一遍
+      分析：import module_name ==> 就是要解释module_name.py ==> 首先要找到module_name.py的位置 ==> 查找系统路径sys.path，当前路径优先。
+   2) 导入包的本质：就是执行该包下的__init__.py文件
+   3) 导入包下边的test1.py文件
+      (1) 修改__init__.py文件，导入包下边的py文件
+          from . imprt test1
+          #import test1
+      (2) 在py文件中导入包下边的模块test1.py文件
 
 4. 导入优化
-例如：
-优化前：
-View Code　
-优化后：
-View Code
-注意：
-如果导入模块的方法和目前环境中有冲突，导入的时候可以设置别名：
-from module_test import test as test01
+   例如：
+   1) 优化前：
+      # module_test.py
+      def test():
+         print ("in the test!")
+      test.py 
+      import module_test
+      def logger():
+         module_test.test()
+         print("in the logger!")
+      def search():
+         module_test.test()
+         print("in the search!")
+   2) 优化后：
+      # module_test.py
+      def test():
+         print ("in the test!")
+      test.py
+      from module_test import test
+      def logger():
+         test()
+         print("in the logger!")
+      def search():
+         test()
+         print("in the search!")
+   3) 注意：
+      如果导入模块的方法和目前环境中有冲突，导入的时候可以设置别名：
+      from module_test import test as test01
