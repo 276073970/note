@@ -148,3 +148,9 @@ job:%s''' % (name,sex,age,job))
     'c:\\csv\\test.csv'  
     >>> os.path.join('/home/aa','/home/aa/bb','/home/aa/bb/c')  
     '/home/aa/bb/c'  
+4) 在当前python中引用上层目录的模块或包
+(1) 引用上层目录的模块
+    通过os.path.append("路径")的方式，将python的环境变量切换到项目根目录，必须使用绝对路径
+(2) 引用上层目录的包
+    通过os.path.append("路径")的方式，将python的环境变量切换到项目根目录，必须使用绝对路径
+    在上层目录中创建一个空文件__init__.py，这样python就识别这个上层目录是一个包，不然就仅仅为目录
