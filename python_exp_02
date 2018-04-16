@@ -90,6 +90,10 @@ calc(*list)
 
     runoob1()
     runoob2()
+(5) 注意错误的引入方式
+    from pkg1.pkg2 import Class  # 正确引入
+    from pkg1.pkg2.Class import method  # 错误引入
+    from pkg1.pkg2 import method  # 正确引入
 
 29. 多行字符串拼接使用小括号
 python遇到未闭合的小括号，自动将多行拼接为一行，相比三个引号和换行符，这种方式不会把换行符、前导空格当作字符。
