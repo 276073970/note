@@ -116,10 +116,11 @@ job:%s''' % (name,sex,age,job))
 1) sys.path: 动态地改变Python搜索路径
 (1) 如果python中导入的package或module不在环境变量PATH中，那么可以使用sys.path将要导入的package或module加入到PATH环境变量中。
     import sys
-    sys.path.append(’引用模块的地址')
-    #或者  
-    import sys  
-    sys.path.insert(0, '引用模块的地址')  
+    sys.path.append('引用模块的地址')
+    如：sys.path.append('C:\\Users\\CH\\bishe\\faceRecognition')，或：
+    import sys
+    sys.path.insert(0, '引用模块的地址')
+    如：sys.path.insert(0, 'C:\\Users\\CH\\bishe\\faceRecognition')
 (2) sys.path是个列表，所以在末尾添加目录是很容易的，用sys.path.append就行了。
     当这个append执行完之后，新目录即时起效，以后的每次import操作都可能会检查这个目录。
     如同解决方案所示，可以选择用sys.path.insert(0,…)这样新添加的目录会优先于sys.path中的其他目录被import检查。
