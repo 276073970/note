@@ -9,7 +9,7 @@
 # postgres=# create database bishe;
 # postgres=# \l
 # postgres=# \q
-# psql -d bishe
+# psql bishe
 # bishe=# \l
 
 ****************************************************************************************************
