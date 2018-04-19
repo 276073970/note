@@ -1,6 +1,8 @@
-# mkdir ~/.postgres
-# initdb ~/.postgres
-# pg_ctl -D ~/.postgres start
+# activate bishe
+# cd C:\Users\CH\bishe\faceRecognition
+# mkdir ./data
+# initdb ./data
+# pg_ctl -D ./data start
 # psql -l
 # psql -h localhost -U CH -d postgres
 
