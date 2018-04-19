@@ -19,8 +19,12 @@
 (2) Anaconda安装的PostgreSQL，默认没有“SUPERUSER postgres”，需先用普通用户（通常为当前系统用户“CH”）登录后，再创建SUPERUSER。
 (3) SQL语句要以分号“;”结尾。
 (4) PostgreSQL的命令提示符，单行语句为“postgres=# ”，多行语句为“postgres-# ”。
-(5) psql命令默认进入# psql -U <User> -d <User>数据库中，未找到则返回错误信息。
-(6) 
+(5) sudo adduser <username>  # 新建一个Linux新用户
+    sudo su - postgres  # 切换到postgres用户
+    psql  # 使用psql命令登录PostgreSQL控制台
+(6) psql会默认以当前系统的登录用户登录PostgreSQL服务器
+    单独录入psql命令，默认进入# psql -U <User> -d <User>数据库中，未找到则返回错误信息。
+
 ****************************************************************************************************
 ****************************************************************************************************
 sudo apt-get install postgresql-client  # 安装PostgreSQL客户端
