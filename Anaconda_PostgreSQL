@@ -1,13 +1,56 @@
-从Anaconda安装PostgreSQL后运行psql时报错如下：
-   psql: could not connect to server: Connection refused
-   这个问题一般是以下原因造成的：
-   1) 服务器没起来，ps -ef|grep postgres查看是否存在PG进程
-   2) 监听问题，cat postgresql.conf|grep listen 查看监听地址是否正确
-   3) 服务端超级用户能进去，其他用户不行，检查是否超出最大连接数限制
-   4) 以上都没问题，服务器端能连进去，但客户端不行，这时需要查看pg_hba.conf文件
-   5) 以上都没问题，检查服务器端的iptables,开启防火墙的访问端口
-   # netstat -ano  列出所有端口的情况
-   # telnet 127.0.0.1 5432  测试端口是否开放
+# mkdir ~/.postgres
+# initdb ~/.postgres
+# pg_ctl -D ~/.postgres start
+# psql -l
+# psql -h localhost -U CH -d postgres
+
+****************************************************************************************************
+****************************************************************************************************
 sudo apt-get install postgresql-client  # 安装PostgreSQL客户端
 sudo apt-get install postgresql-server  # 安装PostgreSQL服务器
 sudo apt-get install pgadmin3  # 安装图形管理界面
+1. 从Anaconda安装PostgreSQL后运行psql时报错如下：
+   psql: could not connect to server: Connection refused
+这个问题一般是以下原因造成的：
+1) 服务器没起来，ps -ef|grep postgres查看是否存在PG进程
+2) 监听问题，cat postgresql.conf|grep listen 查看监听地址是否正确
+3) 服务端超级用户能进去，其他用户不行，检查是否超出最大连接数限制
+4) 以上都没问题，服务器端能连进去，但客户端不行，这时需要查看pg_hba.conf文件
+5) 以上都没问题，检查服务器端的iptables,开启防火墙的访问端口
+   # netstat -ano  列出所有端口的情况
+   # telnet 127.0.0.1 5432  测试端口是否开放
+2. 在prompt终端中：
+   # pg_config
+   # pg_ctl
+报错如下：
+   Pg_ctl: No Database Directory Specified And Environment Variable PGDATA Unset
+3. 解释如下：
+(1) If you tried to run something like:
+    $ pg_ctl restart
+    and got the following error:
+    “pg_ctl: no database directory specified and environment variable PGDATA unset”
+    Then you probably need to specify the data directory (or database cluster) to your PG server.
+(2) If you don’t already has a directory for this:
+    $ mkdir ~/.postgres
+    Then initialize your data directory using the command initdb and the created directory:
+    $ initdb ~/.postgres
+    默认生成情况如下：（可通过“psql -l”命令查看）
+        Name    |  Owner  |  Encoding  |  Collate  |  Ctype  |  Access privileges
+      postgres  |  CH     |  UTF8      |           |         |
+      template0 |  CH     |  UTF8      |           |         |
+      template1 |  CH     |  UTF8      |           |         |
+(3) Hopefully everything will work now and you can initialize/restart your server again:
+    $ pg_ctl -D ~/.postgres start
+    显示：server started
+4. psql -h host_ip -U db_username -d db_name
+default_db_username: postgres
+default_db_name: postgres
+执行# psql -U CH -d CH，报错如下：
+   psql: FATAL: database “<user>” does not exist
+执行# psql -U postgres -d postgres，报错如下：
+   psql: FATAL: role “postgres” does not exist
+显示当前数据库服务目录下的所有数据库
+   # psql -l
+在根据需求启动数据库，如：
+   # psql -U CH -d postgres
+即可进入postgres命令提示符
