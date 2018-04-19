@@ -1,0 +1,13 @@
+从Anaconda安装PostgreSQL后运行psql时报错如下：
+   psql: could not connect to server: Connection refused
+   这个问题一般是以下原因造成的：
+   1) 服务器没起来，ps -ef|grep postgres查看是否存在PG进程
+   2) 监听问题，cat postgresql.conf|grep listen 查看监听地址是否正确
+   3) 服务端超级用户能进去，其他用户不行，检查是否超出最大连接数限制
+   4) 以上都没问题，服务器端能连进去，但客户端不行，这时需要查看pg_hba.conf文件
+   5) 以上都没问题，检查服务器端的iptables,开启防火墙的访问端口
+   # netstat -ano  列出所有端口的情况
+   # telnet 127.0.0.1 5432  测试端口是否开放
+sudo apt-get install postgresql-client  # 安装PostgreSQL客户端
+sudo apt-get install postgresql-server  # 安装PostgreSQL服务器
+sudo apt-get install pgadmin3  # 安装图形管理界面
