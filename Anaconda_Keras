@@ -1,5 +1,5 @@
 https://stackoverflow.com/questions/43327464/how-to-make-keras-use-tensorflow-backend-in-anaconda
-
+How to make Keras use Tensorflow backend in Anaconda?
 Q:
 I have install tensorflow-gpu in my Anaconda environment. They both work well.
 Now I am trying to install Keras with Tensorflow backend. According to the instruction I just run:
