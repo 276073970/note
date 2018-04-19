@@ -2,7 +2,7 @@
 # cd C:\Users\CH\bishe\faceRecognition
 # mkdir ./data
 # initdb ./data
-# pg_ctl -D ./data start
+# pg_ctl -D ./data -l logfile start
 # psql -l
 # psql -h localhost -U CH -d postgres
 
