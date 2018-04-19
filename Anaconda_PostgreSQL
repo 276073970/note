@@ -5,16 +5,20 @@
 # pg_ctl -D ./data -l logfile start
 # psql -l
 # psql -h localhost -U CH -d postgres
-# CREATE USER postgres SUPERUSER;
-# create database bishe;
+# postgres=# CREATE USER postgres SUPERUSER;
+# postgres=# create database bishe;
+# postgres=# \l
+# postgres=# \q
+# psql -d bishe
+# bishe=# \l
 
 ****************************************************************************************************
 ****************************************************************************************************
 注：
-(1) Anaconda安装的PostgreSQL，默认没有“SUPERUSER postgres”，需先用普通用户（通常为当前系统用户“CH”）登录后，再创建SUPERUSER
+(1) Anaconda安装的PostgreSQL，默认没有“SUPERUSER postgres”，需先用普通用户（通常为当前系统用户“CH”）登录后，再创建SUPERUSER。
 (2) SQL语句要以分号“;”结尾。
 (3) PostgreSQL的命令提示符，单行语句为“postgres=# ”，多行语句为“postgres-# ”。
-(4) 
+(4) psql命令默认进入# psql -U <User> -d <User>数据库中，未找到则返回错误信息。
 ****************************************************************************************************
 ****************************************************************************************************
 sudo apt-get install postgresql-client  # 安装PostgreSQL客户端
