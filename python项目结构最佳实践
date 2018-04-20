@@ -1,0 +1,25 @@
+|-flasky
+
+  |-app/  # 可以扩展复制的 app，根据需求
+    |-templates/
+    |-static/
+    |-main/
+      |-__init__.py
+      |-errors.py
+      |-forms.py
+      |-views.py
+    |-__init__.py
+    |-email.py
+    |-models.py
+
+  |-migrations/  # 作为迁移使用
+
+  |-tests/  # 测试用例
+    |-__init__.py
+    |-test*.py
+
+  |-venv/  # virtualenv 的使用环境
+
+  |-requirements.txt  # pip install -r requirements.txt
+  |-config.py  # 配置文件
+  |-manage.py  # 启动文件，入口
