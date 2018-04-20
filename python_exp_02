@@ -14,6 +14,7 @@
     # 在调用该函数时再传入具体命名的参数
     read_img(user_src_img_path, 'jpg')
 
+
 22. 函数传入多个参数时
 (1) 先定义list或tuple，再传入函数：
 def calc(numbers):
@@ -36,6 +37,7 @@ def calc(*numbers):
 list = [a, b, c]
 calc(*list)
 
+
 23. 格式化输出
 (1) Python的动态变量虽然可以赋值任意数据类型的值，但在print格式化输出时，要注意使用强制类型转换。如：
     print("number_0 is %d, number_1 is %d" % (int(num_0), int(num_1)))
@@ -50,12 +52,14 @@ calc(*list)
 (3) 如果都找不到，Python会察看默认路径。UNIX下，默认路径一般为/usr/local/lib/python/。
 模块搜索路径存储在 system 模块的 sys.path 变量中。变量里包含当前目录，PYTHONPATH和由安装过程决定的默认目录。
 
+
 25. PYTHONPATH 变量
 作为环境变量，PYTHONPATH 由装在一个列表里的许多目录组成。PYTHONPATH 的语法和 shell 变量 PATH 的一样。
 (1) 在 Windows 系统，典型的 PYTHONPATH 如下：
     set PYTHONPATH=c:\python27\lib;
 (2) 在 UNIX 系统，典型的 PYTHONPATH 如下：
     set PYTHONPATH=/usr/local/lib/python
+
 
 26. 命名空间和作用域
 (1) 变量是拥有匹配对象的名字（标识符）。命名空间是一个包含了变量名称们（键）和它们各自相应的对象们（值）的字典。
@@ -65,11 +69,13 @@ calc(*list)
     因此，如果要给函数内的全局变量赋值，必须使用 global 语句。
 (5) global VarName 的表达式会告诉 Python， VarName 是一个全局变量，这样 Python 就不会在局部命名空间里寻找这个变量了。
 
+
 27. globals() 和 locals() 函数
 (1) 根据调用地方的不同，globals() 和 locals() 函数可被用来返回全局和局部命名空间里的名字。
 (2) 如果在函数内部调用 locals()，返回的是所有能在该函数里访问的命名。
 (3) 如果在函数内部调用 globals()，返回的是所有在该函数里能访问的全局名字。
 (4) 两个函数的返回类型都是字典。所以名字们能用 keys() 函数摘取。
+
 
 28. Python中的包
 (1) 包是一个分层次的文件目录结构，它定义了一个由模块、子包、子包下的子包等组成的 Python 的应用环境。
@@ -95,6 +101,7 @@ calc(*list)
     from pkg1.pkg2.Class import method  # 错误引入
     from pkg1.pkg2 import method  # 正确引入
 
+
 29. 多行字符串拼接使用小括号
 python遇到未闭合的小括号，自动将多行拼接为一行，相比三个引号和换行符，这种方式不会把换行符、前导空格当作字符。
 # 源码
@@ -117,6 +124,7 @@ name:%s
 sex:%s
 age:%s
 job:%s''' % (name,sex,age,job))
+
 
 30. sys.path & os.path
 1) sys.path: 动态地改变Python搜索路径
@@ -157,7 +165,23 @@ job:%s''' % (name,sex,age,job))
     '/home/aa/bb/c'  
 4) 在当前python中引用上层目录的模块或包
 (1) 引用上层目录的模块
-    通过os.path.append("路径")的方式，将python的环境变量切换到项目根目录，必须使用绝对路径
+    通过os.path.append('路径')的方式，将python的环境变量切换到项目根目录，必须使用绝对路径
 (2) 引用上层目录的包
-    通过os.path.append("路径")的方式，将python的环境变量切换到项目根目录，必须使用绝对路径
+    通过os.path.append('路径')的方式，将python的环境变量切换到项目根目录，必须使用绝对路径
     在上层目录中创建一个空文件__init__.py，这样python就识别这个上层目录是一个包，不然就仅仅为目录
+5) 在使用sys.path.append('引用模块的地址')或sys.path.insert(0, '引用模块的地址')向PATH环境变量添加自己的目录路径时，
+   要特别注意添加的次序（即Python语句的先后次序），因为每次import操作都会检查sys.path这个列表，
+   并按列表中各条路径的先后次序，逐个从中搜寻所需的包或模块，如：
+    sys.path.append('C:\\Users\\CH\\bishe\\faceRecognition\\face_recognition') ··········【路径一】
+    from camera_reader import CameraReader
+    sys.path.append('C:\\Users\\CH\\bishe\\faceRecognition\\model_training') ············【路径二】
+    from train_model import Model
+    from data_set import DataSet
+   如果此时【路径一】中包含了【路径二】中的模块，则当执行“from train_model import Model”等语句时，系统会先从【路径一】中搜寻“train_model”模块，
+   在这种情况下，如果后续代码中使用了“Model”或“DataSet”类及其方法，看似引用的是【路径二】下的“train_model”或“data_set”模块下的类及方法，
+   实则是【路径一】下的“train_model”或“data_set”模块下的类及方法，进而产生了一个极其不容易排出的bug，即：
+   无论对【路径二】下的各模块、类、方法做怎样的修改，程序代码的运行效果都不变，
+   甚至将【路径二】下的模块都删除，代码中依然可以使用“Model”或“DataSet”类及其方法，程序仍然可运行，恐怖之极...
+   
+   
+   
