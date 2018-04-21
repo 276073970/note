@@ -177,11 +177,14 @@ job:%s''' % (name,sex,age,job))
     sys.path.append('C:\\Users\\CH\\bishe\\faceRecognition\\model_training') ············【路径二】
     from train_model import Model
     from data_set import DataSet
-   如果此时【路径一】中包含了【路径二】中的模块，则当执行“from train_model import Model”等语句时，系统会先从【路径一】中搜寻“train_model”模块，
+   如果此时【路径一】中也包含了【路径二】中的模块，则当执行“from train_model import Model”等语句时，系统会先从【路径一】中搜寻“train_model”模块，
    在这种情况下，如果后续代码中使用了“Model”或“DataSet”类及其方法，看似引用的是【路径二】下的“train_model”或“data_set”模块下的类及方法，
    实则是【路径一】下的“train_model”或“data_set”模块下的类及方法，进而产生了一个极其不容易排出的bug，即：
    无论对【路径二】下的各模块、类、方法做怎样的修改，程序代码的运行效果都不变，
    甚至将【路径二】下的模块都删除，代码中依然可以使用“Model”或“DataSet”类及其方法，程序仍然可运行，恐怖之极...
-   
+6) 对于“5)”中的情况，之所以【路径二】中的模块被复制到了【路径一】中，即“【路径一】中也包含了【路径二】中的模块”，
+   是因为【路径一】下camera_reader模块中的引用了这些【路径二】中才有的模块，因此才复制了一份到【路径一】中，
+   不过，如果【路径一】下camera_reader模块是通过相对引用（而不是直接从【路径二】复制模块过来），
+   则添加【路径一】和【路径一】的次序无所谓，程序都能正常运行，并得到合理的结果
    
    
