@@ -229,7 +229,7 @@ threading 模块除了包含 _thread 模块中的所有方法外，还提供的�
   Thread-2: Wed Apr  6 11:53:05 2016
   退出主线程
   
-6. 线程优先级队列（ Queue）
+6. 线程优先级队列（Queue）
 
 Python 的 Queue 模块中提供了同步的、线程安全的队列类，包括FIFO（先入先出)队列Queue，LIFO（后入先出）队列LifoQueue，和优先级队列 PriorityQueue。
 
