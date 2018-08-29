@@ -24,6 +24,11 @@ Tweaks:
 (2) [Appearance] => "Themes" => turn "Applicaions" to "Adwaita-dark"
 (3) [Appearance] => "Themes" => turn "Cursor" to "DMZ-Black"
 (4) [Keyboard & Mouse] => [Additional Layout Options] => turn "Ctrl position" to "Swap Ctrl and Caps Lock"
+gcc & vim:
+(1) sudo apt-get update
+(2) sudo apt-get upgrade
+(3) sudo apt-get install gcc
+(4) sudo apt-get install vim
 
 3. VIM
 (1) sudo apt-get update
