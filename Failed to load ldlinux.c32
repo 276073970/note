@@ -1,0 +1,31 @@
+failed to load ldlinux.c32 
+
+用UltraISO制作Ubuntu 或 Debian 的U盘启动盘后，
+在机器用U盘启动时有时会报这个错误：
+failed to load ldlinux.c32
+
+是因为UltraISO的问题，需要换刻录软件；
+请换刻录软件
+linux的用mkusb，
+windows的用Win32DiskImager
+具体用法：
+https://wiki.ubuntu.com/Win32DiskImager/iso2usb
+https://help.ubuntu.com/community/mkusb
+
+准备工作：
+请到官方网站下载win32diskimager 工具。
+下载地址http://sourceforge.net/projects/win32diskimager/files/latest/download
+下载U-NAS系统的ISO包
+
+1.先插入U盘，再打开win32diskimager。
+
+2. 选择接入U盘的盘符(电脑中最好只接入一个U盘，以免选错)
+
+3.在Image File中，选择系统ISO软件包。(注意：ISO包需要放在英文或数字目录下，即不能放在中文目录下)
+将“保存类型”选择*.*，这样才能发现ISO系统包。
+
+4.点击Write按扭。
+
+注意：
+在写入过程中，如果ISO系统包放在带有中文目录的情况下会出现此类问题
+需要把ISO包放在英文或数字目录下。 
