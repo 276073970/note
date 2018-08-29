@@ -13,7 +13,8 @@
 (5) ch@dell:~/Downloads$ sudo apt-get -f install 
 (6) ch@dell:~/Downloads$ sudo dpkg -i sogoupinyin_2.2.0.0102_amd64.deb
 (7) ch@dell:~/Downloads$ reboot
-(8) 
+## 18.04:
+(1) [System setting] => [Region & Language] => [Manage Installed Languages]
 
 3. VIM
 (1) sudo apt-get update
