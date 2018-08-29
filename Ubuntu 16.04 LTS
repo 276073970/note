@@ -16,9 +16,8 @@
 ## 18.04:
 (1) [System setting] => [Region & Language] => [Manage Installed Languages]
 (2) 双击下载的 deb 软件包，即可直接安装搜狗输入法。
-(3) [Keyboard input method system: IBus] => [fcitx]
-(4) [Applications] => [Fcitx] => [Fcitx Configure]
-(4) [Applications] => [Fcitx Configure] => "+" => turn off "Only Show Current Language" => "Sogou Pinyin" => "^"
+(3) [Keyboard input method system: IBus] => [fcitx] => reboot
+(4) [Fcitx Configure] => "+" => turn off "Only Show Current Language" => "Sogou Pinyin" => "^"
 
 3. VIM
 (1) sudo apt-get update
