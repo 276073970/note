@@ -14,10 +14,16 @@
 (6) ch@dell:~/Downloads$ sudo dpkg -i sogoupinyin_2.2.0.0102_amd64.deb
 (7) ch@dell:~/Downloads$ reboot
 ## 18.04:
+Sougou:
 (1) [System setting] => [Region & Language] => [Manage Installed Languages]
 (2) 双击下载的 deb 软件包，即可直接安装搜狗输入法。
 (3) [Keyboard input method system: IBus] => [fcitx] => reboot
 (4) [Fcitx Configure] => "+" => turn off "Only Show Current Language" => "Sogou Pinyin"
+Tweaks:
+(1) [Ubuntu Software] => install [GNOME Tweaks]
+(2) [Appearance] => "Themes" => turn "Applicaions" to "Adwaita-dark"
+(3) [Appearance] => "Themes" => turn "Cursor" to "DMZ-Black"
+(4) [Keyboard & Mouse] => [Additional Layout Options] => turn "Ctrl position" to "Swap Ctrl and Caps Lock"
 
 3. VIM
 (1) sudo apt-get update
