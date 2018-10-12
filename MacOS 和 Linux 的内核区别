@@ -47,3 +47,16 @@ https://opensource.apple.com/
 
 GitHub地址在此：
 https://github.com/apple/darwin-xnu
+
+有些人可能认为MacOS和Linux内核有相似之处，因为它们可以处理类似的命令和类似的软件。甚至有人认为苹果的MacOS是基于linux的。事实上，这两个内核的历史和特性是非常不同的。今天，我们来看看MacOS和Linux内核的区别。
+MacOS内核的历史
+我们将从MacOS内核的历史开始。1985年，由于与首席执行官John Sculley和苹果董事会发生争执，Steve Jobs离开了苹果。然后，他创建了一家名为Next.Jobs的新电脑公司。乔布斯希望尽快推出一台新电脑(带有新操作系统)。为了节省时间，下一个团队使用了Carnegie Mellon的Mach内核及其部件。创建NextStep操作系统的BSD代码库。
+NeXT从未在财务上取得成功，部分原因是乔布斯习惯于花钱，就像他还在苹果一样。与此同时，苹果曾多次尝试升级操作系统，甚至与ibm合作。1997年，苹果以4.29亿美元收购了Next。作为交易的一部分，史蒂夫·乔布斯(Steve Jobs)重返苹果，NextStep成为MacOS和iOS的基础。
+Linux内核的历史
+与MacOS内核不同的是，linux并不是作为商业活动的一部分而创建的，而是由芬兰计算机科学专业的linus torvaldds于1991年创建的。最初，该内核是按照linus的计算机规范编写的，因为他想利用linus的新80386处理器。1991年8月，linus将他的新内核的代码发布到了usenet。不久，他就收到了来自世界各地的代码和功能建议。第二年，Orest Zborowski将x窗口系统移植到Linux，使它能够支持图形用户界面。
+MacOS内核的特性
+MacOS内核正式被称为XNU。缩写表示“XNU不是Unix”。根据苹果的GitHub页面，XNU是“将Carnegie Mellon University开发的Mach内核与FreeBSD和C++ API中用于编写驱动程序的组件结合在一起的混合内核”。该代码的BSD子系统部分“通常是作为微内核系统中的用户空间服务器实现的。”“Mach部分负责低级工作，如多任务处理、保护内存、虚拟内存管理、内核调试支持和控制台I/O。
+Linux内核的特性
+虽然MacOS内核结合了微内核(Mach)和单片内核(BSD)的特性，但是Linux仅仅是一个单块内核。单个内核负责管理CPU、内存、进程间通信、设备驱动程序、文件系统和系统服务器调用。
+简要说明Mac和Linux内核的区别
+MacOS内核(XNU)的出现时间比Linux长，它是基于两个甚至更旧的代码库的组合。另一方面，Linux是新的，从头开始编写的，并且在更多的设备上使用。
